@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desarrollo de Videojuegos en Roblox Studio — ROBOTSchool</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e14;
+  --surface: #15151f;
+  --surface2: #1c1c28;
+  --surface3: #23232f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --muted: #8888a8;
+  --accent: #ff3d3d;
+  --accent2: #ff7043;
+  --blue: #4488ff;
+  --green: #36d399;
+  --yellow: #ffd166;
+  --purple: #c084fc;
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --r: 12px;
+  --r2: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 40px 60px;
+  text-align: center;
+  background: linear-gradient(180deg, #0a0a12 0%, var(--bg) 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(255,61,61,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(68,136,255,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.hero-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  border: 1px solid rgba(255,61,61,0.3);
+  background: rgba(255,61,61,0.08);
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(42px, 8vw, 80px);
+  letter-spacing: .02em;
+  line-height: 1;
+  margin-bottom: 8px;
+  position: relative;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-stats {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+.hstat {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 16px 24px;
+  min-width: 110px;
+  transition: transform .2s, border-color .2s;
+}
+.hstat:hover { transform: translateY(-3px); border-color: rgba(255,61,61,0.4); }
+.hstat .val {
+  font-family: var(--display);
+  font-size: 36px;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+.hstat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; display: block; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ── NAV TABS ── */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(14,14,20,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+}
+.nav-inner {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn {
+  padding: 16px 22px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+}
+.nav-btn:hover { color: var(--text); }
+.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── SECTIONS ── */
+.section { display: none; padding: 40px 40px 80px; }
+.section.active { display: block; }
+
+/* ── MODULE GRID ── */
+.mod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.mod-card {
+  border-radius: var(--r);
+  padding: 22px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: transform .2s, box-shadow .2s;
+}
+.mod-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  transition: opacity .2s;
+}
+.mod-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+.mod-card:hover::before { opacity: .2; }
+.mod-card-inner { position: relative; z-index: 1; }
+.mod-num {
+  font-family: var(--display);
+  font-size: 48px;
+  line-height: 1;
+  color: rgba(255,255,255,0.2);
+  position: absolute;
+  top: 10px;
+  right: 16px;
+}
+.mod-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.9);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  display: inline-block;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.mod-card h3 { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+.mod-card p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+.mod-meta { margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.6); display: flex; gap: 12px; align-items: center; }
+.mod-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+
+/* ── MODULE DETAIL ── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: color .2s, border-color .2s;
+}
+.back-btn:hover { color: var(--text); border-color: var(--border2); }
+.back-arrow { font-size: 16px; }
+
+.mod-header-detail {
+  border-radius: var(--r);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.mod-header-detail::after {
+  content: attr(data-num);
+  font-family: var(--display);
+  font-size: 160px;
+  color: rgba(255,255,255,0.05);
+  position: absolute;
+  right: -10px;
+  top: -20px;
+  line-height: 1;
+  pointer-events: none;
+}
+.mod-header-detail .eyebrow { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.mod-header-detail h2 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.mod-header-detail p { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.65; max-width: 680px; }
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.info-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+}
+.info-card h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.info-card ul { list-style: none; }
+.info-card ul li {
+  font-size: 13px;
+  color: var(--text);
+  padding: 4px 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+.info-card ul li::before { content: '›'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+.info-card p { font-size: 13px; color: var(--text); line-height: 1.6; }
+code.lua {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: rgba(68,136,255,0.12);
+  color: #7eb7ff;
+  padding: 1px 7px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 2px 0;
+}
+
+/* ── CLASE TABS ── */
+.clase-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.clase-tab {
+  padding: 8px 18px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+}
+.clase-tab:hover { color: var(--text); border-color: var(--border2); }
+.clase-tab.active { color: #fff; border-color: transparent; }
+
+/* ── CLASE BODY ── */
+.clase-body { display: none; }
+.clase-body.active { display: block; }
+
+.clase-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hora-block {
+  border-radius: var(--r);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+}
+.hora1 { background: rgba(68,136,255,0.06); border-color: rgba(68,136,255,0.15); }
+.hora2 { background: rgba(54,211,153,0.06); border-color: rgba(54,211,153,0.15); }
+
+.hora-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.hora-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.hora-badge-1 { background: rgba(68,136,255,0.2); color: #88bbff; }
+.hora-badge-2 { background: rgba(54,211,153,0.2); color: #6ee7c4; }
+.hora-head h4 { font-size: 14px; font-weight: 600; }
+.hora1 .hora-head h4 { color: #88bbff; }
+.hora2 .hora-head h4 { color: #6ee7c4; }
+.hora-timer { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; }
+
+.sec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin: 14px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.step-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 6px 0;
+}
+.step-num {
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.sn1 { background: rgba(68,136,255,0.2); color: #88bbff; }
+.sn2 { background: rgba(54,211,153,0.2); color: #6ee7c4; }
+.step-text { font-size: 13px; color: var(--text); line-height: 1.55; }
+
+.reto-block {
+  background: rgba(255,209,102,0.05);
+  border: 1px solid rgba(255,209,102,0.2);
+  border-radius: var(--r);
+  padding: 20px 24px;
+  margin-top: 4px;
+}
+.reto-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--yellow);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.reto-head::before { content: '●'; font-size: 8px; }
+.reto-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.reto-item:last-child { margin-bottom: 0; }
+.reto-icon { font-size: 16px; line-height: 1.4; flex-shrink: 0; }
+.reto-text { font-size: 13px; color: var(--text); line-height: 1.55; }
+
+/* ── PROYECTO FINAL ── */
+.pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:700px) { .pf-grid { grid-template-columns: 1fr; } }
+
+.pf-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+}
+.pf-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+.pf-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  letter-spacing: .04em;
+}
+.pf-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.progress-row:last-child { border-bottom: none; }
+.p-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #fff;
+}
+.p-bar-wrap { flex: 1; }
+.p-label { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.p-bar { height: 4px; border-radius: 2px; }
+
+/* ── GAMIFICACION ── */
+.gamif-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 14px; margin-bottom: 24px; }
+.gamif-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.gamif-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.gamif-icon { font-size: 32px; display: block; margin-bottom: 12px; line-height: 1; }
+.gamif-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.gamif-card p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+.badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; }
+.badge-card {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.badge-card:hover { border-color: rgba(255,61,61,0.3); }
+.badge-icon { font-size: 26px; display: block; margin-bottom: 8px; }
+.badge-card h5 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.badge-card p { font-size: 11px; color: var(--muted); }
+
+/* ── HERRAMIENTAS ── */
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:600px) { .tool-grid { grid-template-columns: 1fr; } }
+.eval-bar { display: flex; gap: 12px; margin-bottom: 10px; align-items: center; }
+.eval-label { font-size: 13px; min-width: 140px; }
+.eval-track { flex: 1; height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.eval-fill { height: 100%; border-radius: 3px; }
+.eval-pct { font-family: var(--mono); font-size: 12px; color: var(--muted); min-width: 35px; text-align: right; }
+
+/* ── BENEFICIOS ── */
+.skill-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.skill-tag {
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* ── SECTION HEADER ── */
+.sec-header { margin-bottom: 28px; }
+.sec-header h2 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.sec-header p { font-size: 14px; color: var(--muted); }
+
+/* ── CARD CONTAINER ── */
+.card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.card h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.card h3 .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeUp .35s ease both; }
+.fade-in-d1 { animation-delay: .05s; }
+.fade-in-d2 { animation-delay: .1s; }
+.fade-in-d3 { animation-delay: .15s; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.footer span { color: var(--accent); }
+
+@media(max-width:768px) {
+  .hero { padding: 60px 20px 40px; }
+  .section { padding: 28px 20px 60px; }
+  .nav-bar { padding: 0 16px; }
+  .mod-header-detail { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-tag">ROBOTSchool Academy — Programa Certificado</div>
+  <h1>ROBLOX<br><span>STUDIO</span></h1>
+  <p class="hero-sub">Curso completo de desarrollo de videojuegos para niños y adolescentes de 10 a 15 años</p>
+  <div class="hero-stats">
+    <div class="hstat"><span class="val">8</span><span class="lbl">Módulos</span></div>
+    <div class="hstat"><span class="val">32</span><span class="lbl">Clases</span></div>
+    <div class="hstat"><span class="val">64h</span><span class="lbl">Totales</span></div>
+    <div class="hstat"><span class="val">1</span><span class="lbl">Juego completo</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('modulos',this)">Módulos</button>
+    <button class="nav-btn" onclick="showSection('proyecto',this)">Proyecto Final</button>
+    <button class="nav-btn" onclick="showSection('gamificacion',this)">Gamificación</button>
+    <button class="nav-btn" onclick="showSection('herramientas',this)">Herramientas</button>
+    <button class="nav-btn" onclick="showSection('beneficios',this)">Beneficios</button>
+  </div>
+</nav>
+
+<!-- ═══ MÓDULOS ═══ -->
+<div id="sec-modulos" class="section active">
+  <div class="container">
+    <div id="list-view">
+      <div class="sec-header fade-in">
+        <h2>Módulos del curso</h2>
+        <p>Haz clic en un módulo para ver las 4 clases con contenido detallado hora a hora</p>
+      </div>
+      <div class="mod-grid" id="mod-grid"></div>
+    </div>
+    <div id="detail-view" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ═══ PROYECTO FINAL ═══ -->
+<div id="sec-proyecto" class="section">
+  <div class="container">
+    <div class="sec-header fade-in">
+      <h2>CiudadRobot — Proyecto Central</h2>
+      <p>Un juego completo en Roblox construido a lo largo de todo el curso, módulo a módulo</p>
+    </div>
+    <div class="pf-grid fade-in fade-in-d1">
+      <div class="pf-card">
+        <span class="pf-badge" style="background:rgba(68,136,255,0.15);color:#88bbff">MAPA DISEÑADO</span>
+        <p>Ciudad completa con plaza central, calles, zona comercial, zona de desafío, base secreta y zonas temáticas. Mínimo 4 zonas construidas con diseño coherente.</p>
+      </div>
+      <div class="pf-card">
+        <span class="pf-badge" style="background:rgba(54,211,153,0.15);color:#6ee7c4">SISTEMAS PROGRAMADOS</span>
+        <p>Coleccionables, trampas, teletransportadores, puertas interactivas, ascensores animados y sistema de respawn de monedas.</p>
+      </div>
+      <div class="pf-card">
+        <span class="pf-badge" style="background:rgba(192,132,252,0.15);color:#d8b4fe">UI COMPLETA</span>
+        <p>HUD con monedas, nivel y zona actual. Menú de inicio animado, pantalla de victoria, sistema de notificaciones de misiones y menú de pausa.</p>
+      </div>
+      <div class="pf-card">
+        <span class="pf-badge" style="background:rgba(255,61,61,0.15);color:#ff8888">LÓGICA DE JUEGO</span>
+        <p>Sistema de leaderstats con DataStore persistente, 5 misiones rastreadas, 5 niveles de progresión con zonas desbloqueables y leaderboard.</p>
+      </div>
+    </div>
+    <div class="card fade-in fade-in-d2">
+      <h3><span class="dot" style="background:var(--accent)"></span>Progresión módulo a módulo</h3>
+      <div id="prog-bars"></div>
+    </div>
+    <div class="card fade-in fade-in-d3">
+      <h3><span class="dot" style="background:var(--yellow)"></span>Presentación final — Game Developer Day</h3>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px">Cada estudiante presenta su juego en vivo ante compañeros y padres. La presentación dura 7 minutos e incluye demo jugable, explicación de 2 sistemas programados, muestra del código y retrospectiva personal.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+        <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--accent)">25%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Juego funcional</div></div>
+        <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--blue)">25%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Sistemas programados</div></div>
+        <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--green)">25%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Diseño del mapa</div></div>
+        <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--yellow)">25%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Presentación técnica</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GAMIFICACIÓN ═══ -->
+<div id="sec-gamificacion" class="section">
+  <div class="container">
+    <div class="sec-header fade-in">
+      <h2>Sistema de gamificación</h2>
+      <p>El curso tiene su propio sistema de misiones, puntos e insignias para mantener la motivación alta</p>
+    </div>
+    <div class="gamif-grid fade-in fade-in-d1">
+      <div class="gamif-card"><span class="gamif-icon">⭐</span><h4>Misiones por clase</h4><p>Cada clase tiene 3 misiones: Estrella (fácil), Cohete (medio) y Diamante (difícil)</p></div>
+      <div class="gamif-card"><span class="gamif-icon">🏆</span><h4>Puntos XP</h4><p>Estrella: 10 XP — Cohete: 20 XP — Diamante: 40 XP — Bonus creatividad: 15 XP</p></div>
+      <div class="gamif-card"><span class="gamif-icon">📊</span><h4>Leaderboard</h4><p>Ranking semanal visible en clase. Top 3 reciben créditos extra y reconocimiento público</p></div>
+      <div class="gamif-card"><span class="gamif-icon">🚀</span><h4>Niveles de jugador</h4><p>Novice → Builder → Coder → Developer → Game Master según XP acumulado en el curso</p></div>
+      <div class="gamif-card"><span class="gamif-icon">🎯</span><h4>Reto semanal</h4><p>Desafío opcional entre sesiones. Se comparte en ClassDojo. Doble XP si se completa</p></div>
+      <div class="gamif-card"><span class="gamif-icon">🛡️</span><h4>Insignias</h4><p>6 insignias desbloqueables según logros técnicos y creativos durante el curso</p></div>
+    </div>
+    <div class="card fade-in fade-in-d2">
+      <h3><span class="dot" style="background:var(--yellow)"></span>Insignias del curso</h3>
+      <div class="badge-grid">
+        <div class="badge-card"><span class="badge-icon">🧱</span><h5>Constructor</h5><p>Completa el módulo 1 con mapa funcional</p></div>
+        <div class="badge-card"><span class="badge-icon">🎨</span><h5>Diseñador</h5><p>10 elementos con diseño creativo propio</p></div>
+        <div class="badge-card"><span class="badge-icon">💻</span><h5>Programador</h5><p>Primer script funcional con evento real</p></div>
+        <div class="badge-card"><span class="badge-icon">🐛</span><h5>Debug Master</h5><p>Encuentra y corrige 5 errores propios</p></div>
+        <div class="badge-card"><span class="badge-icon">🗺️</span><h5>Arquitecto</h5><p>Ciudad con 4+ zonas completas y nombradas</p></div>
+        <div class="badge-card"><span class="badge-icon">🎮</span><h5>Game Master</h5><p>Juego publicado en Roblox con sistema completo</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HERRAMIENTAS ═══ -->
+<div id="sec-herramientas" class="section">
+  <div class="container">
+    <div class="sec-header fade-in">
+      <h2>Herramientas y dinámica</h2>
+      <p>Todo lo que el docente necesita para implementar el curso directamente</p>
+    </div>
+    <div class="tool-grid fade-in fade-in-d1">
+      <div class="card">
+        <h3><span class="dot" style="background:var(--blue)"></span>Software principal</h3>
+        <ul style="list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">01</span><div><strong>Roblox Studio</strong><br><span style="color:var(--muted)">Entorno de desarrollo y diseño 3D. Gratuito para todos los estudiantes.</span></div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">02</span><div><strong>ClassDojo</strong><br><span style="color:var(--muted)">Gestión de puntos XP, logros e insignias en tiempo real.</span></div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">03</span><div><strong>Google Drive</strong><br><span style="color:var(--muted)">Entrega de evidencias, capturas y backups del proyecto.</span></div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">04</span><div><strong>Roblox.com</strong><br><span style="color:var(--muted)">Publicación, prueba multijugador y presentación del juego final.</span></div></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="dot" style="background:var(--green)"></span>Dinámica de clase (2h)</h3>
+        <ul style="list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="background:rgba(255,61,61,0.15);color:var(--accent);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px">10 min</span><div>Revisión de misiones anteriores y reto verbal de calentamiento</div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="background:rgba(68,136,255,0.15);color:#88bbff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px">50 min</span><div>Hora 1: Concepto + demostración del docente + ejercicio guiado</div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="background:rgba(54,211,153,0.15);color:#6ee7c4;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px">50 min</span><div>Hora 2: Implementación libre en el proyecto propio del estudiante</div></li>
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px"><span style="background:rgba(255,209,102,0.15);color:var(--yellow);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px">10 min</span><div>Cierre: guardar, compartir avance y asignar misiones para la casa</div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card fade-in fade-in-d2">
+      <h3><span class="dot" style="background:var(--purple)"></span>Evaluación del curso</h3>
+      <div id="eval-bars" style="margin-top:4px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BENEFICIOS ═══ -->
+<div id="sec-beneficios" class="section">
+  <div class="container">
+    <div class="sec-header fade-in">
+      <h2>Habilidades y beneficios</h2>
+      <p>Lo que el estudiante lleva consigo al terminar el curso</p>
+    </div>
+    <div style="display:grid;gap:16px">
+      <div class="card fade-in fade-in-d1">
+        <h3><span class="dot" style="background:var(--blue)"></span>Habilidades técnicas</h3>
+        <div class="skill-wrap">
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Roblox Studio</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Programación Lua</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Diseño 3D</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Eventos y funciones</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">UI / HUD</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Variables y condicionales</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Loops y funciones</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">DataStore / persistencia</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Debugging sistemático</span>
+          <span class="skill-tag" style="background:rgba(68,136,255,0.12);color:#88bbff">Optimización de código</span>
+        </div>
+      </div>
+      <div class="card fade-in fade-in-d2">
+        <h3><span class="dot" style="background:var(--green)"></span>Habilidades blandas</h3>
+        <div class="skill-wrap">
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Pensamiento computacional</span>
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Resolución de problemas</span>
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Creatividad digital</span>
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Perseverancia</span>
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Comunicación técnica</span>
+          <span class="skill-tag" style="background:rgba(54,211,153,0.1);color:#6ee7c4">Trabajo por objetivos</span>
+        </div>
+      </div>
+      <div class="card fade-in fade-in-d3">
+        <h3><span class="dot" style="background:var(--yellow)"></span>¿Por qué Roblox Studio?</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:4px">
+          <div style="font-size:13px;line-height:1.6;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:4px">Gratuito y accesible</strong>Sin costo para estudiantes. Corre en PC, Mac y tablets de gama media.</div>
+          <div style="font-size:13px;line-height:1.6;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:4px">Altamente motivante</strong>Los estudiantes ya conocen Roblox. Construir su propio juego genera compromiso real.</div>
+          <div style="font-size:13px;line-height:1.6;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:4px">Lua como puente</strong>Lenguaje simple y directo que prepara para Python, JavaScript y otros lenguajes.</div>
+          <div style="font-size:13px;line-height:1.6;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:4px">Publicación real</strong>El juego se publica en Roblox.com. Familia y amigos pueden jugarlo desde el día uno.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>ROBOTSchool Academy</span> — Desarrollo de Videojuegos en Roblox Studio — 64 horas • 8 módulos • 32 clases
+</div>
+
+<script>
+const MOD_COLORS = ['#E2231A','#E65C00','#E09600','#1B7A3E','#1565C0','#6A1B9A','#00695C','#B71C1C'];
+const MOD_LIGHT  = ['rgba(226,35,26,0.12)','rgba(230,92,0,0.12)','rgba(224,150,0,0.12)','rgba(27,122,62,0.12)','rgba(21,101,192,0.12)','rgba(106,27,154,0.12)','rgba(0,105,92,0.12)','rgba(183,28,28,0.12)'];
+
+const MODULOS = [
+  {
+    nombre:"El Mundo de Roblox Studio", tag:"Solo diseño",
+    resumen:"Interfaz, herramientas 3D y construcción del mapa base",
+    horas:"8 horas", prog:"Sin programación — 100% diseño",
+    obj:"Dominar la interfaz y herramientas de construcción para crear el mapa base de la ciudad interactiva.",
+    habilidades:["Navegación en Roblox Studio","Construcción 3D con Parts","Move (1), Scale (2), Rotate (3)","Explorer y Properties","Materiales, colores y estética","Organización con Folders y Models"],
+    herramientas:["Workspace, Explorer, Properties","Part, Union, Negate","Model, Folder, Toolbox","Baseplate template"],
+    conceptos:[],
+    proyectoApp:"Plaza central, calles principales, fachadas de edificios y estructura base de la ciudad interactiva.",
+    clases:[
+      { titulo:"Bienvenido a Roblox Studio",
+        h1t:"Explorar la interfaz completa",
+        h1:[
+          {t:"Concepto: La interfaz de Roblox Studio",items:["Viewport: el área 3D donde construyes tu mundo","Explorer: árbol de todos los objetos del juego","Properties: propiedades del objeto seleccionado","Toolbar: herramientas Move, Scale, Rotate en la barra superior"]},
+          {t:"Demostración del docente",items:["Crear una Part → moverla → cambiar color en Properties","Observar cómo cada objeto aparece en el árbol de Explorer","Renombrar objetos con doble clic en Explorer"]},
+          {t:"Ejercicio guiado paso a paso",items:["Crear 3 Parts con formas distintas: Block, Sphere, Cylinder","Cambiar Name de cada una: 'Suelo', 'Pared', 'Techo'","Cambiar BrickColor desde Properties en cada una"]},
+          {t:"Mini reto",items:["ESTRELLA: Crea 5 Parts con colores y formas diferentes","COHETE: Agrúpalas en un Model y nómbralo 'MiBase'","DIAMANTE: Construye una caja cerrada (cubo hueco) con 6 Parts"]}
+        ],
+        h2t:"Construcción de la Plaza Central",
+        h2:[
+          {t:"Implementación paso a paso",items:["Abrir template 'Baseplate' en Roblox Studio","Crear carpeta en Explorer: 'CiudadRobot'","Construir suelo de la plaza: Part 50×1×50, color gris claro","Agregar 4 bancas simples: 2 Parts cada una (base + respaldo)","Colocar fuente central: Cylinder + Sphere encima","Nombrar cada objeto descriptivamente en Explorer"]},
+          {t:"Integración al proyecto",items:["Guardar como 'CiudadRobot_M1.rbxl'","La plaza central será el punto de spawn de los jugadores","Todo lo construido hoy permanecerá en el juego final"]}
+        ],
+        retos:["ESTRELLA: Agrega 4 árboles simples (cilindro café + esfera verde)","COHETE: La fuente tiene 3 niveles de altura diferente","DIAMANTE: Diseña un logo de tu juego con Parts en el piso de la plaza"]
+      },
+      { titulo:"Move, Scale y Rotate — Las 3 herramientas clave",
+        h1t:"Dominar movimiento, escala y rotación",
+        h1:[
+          {t:"Concepto: Move (1) · Scale (2) · Rotate (3)",items:["Move: desplaza en X, Y, Z arrastrando las flechas de colores","Scale: cambia el tamaño desde los puntos en cada eje","Rotate: gira el objeto arrastrando los arcos de colores","1 Stud ≈ 28 cm — la unidad de medida de Roblox"]},
+          {t:"Demostración del docente",items:["Construir una rampa: Part escalada y rotada 30°","Construir escaleras: 5 Parts apiladas con desplazamiento en X e Y","Errores comunes: partes flotando, objetos desalineados"]},
+          {t:"Ejercicio guiado — Construir la primera rampa",items:["Paso 1: Crear Part 5×1×5","Paso 2: Scale → hacerla delgada: 5×0.2×5","Paso 3: Rotate → inclinarla 20°","Resultado: primera rampa del proyecto"]},
+          {t:"Mini reto",items:["ESTRELLA: Escalera de 5 peldaños bien alineados","COHETE: Rampa que conecta dos niveles de diferente altura","DIAMANTE: Torre octagonal usando Rotate a 45°"]}
+        ],
+        h2t:"Calles y estructura urbana de la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Agregar calle principal: Part larga y delgada, color asfalto","Crear intersección con calle perpendicular","Construir 3 fachadas de edificios con alturas distintas","Aceras: Parts angostas en bordes de calles","Nombrar: 'CalleNorte', 'CalleOeste', 'EdificioA'"]},
+          {t:"Integración al proyecto",items:["Las calles conectarán todas las zonas del juego final","Los edificios serán destinos interactivos en módulos 3 y 4","Guardar con las carpetas organizadas en Explorer"]}
+        ],
+        retos:["ESTRELLA: Añade señales de tráfico (cilindro + placa rectangular)","COHETE: Construye un puente sobre un río (Part azul)","DIAMANTE: Crea un túnel con abertura visible usando Parts huecas"]
+      },
+      { titulo:"Materiales, colores y estética 3D",
+        h1t:"Hacer que la ciudad se vea bien",
+        h1:[
+          {t:"Concepto: Material y BrickColor",items:["Material: textura visual del objeto (SmoothPlastic, Grass, Wood, Metal, Neon)","BrickColor: color sólido desde la paleta del panel Properties","Color3: color RGB preciso para efectos específicos","Transparency: 0 (sólido) → 1 (invisible), ideal para ventanas"]},
+          {t:"Demostración del docente",items:["Crear edificio con material Brick y añadir ventanas Transparency 0.5","Letrero brillante con material Neon","Combinar materiales para un look realista"]},
+          {t:"Ejercicio guiado",items:["Seleccionar 3 objetos del mapa y cambiar materiales","Piso = SmoothPlastic, edificio = Brick, árbol = Wood","Agregar ventanas con Transparency 0.4","Añadir un letrero con material Neon"]},
+          {t:"Mini reto",items:["ESTRELLA: Edificio con 3 materiales diferentes","COHETE: Vitrina de tienda con vidrio (Transparency 0.6)","DIAMANTE: Fachada fotorrealista combinando 5 o más materiales"]}
+        ],
+        h2t:"Zona comercial con estética completa",
+        h2:[
+          {t:"Implementación paso a paso",items:["Construir zona comercial: 3 tiendas con fachadas diferenciadas","Cada tienda con material y color propio (ropa, tecnología, comida)","Letreros Neon con nombres de cada tienda","Aceras con material Cobblestone","Macetas: SmoothPlastic + Grass sphere encima"]},
+          {t:"Integración al proyecto",items:["Las tiendas serán lugares interactivos en módulos 3 a 6","Los letreros Neon guiarán al jugador por la ciudad","Guardar carpeta 'ZonaComercial' con todos sus elementos"]}
+        ],
+        retos:["ESTRELLA: 3 tiendas con nombres y colores distintos","COHETE: Zona nocturna con letreros Neon iluminando la calle","DIAMANTE: Mercado al aire libre con parasoles y puestos detallados"]
+      },
+      { titulo:"Explorer, organización y reto de construcción libre",
+        h1t:"Organizar como un profesional",
+        h1:[
+          {t:"Concepto: Organización del proyecto",items:["Workspace limpio = proyecto manejable; caótico = errores inevitables","Folders: agrupan objetos por zona o función","Models: agrupan las partes de un mismo objeto (ej: 'Banca')","Nombres descriptivos evitan confusión al programar más adelante"]},
+          {t:"Demostración del docente",items:["Comparar proyecto desorganizado vs organizado en Explorer","Crear estructura: Calles / Edificios / Decoracion / Sistemas","Mover objetos entre carpetas arrastrando en Explorer","Ctrl+F para encontrar cualquier objeto rápidamente"]},
+          {t:"Ejercicio guiado",items:["Reorganizar toda la ciudad en 4 carpetas con nombres lógicos","Renombrar todos los objetos con nombres descriptivos","Crear Model 'Fuente' con todas sus partes adentro","Verificar que ningún objeto quede suelto en la raíz de Workspace"]},
+          {t:"Mini reto",items:["ESTRELLA: Ciudad en mínimo 3 carpetas con estructura clara","COHETE: Cada edificio es un Model con sus partes adentro","DIAMANTE: Screenshot anotado del árbol de Explorer explicando la organización"]}
+        ],
+        h2t:"Reto especial — La Base Secreta",
+        h2:[
+          {t:"Construcción libre: La Base Secreta",items:["Zona oculta de la ciudad: bajo tierra, en azotea o en margen del mapa","Requisitos: entrada disimulada, sala interior, iluminación Neon de ambiente","Usar Union y Negate para formas complejas","Todo en un Model llamado 'BaseSecreta'"]},
+          {t:"Integración al proyecto",items:["La base secreta será la zona de recompensas del juego final","En módulo 6 solo los jugadores con nivel suficiente podrán entrar","Hacer backup antes de cerrar: duplicar el archivo .rbxl"]}
+        ],
+        retos:["ESTRELLA: Base secreta con entrada y sala principal","COHETE: Incluye trampa o pasadizo oculto en la base","DIAMANTE: 3 salas temáticas con sistema de iluminación Neon propio"]
+      }
+    ]
+  },
+  {
+    nombre:"Primeros Scripts en Lua", tag:"Diseño + Programación",
+    resumen:"print, Output, variables, primeros scripts conectados",
+    horas:"8 horas", prog:"print() · variables · tipos de datos · loops básicos",
+    obj:"Escribir los primeros scripts funcionales en Lua y conectarlos a objetos reales del juego.",
+    habilidades:["Abrir el editor de Script","Usar print() y leer el Output","Declarar variables con local","Tipos: number, string, boolean","Loops for y while con wait()"],
+    herramientas:["Script editor en Roblox Studio","Output window","Explorer (Script vs LocalScript)"],
+    conceptos:["print('texto')","local nombre = valor","number · string · boolean","-- comentarios","for i=1,10 do end","while true do  wait(1)  end"],
+    proyectoApp:"Objetos de la ciudad con scripts de estado. Variables de configuración del juego. Contador de inicio animado.",
+    clases:[
+      { titulo:"Mi primer script — Hola, Roblox",
+        h1t:"Abrir el editor y escribir código",
+        h1:[
+          {t:"Concepto: ¿Qué es un Script?",items:["Script = instrucciones que Roblox ejecuta en orden al iniciar el juego","En Roblox, cada Script vive dentro de un objeto del Workspace","Lua: lenguaje de programación simple usado en juegos reales","Output: ventana donde ves los resultados y errores de tu código"]},
+          {t:"Demostración del docente",items:["Insertar Script en la plaza central desde Explorer","Escribir: print('Bienvenido a CiudadRobot')","Presionar Play y observar el Output","Explicar: cada línea es una instrucción independiente"]},
+          {t:"Ejercicio guiado",items:["Insertar Script en la plaza central","Escribir 5 print() con mensajes diferentes del juego","Ver cada mensaje aparecer en el Output","Agregar comentarios con -- para explicar cada línea"]},
+          {t:"Mini reto",items:["ESTRELLA: 5 prints con mensajes temáticos del juego","COHETE: print() con tu nombre y el nombre del juego concatenados","DIAMANTE: Script de 10 prints que cuenten la historia del juego"]}
+        ],
+        h2t:"Scripts en objetos de la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script en la fuente de la plaza: print('La fuente está activa')","Script en edificio comercial: print('Bienvenido a la Zona Comercial')","Script en la entrada de la base secreta: print('Zona restringida')","Probar que cada objeto imprime su mensaje al iniciar el juego"]},
+          {t:"Integración al proyecto",items:["Cada zona clave tiene un script de estado — se expandirán en clases futuras","El Output es la herramienta de debug: si algo falla, aquí lo ves","Guardar archivo actualizado con los primeros scripts"]}
+        ],
+        retos:["ESTRELLA: 3 zonas con Scripts y mensajes propios","COHETE: Script con 5 prints que describen cada zona en orden","DIAMANTE: Script que imprima el nombre de cada edificio de la ciudad en secuencia"]
+      },
+      { titulo:"Variables — Guardar información",
+        h1t:"Variables en Lua",
+        h1:[
+          {t:"Concepto: Variables",items:["Variable = caja con nombre donde guardas información","Sintaxis: local nombreVariable = valor","Tipos: number (42, 3.14), string ('Hola'), boolean (true/false)","El valor puede cambiar durante la ejecución del código"]},
+          {t:"Demostración del docente",items:["local vida = 100  → número","local jugador = 'Ro-Player'  → texto","local enJuego = true  → booleano","print(vida) → muestra el valor en Output"]},
+          {t:"Ejercicio guiado",items:["Crear variable 'monedas' = 0","Crear variable 'nombreJuego' = 'CiudadRobot'","Crear variable 'juegoActivo' = true","print() de cada variable y verificar en Output"]},
+          {t:"Mini reto",items:["ESTRELLA: 5 variables que describan el personaje del juego","COHETE: Cambiar el valor de una variable e imprimir antes y después","DIAMANTE: Variables que calculen precio × cantidad y muestren el total"]}
+        ],
+        h2t:"Variables de configuración del juego",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script en plaza: local velocidadJuego = 1","local monedas = 0  — puntuación inicial","local zonaNombre = 'Plaza Central'","print('Zona actual: ' .. zonaNombre)  — concatenar con ..","print('Monedas iniciales: ' .. monedas)"]},
+          {t:"Integración al proyecto",items:["Las variables monedas y vida se usarán en el sistema del módulo 6","Guardar como 'Script_Config.lua' documentado con comentarios","Estas variables son la base de toda la lógica del juego"]}
+        ],
+        retos:["ESTRELLA: Variables de configuración del juego: nombre, zona, dificultad","COHETE: Variables que calculen el doble y triple de monedas iniciales","DIAMANTE: 10 variables interconectadas que describan todo el estado inicial del juego"]
+      },
+      { titulo:"Condicionales — Si pasa esto, haz esto",
+        h1t:"if / else en Lua",
+        h1:[
+          {t:"Concepto: Condicionales if / else",items:["if = ejecutar código solo si se cumple una condición","else = código alternativo si la condición NO se cumple","elseif = condición adicional entre if y else","Operadores: == (igual), ~= (diferente), > < >= <="]},
+          {t:"Demostración del docente",items:["local vida = 30","if vida > 50 then  print('Jugador sano')","else  print('¡Jugador en peligro!')  end","Cambiar el valor de vida y ver cómo cambia el resultado"]},
+          {t:"Ejercicio guiado",items:["local monedas = 100","if monedas >= 50 then  print('Puedes comprar')","elseif monedas >= 10 then  print('Tienes pocas monedas')","else  print('Sin monedas')  end"]},
+          {t:"Mini reto",items:["ESTRELLA: if que determine si el jugador tiene acceso a la base secreta","COHETE: 3 niveles de dificultad según variable 'puntos'","DIAMANTE: Sistema de vida con 5 estados: crítico, peligro, normal, bien, perfecto"]}
+        ],
+        h2t:"Condiciones en la puerta de la base secreta",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script en la puerta de la base secreta","local tieneAcceso = false","if tieneAcceso then  print('Puerta abierta. Bienvenido.')","else  print('Acceso denegado. Nivel insuficiente.')  end","Cambiar tieneAcceso = true y verificar el Output"]},
+          {t:"Integración al proyecto",items:["Esta lógica es la base del sistema de acceso por niveles del módulo 6","En módulo 3 conectaremos esto a eventos reales del jugador","Guardar 'Script_Puertas.lua' con comentarios claros"]}
+        ],
+        retos:["ESTRELLA: Condicional que determine si el jugador gana o pierde","COHETE: Sistema de niveles: Novato / Intermedio / Experto según puntos","DIAMANTE: Lógica de tienda con monedas + nivel mínimo para acceder"]
+      },
+      { titulo:"Loops — Repetir acciones en el juego",
+        h1t:"for y while en Lua",
+        h1:[
+          {t:"Concepto: Loops (bucles)",items:["Loop = repetir una acción muchas veces sin escribir código repetido","for i = 1, 10 do → repite exactamente 10 veces","while condicion do → repite mientras la condición sea verdadera","wait(1) → pausa de 1 segundo dentro del loop"]},
+          {t:"Demostración del docente",items:["for i = 1, 5 do  print('Ronda ' .. i)  end","while true do  print('Juego activo')  wait(2)  end","Diferencia clave: for sabe cuántas veces; while depende de condición"]},
+          {t:"Ejercicio guiado",items:["for i = 1, 10 do  print('Moneda ' .. i .. ' disponible')  end","while true do  print('Ciudad activa — tiempo: ')  wait(3)  end"]},
+          {t:"Mini reto",items:["ESTRELLA: Loop que cuente de 1 a 20 imprimiendo cada número","COHETE: Contador regresivo de 10 a 0 simulando inicio del juego","DIAMANTE: Loop de 5 oleadas de enemigos con pausa de 3 segundos entre cada una"]}
+        ],
+        h2t:"Animaciones de la ciudad con loops",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script en la fuente: while true do  print('Fuente activa')  wait(1)  end","Contador de inicio en la entrada del juego:","for i = 3, 1, -1 do  print('El juego comienza en: ' .. i)  wait(1)  end","print('¡Bienvenido a CiudadRobot!')"]},
+          {t:"Integración al proyecto",items:["El loop de la fuente será la base del spawn de monedas (módulo 6)","El contador regresivo se integrará en la pantalla de inicio del módulo 7","Próxima clase: conectamos loops con eventos reales de jugadores"]}
+        ],
+        retos:["ESTRELLA: Contador de 5 a 1 que anuncie el inicio del juego","COHETE: Loop que imprima 10 mensajes de ambiente de la ciudad","DIAMANTE: Sistema de 3 oleadas de 10 segundos con anuncio de inicio y fin de cada una"]
+      }
+    ]
+  },
+  {
+    nombre:"Eventos — El Juego Reacciona", tag:"Diseño + Programación",
+    resumen:"Touched, ClickDetector, funciones y objetos interactivos",
+    horas:"8 horas", prog:"function · Touched · ClickDetector · :Connect()",
+    obj:"Programar objetos que reaccionan al jugador usando eventos Touched y ClickDetector.",
+    habilidades:["Definir funciones en Lua","Conectar eventos con :Connect()","Evento Touched y TouchEnded","ClickDetector en objetos","Detectar qué jugador toca el objeto"],
+    herramientas:["Script y LocalScript","ClickDetector (objeto de Explorer)","Explorer para estructura de eventos"],
+    conceptos:["function nombre()  end","evento:Connect(funcion)","part.Touched:Connect(function(hit))","ClickDetector.MouseClick","hit.Parent:FindFirstChild('Humanoid')"],
+    proyectoApp:"Monedas que desaparecen al tocarlas, puertas que se abren con clic, trampas y zona de desafío interactiva.",
+    clases:[
+      { titulo:"Funciones — Bloques de código reutilizables",
+        h1t:"Definir y llamar funciones",
+        h1:[
+          {t:"Concepto: Funciones",items:["Función = bloque de código con nombre que puedes llamar cuando quieras","Sintaxis: function miFuncion()  ... end","Llamar la función: miFuncion()","Los parámetros permiten pasarle información a la función"]},
+          {t:"Demostración del docente",items:["function bienvenida()  print('Hola jugador')  end  → llamar bienvenida()","function sumar(a, b)  return a + b  end","print(sumar(10, 5))  → imprime 15 en Output"]},
+          {t:"Ejercicio guiado",items:["function mostrarVida()  print('Vida actual: 100')  end","function mostrarMonedas()  print('Monedas: 0')  end","Llamar ambas funciones en el Script","Modificarlas para recibir un parámetro con el valor real"]},
+          {t:"Mini reto",items:["ESTRELLA: Función que imprima stats del jugador: vida, monedas, zona","COHETE: Función con parámetro: mostrarZona('Plaza') imprime el nombre recibido","DIAMANTE: 5 funciones interconectadas que simulen un sistema de juego completo"]}
+        ],
+        h2t:"Funciones en los edificios de la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script en la tienda principal de la zona comercial","function abrirTienda()  print('Tienda abierta. Bienvenido.')  end","function cerrarTienda()  print('Tienda cerrada.')  end","abrirTienda()  wait(5)  cerrarTienda()"]},
+          {t:"Integración al proyecto",items:["Estas funciones se conectarán a ClickDetector en la próxima clase","Cada edificio tendrá su propia función de apertura y cierre","Guardar 'Funciones_Ciudad.lua' en la carpeta Sistemas"]}
+        ],
+        retos:["ESTRELLA: Función que anuncie qué zona visitó el jugador","COHETE: Función con parámetro para personalizar el saludo por zona","DIAMANTE: Sistema de 5 funciones que gestionen el ciclo de día/noche de la ciudad"]
+      },
+      { titulo:"Touched — Objetos que reaccionan al contacto",
+        h1t:"El evento Touched en Roblox",
+        h1:[
+          {t:"Concepto: Evento Touched",items:["Touched se dispara cuando algo entra en contacto con el objeto","Sintaxis: objeto.Touched:Connect(function(hit)  end)","hit = lo que tocó el objeto (jugador, otra Part, etc.)",":Destroy() elimina el objeto del juego permanentemente"]},
+          {t:"Demostración del docente",items:["Part en la plaza con Script:","part.Touched:Connect(function(hit)  print(hit.Name .. ' tocó la plaza')  end)","Agregar Destroy() para que la Part desaparezca al contacto","Ver el efecto en Play Mode caminando sobre la parte"]},
+          {t:"Ejercicio guiado",items:["Crear Part amarilla (primera moneda del juego)","moneda.Touched:Connect(function()  print('¡Moneda recogida!')  end)","Probar recolectando la moneda en Play Mode","Agregar moneda:Destroy() para que desaparezca al tocarla"]},
+          {t:"Mini reto",items:["ESTRELLA: Moneda que desaparece al tocarla con mensaje en Output","COHETE: 3 monedas en la ciudad con mensaje diferente cada una","DIAMANTE: Trampa que detecta el toque, imprime alerta y cuenta activaciones"]}
+        ],
+        h2t:"Sistema de monedas en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Crear 5 Parts amarillas distribuidas por la ciudad","Carpeta en Explorer: 'Monedas'","Script en cada moneda con Touched:Destroy()","print('Moneda recogida en: ' .. zonaNombre)","Distribución: 2 plaza, 2 zona comercial, 1 base secreta"]},
+          {t:"Integración al proyecto",items:["Estas monedas se conectarán al leaderstats real en el módulo 6","El Destroy() es el primer efecto visual real e interactivo del juego","Carpeta limpia: 'Sistemas/Monedas' en Explorer"]}
+        ],
+        retos:["ESTRELLA: 5 monedas funcionales distribuidas en la ciudad","COHETE: Trampa que imprime mensaje de daño al ser tocada","DIAMANTE: Zona de velocidad que detecta al jugador y anuncia boost en Output"]
+      },
+      { titulo:"ClickDetector — Interactividad con el mouse",
+        h1t:"Objetos que responden al clic del jugador",
+        h1:[
+          {t:"Concepto: ClickDetector",items:["ClickDetector = objeto que se inserta dentro de una Part para detectar clics","Sintaxis: clickDetector.MouseClick:Connect(function(jugador))","jugador = el Player que hizo clic — tiene nombre y datos","Diferencia con Touched: Click solo necesita el cursor, no contacto físico"]},
+          {t:"Demostración del docente",items:["Insertar ClickDetector en una puerta desde Explorer (+)","local click = puerta:FindFirstChild('ClickDetector')","click.MouseClick:Connect(function(player)  print(player.Name .. ' abrió la puerta')  end)","Mostrar en Play Mode haciendo clic en la puerta"]},
+          {t:"Ejercicio guiado",items:["Seleccionar puerta de un edificio de la ciudad","Insertar ClickDetector desde el menú +","Script en la puerta: MouseClick → función abrirPuerta","Verificar que el nombre del jugador aparece en Output al hacer clic"]},
+          {t:"Mini reto",items:["ESTRELLA: Puerta con ClickDetector que imprime mensaje al hacer clic","COHETE: Botón en la ciudad que activa mensaje de broadcast","DIAMANTE: 3 botones con efectos diferentes: puerta, luz, recompensa"]}
+        ],
+        h2t:"Puertas y botones en toda la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["ClickDetector en 3 puertas principales de la ciudad","Script con función personalizada en cada una","click.MouseClick:Connect(function(jugador)  print(jugador.Name .. ' abrió la tienda')  end)","Botón rojo grande en entrada de la base secreta","Clic en botón → print('Acceso a base secreta iniciado')"]},
+          {t:"Integración al proyecto",items:["En módulo 4 las puertas realmente se moverán con CFrame y Tween","En módulo 7 los botones controlarán elementos de la UI","Sistema de interacción base listo para todo el juego"]}
+        ],
+        retos:["ESTRELLA: 3 puertas con ClickDetector funcionales","COHETE: Botón que identifica qué jugador hizo clic e imprime su nombre","DIAMANTE: 5 botones interactivos con respuestas diferentes e identificación del jugador"]
+      },
+      { titulo:"Combinando eventos — Ciudad Interactiva",
+        h1t:"Integrar Touched y ClickDetector",
+        h1:[
+          {t:"Concepto: Múltiples eventos en un objeto",items:["Un objeto puede tener múltiples eventos activos simultáneamente","Touched ideal para coleccionables y trampas físicas","ClickDetector ideal para botones, puertas y NPCs","La combinación crea mecánicas de juego completas y ricas"]},
+          {t:"Demostración del docente",items:["Part con Touched (trampa activa) Y ClickDetector (botón para desactivarla)","Variable booleana 'trampaActiva' controla el comportamiento","Mostrar cómo los dos eventos coexisten en el mismo Script","Debug: mensajes descriptivos para seguir el flujo en Output"]},
+          {t:"Ejercicio guiado — Zona de desafío",items:["Construir zona de desafío: plataformas con trampas y monedas","Monedas con Touched:Destroy()","Trampas con Touched → print('¡Caíste en la trampa!')","Botón de escape con ClickDetector al final de la zona"]},
+          {t:"Mini reto",items:["ESTRELLA: Zona con 3 monedas y 1 trampa funcional","COHETE: Trampa que se desactiva con botón ClickDetector cercano","DIAMANTE: Zona de desafío completa: 5 obstáculos, 5 premios, 2 botones"]}
+        ],
+        h2t:"Construcción de la Zona de Desafío",
+        h2:[
+          {t:"Implementación paso a paso",items:["Zona de desafío entre plaza y base secreta","5 plataformas flotantes (Parts pequeñas sobre el vacío)","Monedas en plataformas alternadas con Touched:Destroy()","Trampa en plataforma del medio: Touched → print alerta","Botón al final: ClickDetector → print('¡Desafío completado!')"]},
+          {t:"Integración al proyecto",items:["Esta zona aparecerá en el mapa como 'Zona Desafío'","En módulo 6 el botón final otorgará monedas reales al jugador","Guardar y hacer backup del proyecto completo"]}
+        ],
+        retos:["ESTRELLA: Zona funcional con monedas y una trampa activa","COHETE: Trampa desactivable con botón ClickDetector nearby","DIAMANTE: Mini-nivel completo con 3 tipos de eventos integrados y narrativa en Output"]
+      }
+    ]
+  },
+  {
+    nombre:"Propiedades y Transformaciones", tag:"Diseño + Programación",
+    resumen:"CFrame, TweenService, Color3, efectos visuales por código",
+    horas:"8 horas", prog:"CFrame · TweenService · Color3 · Transparency por código",
+    obj:"Modificar posición, color, tamaño y transparencia de objetos por código para crear efectos visuales dinámicos.",
+    habilidades:["Mover objetos con CFrame","Animaciones suaves con TweenService","Cambiar Color3 por código","Modificar Transparency en tiempo real","Puertas que se abren, luces que parpadean"],
+    herramientas:["TweenService (GetService)","CFrame.new(x,y,z)","Color3.fromRGB(r,g,b)","TweenInfo.new(duracion)"],
+    conceptos:["objeto.CFrame = CFrame.new(x,y,z)","local TS = game:GetService('TweenService')","TS:Create(obj, info, {CFrame=pos})","tween:Play()","Color3.fromRGB(255,0,0)"],
+    proyectoApp:"Puertas que se abren suavemente, luces que cambian de color, plataformas animadas y efectos visuales en toda la ciudad.",
+    clases:[
+      { titulo:"CFrame — Mover objetos con código",
+        h1t:"Posición y movimiento con CFrame",
+        h1:[
+          {t:"Concepto: CFrame",items:["CFrame = posición Y rotación de un objeto en el espacio 3D","objeto.CFrame = CFrame.new(x, y, z)  → teletransporta al punto","objeto.CFrame = objeto.CFrame + Vector3.new(0, 5, 0)  → sube 5 studs","CFrame es más preciso y programable que el mouse"]},
+          {t:"Demostración del docente",items:["Puerta que sube al hacer clic: CFrame + Vector3.new(0, 10, 0)","El movimiento es instantáneo → problema visual","Solución: usar Tween en la siguiente clase para animarlo suavemente"]},
+          {t:"Ejercicio guiado",items:["Crear plataforma en la zona de desafío","Script en botón: plataforma.CFrame = CFrame.new(10, 5, 0)","Probar que la plataforma se mueve al presionar el botón","Modificar la posición destino para diferentes efectos"]},
+          {t:"Mini reto",items:["ESTRELLA: Botón que mueve un objeto a una nueva posición","COHETE: Plataforma que alterna entre dos posiciones con cada clic","DIAMANTE: Plataforma que recorre 4 puntos en secuencia al presionar el botón"]}
+        ],
+        h2t:"Puertas que se mueven en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Seleccionar la puerta principal de la zona comercial","Guardar posición original: local posCerrada = puerta.CFrame","Definir posición abierta: CFrame.new(x, y+10, z)","Variable booleana 'estaAbierta' para alternar el estado","ClickDetector: si cerrada → abrir, si abierta → cerrar"]},
+          {t:"Integración al proyecto",items:["3 puertas de la ciudad ahora se abren y cierran con código","El movimiento instantáneo se mejorará con Tween en la próxima clase","Carpeta 'Puertas' en Explorer con scripts propios"]}
+        ],
+        retos:["ESTRELLA: Puerta que se mueve al hacer clic","COHETE: Puerta que alterna entre abierta y cerrada con estado booleano","DIAMANTE: 3 puertas con movimiento diferente: arriba, lateral, rotación"]
+      },
+      { titulo:"TweenService — Animaciones suaves",
+        h1t:"Animar objetos con TweenService",
+        h1:[
+          {t:"Concepto: TweenService",items:["Tween = transición animada de un valor a otro en un tiempo definido","local TS = game:GetService('TweenService')","local info = TweenInfo.new(duracion, EasingStyle, EasingDirection)","local tween = TS:Create(objeto, info, {CFrame = nuevaPos})","tween:Play()  →  inicia la animación"]},
+          {t:"Demostración del docente",items:["Puerta que se abre suavemente en 1.5 segundos","TweenInfo.new(1.5, Enum.EasingStyle.Quad)","Luz que cambia gradualmente de Color3","Comparación lado a lado: CFrame instantáneo vs Tween suave"]},
+          {t:"Ejercicio guiado",items:["Aplicar Tween a la puerta de la zona comercial","TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)","Animar: {CFrame = posAbierta}","Evento .Completed:Wait() para encadenar acciones al terminar"]},
+          {t:"Mini reto",items:["ESTRELLA: Puerta que se abre suavemente en 2 segundos","COHETE: Plataforma en loop continuo A→B→A con Tween","DIAMANTE: Secuencia de 3 animaciones encadenadas: puerta → luz → recompensa"]}
+        ],
+        h2t:"Plataformas animadas en la zona de desafío",
+        h2:[
+          {t:"Implementación paso a paso",items:["Seleccionar 2 plataformas de la zona de desafío","Script con TweenService: tween_ab y tween_ba","while true do  tween_ab:Play()  tween_ab.Completed:Wait()  tween_ba:Play()  tween_ba.Completed:Wait()  end","Velocidad diferente: plataforma 1 = 1.5s, plataforma 2 = 2.5s","Plataforma especial: gira lentamente con animación de CFrame + rotation"]},
+          {t:"Integración al proyecto",items:["Las plataformas animadas hacen la zona de desafío genuinamente jugable","El patrón de Tween en loop se usa en todas las animaciones del juego","Aprender TweenService es aprender animación de juego profesional"]}
+        ],
+        retos:["ESTRELLA: Plataforma que se mueve de A a B suavemente","COHETE: Plataforma en loop continuo de ida y vuelta sin pausas","DIAMANTE: 3 plataformas con velocidad y dirección diferente en movimiento sincronizado"]
+      },
+      { titulo:"Color3 y Transparency — Efectos visuales",
+        h1t:"Cambiar apariencia desde el código",
+        h1:[
+          {t:"Concepto: Color3 y Transparency",items:["Color3.fromRGB(255, 0, 0) → rojo puro","objeto.Color = Color3.fromRGB(r, g, b)","objeto.Transparency = 0 (sólido) → 1 (completamente invisible)","Combinados con Tween: semáforos, fantasmas, efectos de activación"]},
+          {t:"Demostración del docente",items:["Semáforo con Color3 alternando verde → rojo cada 5 segundos","Tween de Transparency: objeto que aparece y desaparece gradualmente","Efecto de recolección de moneda: flash amarillo antes de Destroy()"]},
+          {t:"Ejercicio guiado — Semáforo funcional",items:["Crear semáforo en una calle de la ciudad","while true do  semaforo.Color = Color3.fromRGB(0,255,0)  wait(5)  semaforo.Color = Color3.fromRGB(255,0,0)  wait(5)  end"]},
+          {t:"Mini reto",items:["ESTRELLA: Semáforo funcional en una intersección de la ciudad","COHETE: Semáforo con 3 fases: verde → amarillo → rojo → verde","DIAMANTE: 3 semáforos sincronizados en diferentes intersecciones"]}
+        ],
+        h2t:"Iluminación dinámica de la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Agregar Parts Neon a 3 edificios de la zona comercial","Script de parpadeo suave: Tween Transparency 0 → 0.3 → 0 en loop","Letrero de tienda que cambia de Color3 cada 2 segundos","Zona de base secreta: luces rojas parpadeantes de alerta","Efecto de moneda recogida: flash Color dorado antes de Destroy()"]},
+          {t:"Integración al proyecto",items:["La ciudad se siente viva y dinámica con efectos de luz","Los efectos visuales comunican al jugador qué es interactivo","Carpeta 'Luces' en Explorer con todos los scripts de iluminación"]}
+        ],
+        retos:["ESTRELLA: Letrero de tienda con color cambiante cada 2 segundos","COHETE: Base secreta con alarma visual roja parpadeante","DIAMANTE: Sistema de iluminación día/noche para toda la ciudad con Tween"]
+      },
+      { titulo:"Integración visual — Ciudad que cobra vida",
+        h1t:"Diseño de juego con efectos",
+        h1:[
+          {t:"Concepto: Feedback visual en juegos",items:["Un buen juego usa efectos visuales para comunicar sin palabras","Regla de oro: el jugador debe saber qué hacer sin leer instrucciones","Feedback visual = cambio de color o animación al ocurrir algo","Color + Movimiento + Sonido = experiencia completa"]},
+          {t:"Revisión técnica grupal",items:["Cada estudiante muestra su ciudad y explica 2 efectos visuales","El grupo identifica: ¿qué está claro? ¿qué confunde al jugador?","Docente muestra cómo mejorar la legibilidad visual de cada zona","Optimización: verificar que Output no tenga errores"]},
+          {t:"Ejercicio — Pulir la ciudad completa",items:["Revisar que todas las monedas tengan flash antes de Destroy()","Verificar que puertas abren y cierran correctamente con Tween","Agregar 2 efectos visuales nuevos en zonas que los necesiten","Limpiar Explorer: sin objetos sin nombre ni scripts vacíos"]},
+          {t:"Mini reto",items:["ESTRELLA: Ciudad con mínimo 5 efectos visuales funcionando","COHETE: Cada zona tiene al menos 2 indicadores visuales de interactividad","DIAMANTE: Demo de 3 minutos mostrando todos los efectos a un compañero"]}
+        ],
+        h2t:"Construcción libre — Nueva zona de la ciudad",
+        h2:[
+          {t:"Construcción libre guiada",items:["Objetivo: agregar la zona que le falta a tu ciudad","Opciones: parque de diversiones, zona industrial, aeropuerto, estadio","La nueva zona debe tener: mínimo 3 efectos visuales","Nuevo desafío técnico: construir un ascensor con TweenService (sube y baja)","20 minutos finales para decoración y props de detalle"]},
+          {t:"Integración al proyecto",items:["Checkpoint módulo 4: ciudad con 4+ zonas definidas","Cada zona con interacciones básicas (Touched + Click + Tween) funcionando","Guardar y hacer backup con nombre 'CiudadRobot_M4_FINAL.rbxl'"]}
+        ],
+        retos:["ESTRELLA: Nueva zona diseñada y construida con efectos visuales","COHETE: Ascensor funcional con TweenService en un edificio de la ciudad","DIAMANTE: Tour guiado de 5 minutos mostrando la ciudad con efectos y explicando el código de 3 sistemas"]
+      }
+    ]
+  },
+  {
+    nombre:"Sonido, Física y Ambiente", tag:"Diseño + Programación",
+    resumen:"Sound, físicas de objetos, partículas y ambiente inmersivo",
+    horas:"8 horas", prog:"Sound · Anchored/CanCollide · ParticleEmitter",
+    obj:"Agregar audio, efectos físicos y ambiente para crear una experiencia inmersiva y completa.",
+    habilidades:["Insertar y controlar sonidos por código","Físicas: Anchored, CanCollide, Massless","Gravedad y velocidad aplicada a objetos","ParticleEmitter básico para efectos","Feedback audio-visual completo al jugador"],
+    herramientas:["Sound, SoundService","BodyVelocity, BodyForce","ParticleEmitter","Workspace.Gravity"],
+    conceptos:["sound:Play() / sound:Stop()","sound.Looped = true","objeto.Anchored = false","objeto.CanCollide = false","emitter:Emit(10)"],
+    proyectoApp:"Ciudad con música de fondo, efectos de sonido en interacciones, trampas físicas y partículas en recompensas.",
+    clases:[
+      { titulo:"Sound — Audio en el juego",
+        h1t:"Insertar y controlar sonidos",
+        h1:[
+          {t:"Concepto: Sound en Roblox",items:["Sound = objeto que reproduce audio dentro del juego","Insertar desde Explorer: + → Sound dentro del objeto o Workspace","SoundId: ID del audio en Roblox (formato: rbxassetid://123456)","Propiedades clave: Volume (0–1), Looped, RollOffDistance"]},
+          {t:"Demostración del docente",items:["Sound de moneda: buscar ID en Toolbox → copiar rbxassetid","sound:Play()  en el evento Touched de la moneda","Sound de fondo en Workspace con Looped = true","Sound de puerta al abrirse con ClickDetector"]},
+          {t:"Ejercicio guiado",items:["Insertar Sound en la moneda de la plaza","Configurar SoundId con ID de coin pickup","moneda.Touched → sound:Play() → wait(0.5) → moneda:Destroy()","Agregar Sound de fondo en Workspace con Looped = true y Volume = 0.3"]},
+          {t:"Mini reto",items:["ESTRELLA: 3 sonidos diferentes en 3 objetos distintos de la ciudad","COHETE: Música de fondo de ciudad con volumen apropiado","DIAMANTE: Sistema de audio: música + efectos + alerta de trampa + sonido de victoria"]}
+        ],
+        h2t:"Audio completo en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Música de fondo en Workspace (looped, Volume 0.3)","Sound de moneda en cada coleccionable del mapa","Sound de puerta en cada ClickDetector de acceso","Sound de alerta en cada trampa activa","Sound de fanfarria en el botón final de la zona de desafío"]},
+          {t:"Integración al proyecto",items:["El audio es la diferencia entre una demo técnica y un juego real","Cada zona puede tener su música ambiente diferente","Documentar IDs de sonidos usados en comentarios de los Scripts"]}
+        ],
+        retos:["ESTRELLA: Música de fondo + 3 efectos de sonido en interacciones","COHETE: Cada zona de la ciudad con su música ambiente propia","DIAMANTE: Sistema de audio dinámico: música cambia según la zona actual del jugador"]
+      },
+      { titulo:"Física — Objetos con comportamiento real",
+        h1t:"Anchored, CanCollide y velocidad",
+        h1:[
+          {t:"Concepto: Propiedades físicas de Parts",items:["Anchored = true: fijo en su lugar, la gravedad no lo afecta","Anchored = false: cae, rueda y rebota como objeto real","CanCollide = false: los objetos pasan a través (invisible en términos físicos)","Massless = true: sin masa, no afecta la física de otros objetos"]},
+          {t:"Demostración del docente",items:["Desactivar Anchored en un boulder: cae al piso con gravedad","CanCollide = false en una Part: el jugador la atraviesa","Trampa de caída: boulder que cae sobre el jugador al pisar trigger","Plataforma que desaparece: wait(2) → CanCollide false → Transparency 1"]},
+          {t:"Ejercicio guiado — Trampa de caída",items:["Crear boulder (Sphere grande) sobre la zona de desafío","boulder.Anchored = false  activa la gravedad","Trigger en plataforma cercana: Touched → boulder.Anchored = false","Cronometrar: el jugador tiene 3 segundos para escapar"]},
+          {t:"Mini reto",items:["ESTRELLA: Trampa de objeto que cae con física real","COHETE: Plataforma que desaparece después de 2 segundos de pisarla","DIAMANTE: Zona de caos físico con 5 objetos con propiedades físicas diferentes"]}
+        ],
+        h2t:"Zona de obstáculos físicos",
+        h2:[
+          {t:"Implementación paso a paso",items:["Zona de obstáculos entre la plaza y la base secreta","3 trampas de gravedad: boulders que caen con Touched trigger","Plataformas que desaparecen: wait(2) → CanCollide = false → Transparency 1","Zona de gravedad reducida: Workspace.Gravity = 40 localmente","Viento: Part invisible con BodyVelocity que empuja al jugador"]},
+          {t:"Integración al proyecto",items:["La zona física es el obstáculo más emocionante del juego","Las físicas se combinan con los sonidos de la clase anterior","Guardar: 'ZonaFisica' con toda la física correctamente documentada"]}
+        ],
+        retos:["ESTRELLA: 2 trampas con física real en la zona de desafío","COHETE: Plataformas que desaparecen al pisarlas en secuencia de escape","DIAMANTE: Mini zona de física completa con 5 tipos de obstáculos diferentes"]
+      },
+      { titulo:"ParticleEmitter — Efectos de ambiente",
+        h1t:"Partículas y efectos visuales de ambiente",
+        h1:[
+          {t:"Concepto: ParticleEmitter",items:["ParticleEmitter = objeto que emite partículas visuales (fuego, nieve, magia)","Se inserta dentro de una Part desde el menú + de Explorer","Rate: partículas por segundo emitidas continuamente","Lifetime: cuánto tiempo vive cada partícula individual","emitter:Emit(10) → lanza ráfaga de 10 partículas instantáneamente"]},
+          {t:"Demostración del docente",items:["Partículas de agua en la fuente de la plaza","Destello dorado al recoger una moneda: Emit(15) antes de Destroy()","Activar/desactivar: emitter.Enabled = false / true","Humo en chimenea: Rate bajo con Lifetime alto"]},
+          {t:"Ejercicio guiado",items:["Insertar ParticleEmitter en cada moneda del mapa","Configurar: Rate = 0, Lifetime = 0.5","Al recolectar: emitter:Emit(15) → wait(0.3) → Destroy()","Partículas de humo gris en chimenea de un edificio de la zona comercial"]},
+          {t:"Mini reto",items:["ESTRELLA: Partículas en las monedas al recolectarlas","COHETE: 3 efectos de partículas diferentes en 3 zonas distintas","DIAMANTE: Efectos completos: agua, humo, magia y nieve en zonas diferentes"]}
+        ],
+        h2t:"Ciudad con ambiente vivo y partículas",
+        h2:[
+          {t:"Implementación paso a paso",items:["Agua animada en la fuente de la plaza central","Chimeneas en 2 edificios de la zona comercial (humo gris lento)","Efecto de magia en la entrada de la base secreta (partículas moradas)","Destello dorado en cada moneda al recogerla","Lluvia suave en una zona específica del mapa"]},
+          {t:"Integración al proyecto",items:["La ciudad se siente viva con partículas en movimiento continuo","Partículas + sonido + Tween = feedback completo y satisfactorio","Optimizar: evitar Rate alto en muchos emitters activos al mismo tiempo"]}
+        ],
+        retos:["ESTRELLA: 3 tipos de partículas en 3 zonas diferentes de la ciudad","COHETE: Fuente de la plaza con agua animada + sonido de agua sincronizado","DIAMANTE: Ciudad con ambiente completo: lluvia local, humo, magia y efectos de monedas"]
+      },
+      { titulo:"Checkpoint — Integración Módulos 1 al 5",
+        h1t:"Revisión, pulido y demo de mitad de curso",
+        h1:[
+          {t:"Checklist técnico de módulos 1–5",items:["Diseño: mapa completo con 4+ zonas bien definidas y nombradas","Código: scripts sin errores rojos en el Output","Eventos: Touched y Click funcionando en todos los objetos interactivos","Efectos: Tween, Color, Sound y Partículas integradas en el juego"]},
+          {t:"Sesión de code review grupal",items:["Cada estudiante muestra 1 script y lo explica línea por línea","Compañeros dan feedback: ¿se entiende? ¿funciona?","Docente revisa patrones incorrectos comunes","Reto: limpiar todos los Warnings del Output en 15 minutos"]},
+          {t:"Optimización y organización",items:["Verificar Explorer: estructura limpia y lógica de carpetas","Eliminar objetos sin usar y scripts vacíos","Documentar con comentarios los scripts principales","Backup del proyecto antes de continuar al módulo 6"]},
+          {t:"Demo de mitad de curso",items:["Cada estudiante juega el proyecto de un compañero 3 minutos","Feedback: 2 cosas que funcionan bien, 1 cosa a mejorar","ESTRELLA: Juego jugable sin errores visibles durante la demo","DIAMANTE: Demo narrativa de 2 minutos explicando el diseño del juego"]}
+        ],
+        h2t:"Construcción libre con feedback en vivo",
+        h2:[
+          {t:"Sesión de mejora guiada",items:["Cada estudiante identifica la zona más débil de su ciudad","30 minutos para mejorar esa zona con técnicas de módulos 1–5","Agregar mínimo 1 elemento nuevo de diseño y 1 script nuevo","El objetivo: cada juego se ve diferente y tiene personalidad propia"]},
+          {t:"Entrega de checkpoint",items:["Guardar como 'CiudadRobot_M5_FINAL.rbxl'","Captura de pantalla del mapa desde vista de pájaro (aérea)","Comentario en script principal: lista de lo que tiene el juego hasta ahora","Publicar en modo privado en Roblox.com para prueba online"]}
+        ],
+        retos:["ESTRELLA: Juego con 5 sistemas diferentes funcionando sin errores","COHETE: Demo jugable de 3 minutos sin crashes ni Warnings en Output","DIAMANTE: Publicar en Roblox y compartir link para que el docente lo pruebe"]
+      }
+    ]
+  },
+  {
+    nombre:"Sistemas de Juego — Monedas y Progresión", tag:"Diseño + Programación",
+    resumen:"Leaderstats, DataStore, monedas reales y sistema de niveles",
+    horas:"8 horas", prog:"Leaderstats · DataStoreService · Tables en Lua · sistema de misiones",
+    obj:"Implementar sistemas reales de puntuación, monedas y progresión que persisten entre sesiones de juego.",
+    habilidades:["Leaderstats para puntos visibles en juego","DataStore para guardar datos del jugador","Sistema de monedas funcional y persistente","Progresión de niveles con zonas desbloqueables","Tables (listas y diccionarios) en Lua"],
+    herramientas:["DataStoreService","Players service (PlayerAdded)","ServerScriptService","IntValue dentro de leaderstats folder"],
+    conceptos:["game.Players.PlayerAdded:Connect()","Instance.new('Folder')","DataStore:SetAsync(key, value)","DataStore:GetAsync(key)","pcall(function()  end)","local t = {}  table.insert(t, v)"],
+    proyectoApp:"Sistema completo de monedas y niveles visible en pantalla, persistente entre sesiones, con zonas desbloqueables y 5 misiones rastreadas.",
+    clases:[
+      { titulo:"Leaderstats — Puntos visibles en el juego",
+        h1t:"El sistema de puntuación oficial de Roblox",
+        h1:[
+          {t:"Concepto: Leaderstats",items:["Leaderstats = Folder especial que Roblox muestra automáticamente al presionar Tab","Debe llamarse EXACTAMENTE 'leaderstats' (minúsculas, sin espacios)","Se crea dentro del Player cuando entra al servidor con PlayerAdded","Cada IntValue (o NumberValue) dentro es una stat visible en pantalla"]},
+          {t:"Demostración del docente",items:["Script en ServerScriptService: game.Players.PlayerAdded:Connect(function(player)","Crear Folder 'leaderstats' → IntValue 'Monedas' con Value = 0","Probar: presionar Tab en Play Mode → tabla de puntuación aparece automáticamente","Conectar monedas del mapa: player.leaderstats.Monedas.Value += 10"]},
+          {t:"Ejercicio guiado",items:["Script de leaderstats en ServerScriptService","Crear: Monedas (IntValue, 0), Puntos (IntValue, 0), Nivel (IntValue, 1)","Verificar que la tabla aparece al presionar Tab","Conectar 2 monedas del mapa al leaderstats (Touched → Value += 10)"]},
+          {t:"Mini reto",items:["ESTRELLA: Leaderstats con Monedas y Puntos visibles en pantalla","COHETE: Monedas del mapa suman 10 puntos al leaderstats al recogerlas","DIAMANTE: 3 tipos de monedas con valores diferentes: 1, 5 y 10 puntos"]}
+        ],
+        h2t:"Sistema de monedas completo en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script de leaderstats en ServerScriptService (corre en el servidor)","Actualizar todos los scripts de monedas del mapa para usar leaderstats","function recolectarMoneda(player, valor)  player.leaderstats.Monedas.Value += valor  end","Moneda normal = 10, Moneda especial = 50, Moneda secreta en base = 100","Respawn de monedas: wait(10) → recrear moneda en su posición original"]},
+          {t:"Integración al proyecto",items:["El sistema de monedas es el núcleo de la jugabilidad del juego","Las monedas de la base secreta valen más → incentivo a explorar","Preparar variables para conectar con DataStore en la siguiente clase"]}
+        ],
+        retos:["ESTRELLA: Leaderstats funcional con monedas que suman correctamente","COHETE: 3 tipos de monedas con valores diferentes distribuidas en la ciudad","DIAMANTE: Sistema de respawn de monedas cada 10 segundos con bonus por streak"]
+      },
+      { titulo:"DataStore — Guardar el progreso del jugador",
+        h1t:"Persistencia de datos entre sesiones",
+        h1:[
+          {t:"Concepto: DataStoreService",items:["DataStore = base de datos de Roblox para guardar datos de jugadores","Los datos persisten entre sesiones: el jugador no pierde su progreso","DataStore:SetAsync(key, value) → guardar datos","DataStore:GetAsync(key) → leer datos guardados","Siempre usar pcall() para manejar errores de conexión"]},
+          {t:"Demostración del docente",items:["Habilitar API: Game Settings → Security → Enable Studio Access to API Services","local DS = game:GetService('DataStoreService')","local store = DS:GetDataStore('CiudadRobot_v1')","PlayerAdded: cargar datos → leaderstats.Monedas.Value = datos guardados","PlayerRemoving: guardar → store:SetAsync(player.UserId, monedas)"]},
+          {t:"Ejercicio guiado",items:["Agregar DataStore al Script de leaderstats existente","PlayerAdded: pcall → GetAsync → cargar Monedas guardadas","PlayerRemoving: pcall → SetAsync → guardar Monedas actuales","Probar: recolectar monedas → salir → entrar → monedas persisten"]},
+          {t:"Mini reto",items:["ESTRELLA: DataStore que guarda y carga Monedas correctamente","COHETE: DataStore que guarda Monedas, Puntos y Nivel","DIAMANTE: Auto-guardado cada 60 segundos + mensaje de confirmación al jugador"]}
+        ],
+        h2t:"Progresión persistente en CiudadRobot",
+        h2:[
+          {t:"Implementación paso a paso",items:["DataStore para Monedas y Nivel en ServerScriptService","Auto-guardado: while true do  guardarDatos(player)  wait(60)  end","Mensaje en pantalla cuando el guardado ocurre (Output por ahora, UI en módulo 7)","Cargar nivel al entrar y colocar al jugador en la zona correspondiente","Límite de seguridad: if monedas > 99999 then monedas = 99999 end"]},
+          {t:"Integración al proyecto",items:["El progreso del jugador ahora es permanente entre sesiones","Los datos se conectarán con la UI del módulo 7 para mostrarlos visualmente","DataStore es una habilidad que usan todos los juegos de Roblox profesionales"]}
+        ],
+        retos:["ESTRELLA: DataStore funcional que guarda y carga monedas sin errores","COHETE: Auto-guardado cada 60 segundos con mensaje de confirmación","DIAMANTE: Sistema de guardado con pcall, manejo de errores y fallback si DataStore falla"]
+      },
+      { titulo:"Sistema de niveles y zonas desbloqueables",
+        h1t:"Progresión del jugador con niveles",
+        h1:[
+          {t:"Concepto: Sistema de niveles",items:["Nivel sube cuando el jugador alcanza cierto número de monedas","Table en Lua para definir requisitos: {100, 300, 600, 1000, 2000}","if monedas >= requisitos[nivel] then  nivel += 1","Recompensas por nivel: acceso a zonas, velocidad, items especiales"]},
+          {t:"Demostración del docente",items:["local requisitos = {100, 300, 600, 1000, 2000}","function checkNivel(player)","  local monedas = player.leaderstats.Monedas.Value","  local nivel = player.leaderstats.Nivel.Value","  if nivel <= 5 and monedas >= requisitos[nivel] then","    player.leaderstats.Nivel.Value += 1","    print(player.Name .. ' subió al nivel ' .. nivel+1)  end  end"]},
+          {t:"Ejercicio guiado",items:["Agregar IntValue 'Nivel' al leaderstats (Value inicial = 1)","Crear tabla de requisitos con 5 niveles","Llamar checkNivel() cada vez que se recolecta una moneda","Probar: recolectar monedas hasta ver el nivel subir en la tabla"]},
+          {t:"Mini reto",items:["ESTRELLA: Sistema de 3 niveles funcional con tabla de requisitos","COHETE: 5 niveles con mensaje de subida al alcanzar cada uno","DIAMANTE: Nivel 3 desbloquea acceso a zona nueva (puerta que se abre automáticamente)"]}
+        ],
+        h2t:"Zonas desbloqueables en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["Puerta de la base secreta: solo se abre en nivel 3 o más","if player.leaderstats.Nivel.Value >= 3 then  abrirPuerta()  else  print('Necesitas nivel 3')  end","Zona VIP en el techo de un edificio: acceso con nivel 5","Recompensa visual al subir de nivel: partículas + sonido de fanfarria","Zona premium: 5 monedas de 100 puntos c/u para jugadores avanzados"]},
+          {t:"Integración al proyecto",items:["El sistema de niveles da profundidad y rejugabilidad al juego","Los jugadores tienen incentivo real para explorar toda la ciudad","La UI del módulo 7 mostrará una barra de progreso del nivel actual"]}
+        ],
+        retos:["ESTRELLA: Base secreta con acceso mínimo de nivel 3","COHETE: 3 zonas con diferentes requisitos de nivel para entrar","DIAMANTE: 5 niveles completos con zonas, recompensas y efectos por cada subida de nivel"]
+      },
+      { titulo:"Tables y sistema de misiones en Lua",
+        h1t:"Tables para datos complejos",
+        h1:[
+          {t:"Concepto: Tables en Lua",items:["Table = colección de datos (lista o diccionario) en Lua","Lista: local items = {'espada', 'escudo', 'pocion'}","Diccionario: local stats = {vida=100, nivel=1}","Acceder: items[1] → 'espada'  /  stats.vida → 100","Iterar: for i, v in ipairs(items) do  print(v)  end"]},
+          {t:"Demostración del docente",items:["Sistema de misiones con table de 5 objetivos","local misiones = {'Recolecta 50 monedas', 'Abre la puerta norte', 'Llega a la base secreta', 'Sube al nivel 3', 'Completa la zona de desafío'}","local completadas = {false, false, false, false, false}","Función para marcar misión como completada y contar pendientes"]},
+          {t:"Ejercicio guiado",items:["Crear table de 5 misiones y table de estados (false/false/false/false/false)","Función markMision(idx): completadas[idx] = true","Función contarPendientes(): contar false en la table","Llamar markMision al completar eventos clave del juego"]},
+          {t:"Mini reto",items:["ESTRELLA: Table con 3 misiones rastreadas del juego","COHETE: Sistema que detecta completación y otorga recompensa en monedas","DIAMANTE: 5 misiones con progreso, recompensas y mensaje especial al completar todas"]}
+        ],
+        h2t:"Sistema de misiones en CiudadRobot",
+        h2:[
+          {t:"Implementación paso a paso",items:["Script de misiones en ServerScriptService","5 misiones principales: recolectar 50 monedas, visitar 3 zonas, abrir 3 puertas, llegar a base secreta, completar zona de desafío","Table de progreso por jugador indexada por userId","checkMision() llamada en cada evento relevante del juego","Al completar las 5: mensaje especial + recompensa de 500 monedas"]},
+          {t:"Integración al proyecto",items:["El sistema de misiones da dirección clara al jugador","En módulo 7 mostraremos el progreso de misiones en la UI","Tables son la base de cualquier sistema complejo en Lua y en Python"]}
+        ],
+        retos:["ESTRELLA: 3 misiones rastreadas con table funcional","COHETE: Sistema que detecta completación y otorga recompensa automáticamente","DIAMANTE: 5 misiones completas con progreso por jugador, recompensas y mensaje de victoria"]
+      }
+    ]
+  },
+  {
+    nombre:"UI — Interfaz del Jugador", tag:"Diseño + Programación",
+    resumen:"ScreenGui, HUD, menú de inicio, notificaciones y pantalla de victoria",
+    horas:"8 horas", prog:"ScreenGui · TextLabel · Frame · LocalScript · Tween en UI",
+    obj:"Crear la interfaz completa del juego: HUD dinámico, menú de inicio, pantalla de victoria y notificaciones.",
+    habilidades:["Crear ScreenGui y sus elementos","TextLabel, Frame, TextButton, ImageLabel","LocalScript para UI del cliente","Actualizar UI desde código en tiempo real","Animaciones de UI con TweenService"],
+    herramientas:["StarterGui → ScreenGui","LocalScript dentro de la UI","UICorner, UIStroke, UIPadding","TweenService para animaciones de UI"],
+    conceptos:["game.Players.LocalPlayer","player:WaitForChild('leaderstats')","stat.Changed:Connect(function(val))","gui.Text = 'Monedas: ' .. val","gui.Visible = true / false"],
+    proyectoApp:"HUD completo con monedas y nivel animados, menú de inicio animado, notificaciones de misiones y pantalla de victoria funcional.",
+    clases:[
+      { titulo:"ScreenGui y Frames — Estructura de la UI",
+        h1t:"Construir la interfaz del juego",
+        h1:[
+          {t:"Concepto: ScreenGui",items:["ScreenGui = contenedor de UI que se superpone sobre el juego en pantalla","Se coloca en StarterGui para que cada jugador lo reciba al entrar","Frame = panel rectangular, base de cualquier ventana o HUD","TextLabel = texto en pantalla / TextButton = botón clicable","Propiedades clave: AnchorPoint, Position (scale + offset), Size"]},
+          {t:"Demostración del docente",items:["Insertar ScreenGui en StarterGui → Frame en esquina superior izquierda","TextLabel dentro del Frame: 'Monedas: 0', Font GothamBold, color dorado","Ajustar BackgroundTransparency, BorderSizePixel, Font, TextColor3","Ver resultado inmediatamente en Play Mode"]},
+          {t:"Ejercicio guiado",items:["Crear ScreenGui 'HUD' en StarterGui","Frame esquina superior izquierda: 200×60 px, fondo oscuro semitransparente","TextLabel: 'Monedas: 0', font GothamBold, color dorado (#FFD166)","Frame esquina superior derecha: mostrar 'Nivel: 1'"]},
+          {t:"Mini reto",items:["ESTRELLA: HUD con contador de Monedas visible en pantalla","COHETE: HUD con Monedas y Nivel en esquinas opuestas de la pantalla","DIAMANTE: HUD completo con Monedas, Nivel, Zona actual y barra de progreso de nivel"]}
+        ],
+        h2t:"HUD del juego en la ciudad",
+        h2:[
+          {t:"Implementación paso a paso",items:["ScreenGui 'HUD' en StarterGui","Frame superior izquierda: contador de Monedas (dorado, semitransparente)","Frame superior derecha: Nivel del jugador (azul)","Frame inferior central: nombre de zona actual","UIStroke en TextLabels para legibilidad sobre cualquier fondo","UICorner (8px) en todos los Frames"]},
+          {t:"Integración al proyecto",items:["El HUD conecta visualmente con el leaderstats del módulo 6","En la siguiente clase actualizamos los valores desde LocalScript en tiempo real","El diseño del HUD refleja la identidad visual del juego"]}
+        ],
+        retos:["ESTRELLA: HUD con Monedas visible y bien diseñado","COHETE: HUD completo con Monedas, Nivel y Zona actual","DIAMANTE: HUD con barra de progreso animada + todos los elementos con UICorner y UIStroke"]
+      },
+      { titulo:"LocalScript — UI dinámica en tiempo real",
+        h1t:"Conectar UI con los datos del juego",
+        h1:[
+          {t:"Concepto: LocalScript y LocalPlayer",items:["LocalScript = corre en el cliente (PC del jugador), no en el servidor","local player = game.Players.LocalPlayer  → el jugador actual","player:WaitForChild('leaderstats')  → espera a que existan los datos","stat.Changed:Connect(function(val))  → detectar cambios en tiempo real","gui.Text = 'Monedas: ' .. val  → actualizar el texto del label"]},
+          {t:"Demostración del docente",items:["LocalScript dentro del ScreenGui 'HUD'","local monedas = stats:WaitForChild('Monedas')","monedasLabel.Text = 'Monedas: ' .. monedas.Value","monedas.Changed:Connect(function(val)  monedasLabel.Text = 'Monedas: ' .. val  end)","Ver el HUD actualizarse en tiempo real al recolectar monedas"]},
+          {t:"Ejercicio guiado",items:["LocalScript en el HUD","Conectar TextLabel de Monedas al leaderstats.Monedas con Changed","Conectar TextLabel de Nivel al leaderstats.Nivel con Changed","Probar: recolectar monedas → HUD se actualiza en tiempo real sin recargar"]},
+          {t:"Mini reto",items:["ESTRELLA: HUD actualiza Monedas en tiempo real al recolectarlas","COHETE: HUD actualiza Monedas y Nivel simultáneamente","DIAMANTE: HUD con animación al subir de nivel: flash de color y efecto de escala"]}
+        ],
+        h2t:"HUD dinámico conectado al juego completo",
+        h2:[
+          {t:"Implementación paso a paso",items:["LocalScript en el ScreenGui 'HUD'","Monedas: Changed → actualizar label + Tween de escala (1 → 1.2 → 1)","Nivel: Changed → flash verde en el panel durante 0.5 segundos","Zona actual: Touched en cada zona → actualizar label de zona","Efecto de nueva moneda: label temporalmente amarillo brillante por 0.5s"]},
+          {t:"Integración al proyecto",items:["El HUD refleja en tiempo real todo lo que ocurre en el juego","La animación de actualización hace el feedback claro y satisfactorio","Sistema listo para conectar con notificaciones de misiones"]}
+        ],
+        retos:["ESTRELLA: HUD dinámico conectado a leaderstats en tiempo real","COHETE: Animación de pulso al recolectar moneda + flash verde al subir nivel","DIAMANTE: HUD completo con todas las animaciones y zona actual actualizada"]
+      },
+      { titulo:"Menú de inicio y pantallas especiales",
+        h1t:"Pantalla de inicio y pantalla de victoria",
+        h1:[
+          {t:"Concepto: Pantallas de UI completas",items:["Menú de inicio: pantalla grande que aparece antes de comenzar a jugar","Frame central que ocupa 80% de pantalla con logo, título y botón Jugar","gui.Visible = true / false  para mostrar u ocultar pantallas","Tween de entrada: Frame aparece desde fuera de pantalla deslizándose","Pantalla de victoria: aparece al completar todas las misiones del juego"]},
+          {t:"Demostración del docente",items:["Frame MenuInicio: fondo oscuro semitransparente, logo + título centrados","Botón 'JUGAR' con hover effect (Color change al pasar el cursor)","Al hacer clic: Tween de salida → gui.Visible = false → habilitar controles","Pantalla de victoria similar pero con mensaje y animación de celebración"]},
+          {t:"Ejercicio guiado",items:["Crear Frame 'MenuInicio' que ocupe el centro de la pantalla","Logo (ImageLabel o TextLabel grande), título 'CiudadRobot'","Botón 'JUGAR': TextButton con fondo de color y hover effect","LocalScript: botón.MouseButton1Click → Tween salida → Visible = false"]},
+          {t:"Mini reto",items:["ESTRELLA: Menú de inicio con botón funcional que inicia el juego","COHETE: Menú con animación de entrada (deslizamiento) y salida suave","DIAMANTE: Menú completo con logo animado, partículas de fondo y música de menú"]}
+        ],
+        h2t:"Menú, pausa y pantalla de victoria",
+        h2:[
+          {t:"Implementación paso a paso",items:["ScreenGui 'Menus' separado del HUD para mayor organización","MenuInicio: logo + título + botón Jugar + animación Tween de entrada","Victoria: aparece al completar las 5 misiones, con mensaje y botón reinicio","Pausa: botón en HUD → muestra/oculta Frame de pausa","Notificaciones: Frame pequeño inferior que aparece 2 segundos al completar misión"]},
+          {t:"Integración al proyecto",items:["El menú da profesionalismo: el juego parece un producto real","Las pantallas de victoria y derrota completan el ciclo de juego","Sistema de notificaciones conectado con el módulo de misiones del módulo 6"]}
+        ],
+        retos:["ESTRELLA: Menú de inicio funcional con botón de jugar","COHETE: Pantalla de victoria que aparece al completar las misiones del juego","DIAMANTE: Sistema completo de UI con menú, pausa, victoria y notificaciones animadas"]
+      },
+      { titulo:"Pulido visual y coherencia de UI",
+        h1t:"Diseño de UI profesional",
+        h1:[
+          {t:"Concepto: Diseño de UI para juegos",items:["Consistencia: todos los botones con el mismo estilo, fuente y colores","Jerarquía visual: lo importante más grande o más brillante en pantalla","Feedback: todo clic o acción tiene respuesta visual inmediata","Legibilidad: UIStroke garantiza que el texto sea visible sobre cualquier fondo","Paleta: máximo 3 colores base en toda la interfaz del juego"]},
+          {t:"Revisión grupal de UI",items:["Cada estudiante muestra su UI al grupo en Play Mode","Feedback: ¿es legible? ¿coherente? ¿los botones parecen clicables?","Docente muestra técnicas de pulido: UIListLayout, UICorner, UIPadding","Reto: hacer que un compañero entienda la UI sin instrucciones verbales"]},
+          {t:"Ejercicio guiado — Refinar el HUD",items:["UICorner en todos los Frames: CornerRadius 8 px","UIStroke en todos los TextLabel importantes","UIPadding interno en Frames para breathing room","Verificar que la UI escala bien en diferentes resoluciones de pantalla"]},
+          {t:"Mini reto",items:["ESTRELLA: UI con UICorner y colores consistentes en toda la interfaz","COHETE: HUD con UIStroke en todos los textos para legibilidad garantizada","DIAMANTE: Sistema de UI completo que pasa la prueba de usuario con 2 compañeros sin instrucciones"]}
+        ],
+        h2t:"UI final del proyecto — Sesión de pulido",
+        h2:[
+          {t:"Pulido total de la UI",items:["Revisar cada Frame: UICorner, UIPadding y UIStroke aplicados","Verificar coherencia: paleta de 3 colores definida y aplicada en todo","Comprobar que la UI no tapa objetos importantes del juego","Prueba de usabilidad: compañero juega y da feedback de la interfaz","Corregir bugs visuales: texto cortado, botones sin respuesta, texto ilegible"]},
+          {t:"Integración al proyecto",items:["UI pulida = juego que parece profesional y terminado","La UI del módulo 7 estará lista para la presentación final del módulo 8","Guardar snapshot completo del proyecto con UI terminada"]}
+        ],
+        retos:["ESTRELLA: UI con estilo visual coherente y sin bugs visibles","COHETE: Demo completa de UI funcionando en Play Mode con todos los elementos","DIAMANTE: Sistema de UI que pasa la prueba de usabilidad con 2 compañeros sin dar instrucciones previas"]
+      }
+    ]
+  },
+  {
+    nombre:"Proyecto Final — Publicación y Presentación", tag:"Integración total",
+    resumen:"Testing, optimización, publicación en Roblox y presentación del juego",
+    horas:"8 horas", prog:"Debugging · pcall · optimización · publicación en Roblox",
+    obj:"Finalizar, optimizar y publicar el juego completo. Presentar el proyecto ante el grupo en el Game Developer Day.",
+    habilidades:["Debugging sistemático con Output","Optimización de scripts y escenas","Publicación en Roblox.com","Presentación técnica de proyectos","Testing colaborativo de juego completo"],
+    herramientas:["Roblox Studio → File → Publish to Roblox","Performance Stats (F4 en Play Mode)","Output para debugging","Roblox.com → Game Page configuración"],
+    conceptos:["pcall(function()  ...  end)","FPS con F4 performance stats","Roblox:SetAttribute()","Roblox Game Settings → Permissions"],
+    proyectoApp:"CiudadRobot publicada en Roblox, juego 100% funcional, presentación en vivo ante el grupo con demo y explicación técnica.",
+    clases:[
+      { titulo:"Testing y debugging sistemático",
+        h1t:"Encontrar y corregir errores",
+        h1:[
+          {t:"Concepto: Debugging profesional",items:["Debugging = proceso de encontrar y corregir errores de código","Output: rojo = errores críticos, amarillo = warnings, blanco = prints normales","Estrategia: dividir y vencer — aislar el problema antes de corregir","print() estratégico: imprimir valores en puntos clave para rastrear bugs","pcall(): ejecutar código riesgoso sin romper el juego completo"]},
+          {t:"Taller de debugging grupal",items:["Docente introduce 5 bugs conocidos en un proyecto de ejemplo","Estudiantes los encuentran y corrigen en equipo de 2","Bug 1: script referencia objeto con nombre incorrecto","Bug 2: evento Touched que dispara infinitamente sin condición","Bug 3: DataStore que no guarda por falta de pcall"]},
+          {t:"Ejercicio guiado — Corregir el propio proyecto",items:["Abrir Output y listar todos los errores y warnings del proyecto","Clasificar: críticos (rojo) → corregir primero, advertencias (amarillo) → segundo","Agregar pcall() a todos los DataStore:GetAsync y SetAsync","Probar cada sistema individualmente después de cada corrección"]},
+          {t:"Mini reto",items:["ESTRELLA: Output completamente limpio sin errores rojos","COHETE: Output limpio + todos los warnings resueltos","DIAMANTE: Código con pcall() en todas las operaciones de red + comentarios en cada función importante"]}
+        ],
+        h2t:"Testing completo del juego",
+        h2:[
+          {t:"Protocolo de testing estructurado",items:["Checklist de 10 puntos: monedas (5/5), puertas (3/3), UI actualiza, DataStore guarda, misiones detectan completación, menú funciona, sonidos activos, físicas correctas, niveles suben, pantalla de victoria aparece","Sesión de 10 minutos jugando el propio juego desde el inicio","Identificar 3 bugs o mejoras y documentarlos en un comentario del Script","Swap testing: intercambiar proyecto con compañero y reportar bugs encontrados"]},
+          {t:"Integración al proyecto",items:["El testing revela qué sistemas funcionan y cuáles necesitan ajuste final","Priorizar: bugs críticos primero, mejoras estéticas después","Lista de bugs resueltos vs pendientes para mencionar en la presentación"]}
+        ],
+        retos:["ESTRELLA: Juego sin errores críticos en el Output","COHETE: Juego que pasa el testing de un compañero sin crashes durante 5 minutos","DIAMANTE: Documento de bugs encontrados, resueltos y lista de mejoras futuras para versión 2.0"]
+      },
+      { titulo:"Optimización y detalles finales",
+        h1t:"Hacer el juego estable y eficiente",
+        h1:[
+          {t:"Concepto: Optimización básica en Roblox",items:["Performance: FPS bajo = juego lento. Presionar F4 para ver stats en tiempo real","Demasiados ParticleEmitters activos simultáneamente = lag visible","Loops sin wait() dentro = freeze completo del juego (evitar siempre)","Instancias sin usar = memoria desperdiciada, :Destroy() los objetos usados","Regla práctica: si no se ve ni se necesita, no debe existir en el juego"]},
+          {t:"Técnicas de optimización",items:["Revisar todos los while loops: deben tener wait() apropiado (mínimo 0.1)","Desactivar ParticleEmitters cuando el jugador está lejos de ellos","Usar :FindFirstChild() en vez de indexar directamente (más seguro y claro)","Convertir grupos de Parts estáticas en Unions para reducir instancias"]},
+          {t:"Ejercicio guiado",items:["Revisar FPS en Play Mode con F4 → objetivo: 40+ FPS estable","Identificar los 3 scripts más pesados del proyecto","Agregar wait() apropiado a loops problemáticos detectados","Convertir 2 grupos de decoración estática en Unions"]},
+          {t:"Mini reto",items:["ESTRELLA: FPS estable en 40+ durante todo el juego","COHETE: Todos los loops con wait() apropiado y juego sin congelarse","DIAMANTE: Juego optimizado que corre a 60FPS con prueba de múltiples jugadores en Test mode"]}
+        ],
+        h2t:"Detalles finales del proyecto",
+        h2:[
+          {t:"Pulido final de toda la ciudad",items:["Revisión de diseño: ¿hay zonas sin terminar? Completarlas en esta sesión","Detalles ambientales faltantes: props, decoración, iluminación de relleno","Verificar que cada zona tiene: nombre en mapa, interacción real, audio","Revisar spawn: ¿el jugador aparece en un buen lugar? ¿con orientación correcta?","Pantalla de inicio del menú: que sea lo primero impresionante que el jugador ve"]},
+          {t:"Integración al proyecto",items:["El juego está completamente listo para publicación","Último backup del proyecto antes de publicar","Preparar capturas de pantalla atractivas para usar como thumbnail"]}
+        ],
+        retos:["ESTRELLA: Ciudad completa con todas las zonas terminadas y nombradas","COHETE: Juego optimizado sin zonas vacías ni bugs visuales detectables","DIAMANTE: Ciudad con diseño coherente, 5+ zonas detalladas y juego 100% funcional"]
+      },
+      { titulo:"Publicación en Roblox",
+        h1t:"Lanzar el juego al mundo",
+        h1:[
+          {t:"Concepto: Publicar en Roblox",items:["File → Publish to Roblox → crear nuevo juego en la cuenta","Nombre del juego: descriptivo, atractivo y fácil de recordar","Descripción: 2–3 oraciones que expliquen qué hace el juego y por qué es divertido","Thumbnail: captura de pantalla atractiva de la zona más impresionante","Genre y Max Players: configurar según el tipo de juego creado"]},
+          {t:"Configuración del juego en Roblox.com",items:["Game Settings → Permissions: privado (solo tú) o amigos o público","Max Players recomendado: 10–15 jugadores para este tipo de juego","Agregar thumbnail personalizado de la ciudad desde arriba","Descripción: '¡Explora CiudadRobot, recolecta monedas y descubre la base secreta!'","Badges opcionales: para jugadores que completan misiones específicas"]},
+          {t:"Ejercicio guiado — Publicar el juego",items:["Cada estudiante publica su juego en modo privado inicialmente","Verificar que el link funciona abriéndolo en el navegador del mismo PC","Probar en modo multijugador: Test → Start Server and Player en Studio","Ajustar configuraciones según lo observado en la prueba online"]},
+          {t:"Mini reto",items:["ESTRELLA: Juego publicado en Roblox en modo privado","COHETE: Juego publicado con thumbnail atractivo y descripción completa","DIAMANTE: Juego publicado públicamente y compartido con 2 compañeros para prueba real"]}
+        ],
+        h2t:"Prueba multijugador final",
+        h2:[
+          {t:"Sesión de testing multijugador en vivo",items:["Intercambiar links de juego entre todos los compañeros de clase","15 minutos jugando el juego de un compañero sin instrucciones del autor","Feedback estructurado: 3 cosas positivas + 2 sugerencias de mejora","Docente evalúa jugabilidad general del grupo y detecta problemas comunes","Correcciones de última hora según feedback prioritario recibido"]},
+          {t:"Integración al proyecto",items:["El juego está publicado y jugable en Roblox.com permanentemente","El feedback de compañeros es evaluación real de usabilidad","Preparar la narrativa de presentación para el Game Developer Day"]}
+        ],
+        retos:["ESTRELLA: Juego publicado y probado por al menos 1 compañero","COHETE: Feedback de 3 compañeros documentado e incorporado al juego","DIAMANTE: Juego con 10+ sesiones de juego, thumbnail profesional y feedback incorporado"]
+      },
+      { titulo:"Game Developer Day — Presentación Final",
+        h1t:"Presentar el juego al mundo",
+        h1:[
+          {t:"Estructura de presentación (7 minutos)",items:["Minuto 1–2: Demo jugable en vivo — recorrido de todas las zonas del juego","Minuto 3–4: Explicar 2 sistemas programados que más costó implementar","Minuto 5: Mostrar el código de 1 script y explicarlo línea por línea","Minuto 6: Aprendizaje personal — qué aprendiste y qué agregarías en versión 2","Minuto 7: Preguntas del grupo (máximo 3 preguntas)"]},
+          {t:"Preparación de la presentación",items:["Practicar demo de 2 minutos recorriendo todas las zonas de la ciudad","Seleccionar el script más complejo para mostrar y explicar sin notas","3 datos curiosos del desarrollo: error más difícil, feature favorita, tiempo invertido","Opcional: video de 1 minuto del gameplay para proyectar como intro"]},
+          {t:"Criterios de evaluación del proyecto final",items:["Juego funcional sin errores críticos durante la demo (25%)","Sistemas programados correctamente y funcionando (25%)","Diseño del mapa y experiencia de juego (25%)","Calidad de la presentación y explicación técnica (25%)"]},
+          {t:"Reto de presentación",items:["ESTRELLA: Demo funcional de 3 minutos sin crashes ni errores visibles","COHETE: Explicar el sistema más complejo del juego sin leer notas","DIAMANTE: Presentación de 7 minutos completa + responder preguntas técnicas del grupo sin dudar"]}
+        ],
+        h2t:"Ceremonia de graduación — Game Developer Day",
+        h2:[
+          {t:"Dinámica del evento final",items:["Sala configurada: proyector, sillas en semicírculo, padres invitados","Cada estudiante presenta al grupo con pantalla proyectada","Después de cada presentación: 1 minuto de aplauso + feedback del grupo","Docente da feedback técnico breve y personalizado a cada presentador"]},
+          {t:"Ceremonia de cierre",items:["Entrega de insignia 'Game Master' a cada estudiante graduado","Top 3 proyectos por categorías: Mejor Diseño, Mejor Código, Más Creativo","Diploma digital del curso de Roblox Studio — ROBOTSchool Academy","Publicación de todos los juegos en el portafolio digital del grupo","Invitación a curso avanzado: sistemas avanzados, monetización y multijugador"]}
+        ],
+        retos:["ESTRELLA: Presentación de 5 minutos con juego funcional demostrado en vivo","COHETE: Presentación completa de 7 minutos explicando código real con seguridad","DIAMANTE: Juego reconocido por el grupo en alguna de las 3 categorías de la ceremonia de graduación"]
+      }
+    ]
+  }
+];
+
+const MOD_COLORS_CSS = ['#E2231A','#E65C00','#D4900A','#1B7A3E','#1565C0','#6A1B9A','#00695C','#B71C1C'];
+
+function buildModGrid() {
+  const grid = document.getElementById('mod-grid');
+  MODULOS.forEach((mod, i) => {
+    const card = document.createElement('div');
+    card.className = 'mod-card';
+    card.style.background = MOD_COLORS_CSS[i];
+    card.innerHTML = `
+      <div class="mod-num">${i+1}</div>
+      <div class="mod-card-inner">
+        <div class="mod-tag">${mod.tag}</div>
+        <h3>${mod.nombre}</h3>
+        <p>${mod.resumen}</p>
+        <div class="mod-meta">
+          <span>${mod.horas}</span>
+          <span class="mod-dot"></span>
+          <span>4 clases</span>
+        </div>
+      </div>`;
+    card.onclick = () => showModDetail(i);
+    grid.appendChild(card);
+  });
+}
+
+function showModDetail(idx) {
+  const mod = MODULOS[idx];
+  const color = MOD_COLORS_CSS[idx];
+  document.getElementById('list-view').style.display = 'none';
+  const dv = document.getElementById('detail-view');
+  dv.style.display = 'block';
+
+  let html = `<button class="back-btn" onclick="goBack()"><span class="back-arrow">←</span> Todos los módulos</button>`;
+  html += `<div class="mod-header-detail" style="background:${color}20;border:1px solid ${color}40" data-num="${idx+1}">
+    <div class="eyebrow">Módulo ${idx+1} de 8</div>
+    <h2>${mod.nombre}</h2>
+    <p>${mod.obj}</p>
+  </div>`;
+  html += `<div class="info-cards">`;
+  html += `<div class="info-card"><h4>Habilidades que desarrolla</h4><ul>${mod.habilidades.map(h=>`<li>${h}</li>`).join('')}</ul></div>`;
+  html += `<div class="info-card"><h4>Herramientas de Roblox</h4><ul>${mod.herramientas.map(h=>`<li>${h}</li>`).join('')}</ul></div>`;
+  if(mod.conceptos.length) {
+    html += `<div class="info-card"><h4>Conceptos Lua del módulo</h4><ul>${mod.conceptos.map(c=>`<li><code class="lua">${c}</code></li>`).join('')}</ul></div>`;
+  }
+  html += `<div class="info-card"><h4>Construyen en el proyecto</h4><p>${mod.proyectoApp}</p></div>`;
+  html += `</div>`;
+
+  html += `<div class="clase-tabs">`;
+  mod.clases.forEach((c,ci) => {
+    html += `<button class="clase-tab${ci===0?' active':''}" id="ctab_${idx}_${ci}" onclick="switchClase(${idx},${ci})" style="${ci===0?`background:${color};color:#fff;border-color:${color}`:''}">Clase ${idx*4+ci+1}: ${c.titulo}</button>`;
+  });
+  html += `</div>`;
+
+  mod.clases.forEach((c,ci) => {
+    html += `<div class="clase-body${ci===0?' active':''}" id="cbody_${idx}_${ci}">`;
+    html += `<div class="clase-title" style="color:${color}">${c.titulo}</div>`;
+    
+    html += `<div class="hora-block hora1"><div class="hora-head"><span class="hora-badge hora-badge-1">Hora 1</span><h4>${c.h1t}</h4><span class="hora-timer">60 min</span></div>`;
+    c.h1.forEach(sec => {
+      html += `<div class="sec-label">${sec.t}</div>`;
+      sec.items.forEach((it,ii) => {
+        html += `<div class="step-row"><div class="step-num sn1">${ii+1}</div><div class="step-text">${it}</div></div>`;
+      });
+    });
+    html += `</div>`;
+
+    html += `<div class="hora-block hora2"><div class="hora-head"><span class="hora-badge hora-badge-2">Hora 2</span><h4>${c.h2t}</h4><span class="hora-timer">60 min</span></div>`;
+    c.h2.forEach(sec => {
+      html += `<div class="sec-label">${sec.t}</div>`;
+      sec.items.forEach((it,ii) => {
+        html += `<div class="step-row"><div class="step-num sn2">${ii+1}</div><div class="step-text">${it}</div></div>`;
+      });
+    });
+    html += `</div>`;
+
+    html += `<div class="reto-block"><div class="reto-head">Misiones de la clase ${idx*4+ci+1}</div>`;
+    const icons = ['⭐','🚀','💎'];
+    const labels = ['Estrella (fácil)','Cohete (medio)','Diamante (difícil)'];
+    c.retos.forEach((r,ri) => {
+      html += `<div class="reto-item"><span class="reto-icon">${icons[ri]}</span><div class="reto-text"><strong style="font-size:11px;color:var(--yellow);display:block;margin-bottom:2px">${labels[ri]}</strong>${r}</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  dv.innerHTML = html;
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function switchClase(modIdx, claseIdx) {
+  const color = MOD_COLORS_CSS[modIdx];
+  document.querySelectorAll(`[id^="ctab_${modIdx}_"]`).forEach(t => {
+    t.classList.remove('active');
+    t.style.background = '';
+    t.style.color = '';
+    t.style.borderColor = '';
+  });
+  document.querySelectorAll(`[id^="cbody_${modIdx}_"]`).forEach(b => b.classList.remove('active'));
+  const tab = document.getElementById(`ctab_${modIdx}_${claseIdx}`);
+  if(tab) { tab.classList.add('active'); tab.style.background = color; tab.style.color = '#fff'; tab.style.borderColor = color; }
+  const body = document.getElementById(`cbody_${modIdx}_${claseIdx}`);
+  if(body) body.classList.add('active');
+}
+
+function goBack() {
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('detail-view').innerHTML = '';
+  document.getElementById('list-view').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildProgBars() {
+  const progData = [
+    {m:'M1',label:'Mapa base, plaza central y calles principales',color:MOD_COLORS_CSS[0],w:12},
+    {m:'M2',label:'Scripts básicos, variables y loops en objetos',color:MOD_COLORS_CSS[1],w:24},
+    {m:'M3',label:'Sistema de monedas, puertas y zona de desafío',color:MOD_COLORS_CSS[2],w:36},
+    {m:'M4',label:'Puertas animadas, luces dinámicas y plataformas',color:MOD_COLORS_CSS[3],w:48},
+    {m:'M5',label:'Audio completo, física y efectos de partículas',color:MOD_COLORS_CSS[4],w:60},
+    {m:'M6',label:'Monedas reales, 5 niveles y DataStore persistente',color:MOD_COLORS_CSS[5],w:75},
+    {m:'M7',label:'HUD dinámico, menú de inicio y pantalla de victoria',color:MOD_COLORS_CSS[6],w:88},
+    {m:'M8',label:'Juego publicado en Roblox y presentación final',color:MOD_COLORS_CSS[7],w:100},
+  ];
+  const pb = document.getElementById('prog-bars');
+  if(pb) pb.innerHTML = progData.map(p=>`
+    <div class="progress-row">
+      <div class="p-circle" style="background:${p.color}">${p.m}</div>
+      <div class="p-bar-wrap">
+        <div class="p-label">${p.label}</div>
+        <div class="p-bar" style="background:var(--surface3);height:4px;border-radius:2px"><div style="width:${p.w}%;height:100%;border-radius:2px;background:${p.color};transition:width 1s ease"></div></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildEvalBars() {
+  const evals = [
+    {label:'Proyecto final',pct:40,color:'var(--accent)'},
+    {label:'Misiones de clase',pct:30,color:'var(--blue)'},
+    {label:'Participación activa',pct:20,color:'var(--green)'},
+    {label:'Retos extra-clase',pct:10,color:'var(--yellow)'},
+  ];
+  const eb = document.getElementById('eval-bars');
+  if(eb) eb.innerHTML = evals.map(e=>`
+    <div class="eval-bar">
+      <span class="eval-label">${e.label}</span>
+      <div class="eval-track"><div class="eval-fill" style="width:${e.pct}%;background:${e.color}"></div></div>
+      <span class="eval-pct">${e.pct}%</span>
+    </div>`).join('');
+}
+
+buildModGrid();
+buildProgBars();
+buildEvalBars();
+</script>
+</body>
+</html>
