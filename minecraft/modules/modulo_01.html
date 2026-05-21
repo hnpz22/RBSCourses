@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 01 — INTRODUCCIÓN A MINECRAFT Y PENSAMIENTO LÓGICO — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#5DA130;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">01</span>
+  <div class="mod-label">// MÓDULO 01 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">INTRODUCCIÓN A MINECRAFT<br>Y PENSAMIENTO LÓGICO</h1>
+  <div class="mod-theme">Fundamentos — Sin programación formal · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">Minecraft Education</span><span class="tag tag-p">Code.org</span><span class="tag tag-o">ODS 2 Hambre Cero</span><span class="tag tag-o">ODS 11 Ciudades Sostenibles</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Explorar Minecraft Education, desarrollar lógica computacional básica y comprender conceptos de sostenibilidad aplicados al entorno del juego.</li></ul></div><div class="meta-cell"><h4>💪 HABILIDADES</h4><ul><li>Navegación y controles en Minecraft</li><li>Lógica secuencial básica con Code.org</li><li>Pensamiento sostenible aplicado</li><li>Diseño en papel antes de construir</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN EN MINECRAFT</h4><ul><li>Casa con cocina y habitaciones</li><li>Huerta funcional (mínimo 3 cultivos)</li><li>Granja de animales en corral vallado</li><li>Fuente de energía renovable visible</li></ul></div><div class="meta-cell"><h4>🏆 MISIÓN DEL MÓDULO</h4><ul><li>Misión Fundador: Establecer las bases del sector en la Ciudad Inteligente. Casa, comida y energía limpia como requisito mínimo para avanzar al Módulo 2.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>¡Bienvenido a Minecraft Education!</h3><span>¿Qué es programar? · Primeros pasos en el servidor compartido</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Alguna vez le diste instrucciones a alguien para que hiciera algo exactamente como tú querías? ¿Qué pasó cuando fallaron en un solo paso?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es Minecraft Education?</strong> Diferencia con la versión normal. Modo creativo vs. supervivencia. Por qué se usa en clase como entorno de aprendizaje.</li><li><strong>¿Qué vamos a aprender en 8 módulos?</strong> El docente muestra la ruta completa: Redstone → Scratch → PSeInt → Python → IA. Cada estudiante señala qué le emociona más.</li><li><strong>Code.org — Aventurero de Minecraft:</strong> Crear cuenta en studio.code.org. Explorar la interfaz de bloques. Completar niveles 1–5 del tutorial guiado de forma individual.</li><li><strong>Discusión de cierre:</strong> ¿Qué instrucciones usaron en el tutorial? ¿Qué es un algoritmo? El docente conecta los bloques con el concepto de secuencia lógica.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Llegar a la oveja en 3 pasos exactos</span>
+                  <span class="ch ch-m">MEDIO: Completar nivel 5 sin usar la opción de ayuda</span>
+                  <span class="ch ch-h">DIFÍCIL: Completar el nivel usando el mínimo posible de bloques</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Entrar al servidor compartido:</strong> El docente explica reglas de convivencia, zonas asignadas de construcción y cómo colaborar sin destruir el trabajo de los compañeros.</li><li><strong>Exploración guiada:</strong> Movimiento con WASD, saltar, correr, abrir inventario con E, colocar y romper bloques. Demo en vivo del docente.</li><li><strong>Misión Fundador — Nivel 1:</strong> Construir la base de la casa: piso + paredes de mínimo 6×6 bloques. Distribuir el espacio interior para cocina y habitación.</li><li><strong>Reto Creativo:</strong> Colocar la base del segundo piso y seleccionar materiales de decoración para trabajar en la siguiente clase.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Introducción a la Sostenibilidad</h3><span>¿Por qué construir de forma responsable? · ODS 11 Ciudades Sostenibles</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué pasaría si en tu ciudad no hubiera parques, zonas verdes ni luz solar? ¿Cómo sería vivir ahí día a día?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es la sostenibilidad?</strong> Usar recursos del presente sin comprometer los del futuro. Ejemplos cotidianos concretos vs. anti-ejemplos visibles en Colombia.</li><li><strong>Construcciones sostenibles reales:</strong> Casas con paneles solares, jardines verticales, techos verdes. El docente muestra imágenes reales y sus equivalentes posibles en Minecraft.</li><li><strong>Actividad de boceto en papel (5 min):</strong> Cada estudiante dibuja el plano de su casa marcando al menos 3 elementos sostenibles: ventanas, huerta, fuente de energía.</li><li><strong>Code.org:</strong> Completar niveles 6–10 del Aventurero de Minecraft. Foco en identificar instrucciones que se repiten.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Boceto con 3 elementos sostenibles identificados</span>
+                  <span class="ch ch-m">MEDIO: Boceto con distribución de espacios por zonas claras</span>
+                  <span class="ch ch-h">DIFÍCIL: Boceto de dos pisos con elementos sostenibles en cada nivel</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Terminar la casa:</strong> Añadir techo, terraza, ventanas grandes de vidrio transparente e iluminación interior con lámparas de Redstone o glowstone (no antorchas).</li><li><strong>Misión Fundador — Nivel 2:</strong> Construir huerta funcional adosada a la casa con al menos 3 tipos de cultivos. El agua debe estar a máximo 4 bloques de cada cultivo para que crezcan.</li><li><strong>Conexión ODS 11:</strong> El docente muestra en el servidor cómo una ciudad bien planificada integra zonas verdes. ¿Cómo lo harán en su propio sector?</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Las Granjas y la Sostenibilidad Alimentaria</h3><span>ODS 2 — Hambre Cero · Producción de alimentos en Minecraft</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿De dónde viene la comida que hay en tu casa? ¿Cuántos pasos tiene el proceso desde la tierra hasta tu plato?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es una granja?</strong> Tipos: de cultivos, de animales, mixtas. Su importancia para la seguridad alimentaria local y global.</li><li><strong>ODS 2 — Hambre Cero:</strong> ¿Cuántas personas no tienen acceso a comida hoy en el mundo? ¿Cómo puede la tecnología agrícola (sensores, riego automático) ayudar?</li><li><strong>Code.org:</strong> Niveles 11–14 del Aventurero. El docente señala el uso de loops para tareas repetitivas como plantar o regar filas de cultivos.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Granja de trigo 3×3 con canal de agua central</span>
+                  <span class="ch ch-m">MEDIO: Granja mixta: cultivos + área separada de animales</span>
+                  <span class="ch ch-h">DIFÍCIL: Sistema de irrigación con canal central y cultivos a los lados</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Construcción de granja completa:</strong> Cultivos (trigo, zanahoria, papa) en tierra labrada con agua cercana. Corral vallado con madera para animales (pollos, vacas o cerdos).</li><li><strong>Criterios sostenibles:</strong> No dañar el bioma circundante, usar agua eficientemente, dejar zonas verdes alrededor. El docente revisa cada granja en vivo.</li><li><strong>Presentación rápida 2 min:</strong> Cada estudiante muestra su granja al grupo y explica qué produce y por qué considera que es sostenible.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Energías Renovables vs No Renovables</h3><span>Cierre Módulo 1 · Presentación de sectores · ODS 2 y 11</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué pasaría si el petróleo del planeta se acabara mañana? ¿Cómo tendríamos energía para vivir?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Renovables vs no renovables:</strong> Definiciones, ejemplos visuales, ventajas y desventajas de cada tipo. Debate grupal: ¿cuál es más viable para Colombia?</li><li><strong>Tipos de energía renovable:</strong> Solar (paneles fotovoltaicos), eólica (aerogeneradores), hidráulica (represas), geotérmica. Casos reales en Colombia.</li><li><strong>Code.org:</strong> Completar los niveles finales del Aventurero de Minecraft (15+). Obtener la insignia de completar el tutorial completo.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Identificar 3 energías renovables en imágenes</span>
+                  <span class="ch ch-m">MEDIO: Comparar ventajas de solar vs eólica en tabla escrita</span>
+                  <span class="ch ch-h">DIFÍCIL: Diseñar boceto de ciudad 100% renovable con 3 fuentes distintas</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB + CIERRE</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Construir fuente de energía renovable:</strong> Molino de viento (lana + madera), paneles solares (vidrio + hierro) o represa (agua + piedra). Cada estudiante elige su tipo y lo ubica cerca de la casa.</li><li><strong>CIERRE MÓDULO 1:</strong> Tour rápido de cada sector: casa + granja + fuente de energía. Cada estudiante explica cómo su diseño conecta con ODS 2 y ODS 11.</li><li><strong>Reflexión grupal:</strong> ¿Qué aprendieron? ¿Qué mejorarían si pudieran rehacerlo? Votación del sector más sostenible del grupo.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><span></span><a href="modulo_02.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M2: Redstone →</a></div>
+
+<footer>
+  <p><span>MÓDULO 01</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

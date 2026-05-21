@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 07 — PSEUDOCÓDIGO Y ROBOTS CONSTRUCTORES — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#8B5CF6;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">07</span>
+  <div class="mod-label">// MÓDULO 07 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">PSEUDOCÓDIGO Y ROBOTS CONSTRUCTORES</h1>
+  <div class="mod-theme">PSeInt · Agent de Minecraft Education · Del visual al texto · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">PSeInt</span><span class="tag tag-p">Minecraft Education Agent</span><span class="tag tag-s">Pseudocódigo</span><span class="tag tag-s">Funciones</span><span class="tag tag-s">Ciclos en texto</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Transitar de la programación visual de Scratch al pseudocódigo en PSeInt. Comprender variables, ciclos y condicionales escritos en texto. Programar el Agent de Minecraft para construir estructuras automáticamente.</li></ul></div><div class="meta-cell"><h4>💻 CONCEPTOS</h4><ul><li>Algoritmo / Inicio / Fin</li><li>Escribir / Leer (entrada y salida)</li><li>variable ← valor (asignación)</li><li>Para i←1 Hasta N Con Paso 1</li><li>Mientras [condicion]</li><li>Si Entonces SiNo</li><li>SubAlgoritmo (función)</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Estación de transporte de la ciudad</li><li>Red de rieles conectando 3 zonas del servidor</li><li>Estructuras automáticas construidas por el Agent</li><li>Sistemas inteligentes programados con ciclos</li></ul></div><div class="meta-cell"><h4>🎭 ACTIVIDAD</h4><ul><li>"Red de transporte humana": estudiantes simulan estaciones y trenes con roles fijos siguiendo instrucciones exactas. Experimenta en el cuerpo la lógica de un sistema de control.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>Del Visual al Texto — PSeInt</h3><span>¿Qué es el pseudocódigo? · Variables declaradas en texto</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Si Scratch usa bloques de colores para programar, ¿cómo crees que se ve exactamente ese mismo programa escrito en texto puro? ¿Crees que es más fácil o más difícil de leer?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Introducción a PSeInt:</strong> Descargar o abrir. Estructura obligatoria: "Algoritmo nombre / Inicio / [instrucciones] / Fin". El pseudocódigo es un puente entre el lenguaje humano y el lenguaje de máquina.</li><li><strong>Comparación Scratch → PSeInt en vivo:</strong> El docente muestra el mismo programa en ambas herramientas. "Repetir 10 veces" → "Para i←1 Hasta 10 Con Paso 1 Hacer". "Si toca borde" → "Si color = rojo Entonces Escribir '¡Peligro!'"</li><li><strong>Variables en PSeInt:</strong> Declaración implícita. Asignación con el operador ←. Tipos: Real (número decimal), Entero, Cadena (texto), Logico (verdadero o falso).</li><li><strong>Primer programa completo:</strong> Pedir el nombre del usuario con Leer. Calcular la edad en meses (edad * 12). Mostrar el resultado con Escribir usando una cadena formateada.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Programa que saluda usando el nombre del usuario</span>
+                  <span class="ch ch-m">MEDIO: Calculadora de edad exacta en días y meses</span>
+                  <span class="ch ch-h">DIFÍCIL: Conversor completo de temperatura C → F → K con fórmulas</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Introducción al Agent:</strong> Robot programable interno de Minecraft Education. Comandos disponibles: mover (adelante, atrás, izquierda, derecha), girar, colocar bloque, recoger bloque.</li><li><strong>Primer programa del Agent:</strong> Caminar en línea recta 10 pasos colocando un bloque en cada posición. Verificar visualmente que el resultado es correcto.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Ciclos y Condicionales en PSeInt</h3><span>Traducir el minijuego de Scratch a pseudocódigo completo</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Ya sabes exactamente cómo funciona un loop en Scratch con bloques de colores. ¿Cómo crees que se escribe "repetir 10 veces" cuando no hay bloques, solo texto?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Ciclo Para en PSeInt:</strong> "Para i←1 Hasta 10 Con Paso 1 Hacer / [instrucciones] / FinPara". La variable i toma los valores del 1 al 10 automáticamente en cada iteración.</li><li><strong>Ciclo Mientras en PSeInt:</strong> "Mientras [condicion] Hacer / [instrucciones] / FinMientras". Se repite mientras la condición sea verdadera. Advertencia: loop infinito si la condición nunca se vuelve falsa.</li><li><strong>Si-Entonces-SiNo anidado:</strong> Condicionales dentro de otros condicionales para decisiones complejas. La indentación visual es clave para leer el código correctamente.</li><li><strong>Ejercicio principal de la clase:</strong> Traducir el minijuego de Scratch al pseudocódigo. El docente guía con preguntas: "¿Cuál era el loop principal? ¿Cuál era la condición de victoria?"</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Ciclo que imprime los números del 1 al 10</span>
+                  <span class="ch ch-m">MEDIO: Programa que determina si un número es par o impar</span>
+                  <span class="ch ch-h">DIFÍCIL: Pseudocódigo completo del minijuego con score y condición de victoria</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Agent con ciclo:</strong> Construir una pared larga usando Para: colocar bloque → mover → repetir N veces. Cambiar el valor de N para observar el efecto en la longitud de la pared.</li><li><strong>Agent con condicional:</strong> Si hay un bloque adelante → girar 90°. Si no → avanzar y colocar bloque. El Agent navega un espacio sin chocar.</li><li><strong>Inicio estación de transporte:</strong> El Agent coloca los rieles del sistema de transporte. El estudiante construye la estructura de la estación alrededor de los rieles.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Funciones y Agent Constructor Avanzado</h3><span>SubAlgoritmos reutilizables · Automatizar construcción compleja</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Si tuvieras un robot constructor físico real que siguiera tus instrucciones exactas sin error, ¿qué le ordenarías construir primero en tu ciudad?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es un SubAlgoritmo?</strong> Un bloque de código con nombre propio que realiza una tarea específica y puede reutilizarse en cualquier punto del programa. Evita repetir el mismo código múltiples veces.</li><li><strong>SubAlgoritmo en PSeInt:</strong> "SubAlgoritmo nombre(parametros) / [instrucciones] / FinSubAlgoritmo". Se invoca desde el algoritmo principal usando su nombre.</li><li><strong>¿Por qué son fundamentales?</strong> Si necesito construir 4 paredes, creo "construirPared(longitud)" y la llamo 4 veces con distintos valores. El código queda limpio, corto y fácil de mantener.</li><li><strong>Ejercicio:</strong> SubAlgoritmo que calcula el área y perímetro de un rectángulo. Llamarlo 3 veces desde el algoritmo principal con valores distintos.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Agent construye una habitación completa:</strong> Programar las 4 paredes usando ciclos anidados (Para dentro de Para). Absolutamente prohibido colocar bloques manualmente.</li><li><strong>Actividad física — Red de transporte humana:</strong> 5 estudiantes son "estaciones" fijas. Los demás son "trenes". El "programador" da instrucciones verbales exactas de movimiento. ¿Qué instrucciones necesitaba el sistema?</li><li><strong>Red de rieles en Minecraft:</strong> Conectar 3 zonas distintas de la ciudad con rieles funcionales. Añadir estaciones con señalización clara.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Ciudad Inteligente — Sistemas Programados</h3><span>Cierre Módulo 7 · Agent completa la ciudad · Preview Módulo 8</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Llevan 7 módulos construyendo y programando en equipo. ¿Cuánto ha crecido tu ciudad desde el primer día? ¿Qué te sorprende más de todo lo que lograron?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — PRODUCCIÓN PSEINT</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Proyecto PSeInt de módulo:</strong> Entrega del pseudocódigo completo del minijuego del Módulo 6, completamente traducido de Scratch a PSeInt. El docente valida la lógica y coherencia.</li><li><strong>Reto Agent máximo:</strong> Programar al Agent para construir una estructura de al menos 50 bloques usando ciclos. Prohibido colocar manualmente ni un solo bloque.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB + CIERRE</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Agent embellece la ciudad:</strong> Cada estudiante usa al Agent para construir una estructura decorativa: muro perimetral, torre, pavimento geométrico o jardín con patrón.</li><li><strong>CIERRE MÓDULO 7:</strong> Tour completo de la ciudad. Ya tiene: casas, granja, energía, restaurantes, escuelas, parques, sistema de transporte y estructuras del Agent.</li><li><strong>Preview Módulo 8:</strong> "La próxima clase escriben Python de verdad. Su código va a correr en una terminal exactamente como el de los ingenieros de Google y Netflix."</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><a href="modulo_05.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M5: Ciudad</a><a href="modulo_07.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M7: PSeInt →</a></div>
+
+<footer>
+  <p><span>MÓDULO 07</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

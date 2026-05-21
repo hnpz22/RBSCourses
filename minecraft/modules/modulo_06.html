@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 06 — INFRAESTRUCTURA Y SISTEMAS INTERACTIVOS — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#4ECDC4;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">06</span>
+  <div class="mod-label">// MÓDULO 06 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">INFRAESTRUCTURA Y SISTEMAS INTERACTIVOS</h1>
+  <div class="mod-theme">Loops · Condicionales · Variables · Minijuego Completo · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">Scratch</span><span class="tag tag-p">Code.org</span><span class="tag tag-p">Minecraft Education</span><span class="tag tag-s">Loops</span><span class="tag tag-s">if / else</span><span class="tag tag-s">Variables</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Dominar loops (repetición), condicionales (if/else) y variables en Scratch. Crear un minijuego funcional completo. Construir infraestructura interactiva en Minecraft.</li></ul></div><div class="meta-cell"><h4>💻 CONCEPTOS</h4><ul><li>loops: repetir N veces</li><li>por siempre (loop infinito)</li><li>si / entonces / si no</li><li>variables: score y vidas</li><li>colisión entre sprites</li><li>condición de victoria o derrota</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Barrios con patrón repetido (loop físico)</li><li>Puentes con estructura repetida</li><li>Semáforo funcional con temporizador Redstone</li><li>Área de minijuegos y parkour para el grupo</li></ul></div><div class="meta-cell"><h4>🏆 MISIÓN</h4><ul><li>Misión Programador: Crear un minijuego funcional en Scratch con score visible, condición de victoria y al menos un loop activo y un condicional funcionando.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>Loops — Repetir es Programar</h3><span>Patrones en Scratch · Barrios organizados con patrón en Minecraft</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué tareas haces exactamente igual todos los días sin variación? Si fueras un robot que ejecuta instrucciones, ¿qué instrucciones repetirías sin parar?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es un loop?</strong> Repetir un conjunto de instrucciones N veces o mientras una condición sea verdadera. Ejemplos: lavadora (gira 800 veces), semáforo (cicla indefinidamente), GIF animado (se repite sin parar).</li><li><strong>Bloques de repetición en Scratch:</strong> "repetir (10)" para N iteraciones fijas. "por siempre" para repetición infinita. "repetir hasta que [condición]" para parar cuando se cumple algo.</li><li><strong>Ejercicio de figuras geométricas:</strong> Cuadrado = repetir 4 veces (avanzar 100 + girar 90°). Triángulo = repetir 3 (avanzar 100 + girar 120°). Hexágono = repetir 6 (avanzar 80 + girar 60°).</li><li><strong>Eficiencia demostrada en vivo:</strong> Sin loop, dibujar un octágono requiere 24 bloques de código. Con loop, solo 3 bloques. El docente muestra ambas versiones en Scratch.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Cuadrado perfecto con loop repetir 4</span>
+                  <span class="ch ch-m">MEDIO: Estrella de 5 puntas con el ángulo correcto</span>
+                  <span class="ch ch-h">DIFÍCIL: Espiral progresiva o patrón fractal usando loops anidados</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Barrio con patrón repetido:</strong> Al menos 4 casas del mismo estilo arquitectónico con la misma separación entre ellas. El docente conecta: "Lo que acaban de hacer físicamente en Minecraft, en código se llama loop de 4 iteraciones."</li><li><strong>Puentes con estructura repetida:</strong> Construir 2 puentes con arcos, pilares o vigas que se repitan de forma uniforme para conectar zonas separadas por agua o desnivel.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Condicionales — Si... Entonces... Si No...</h3><span>if/else en Scratch · Semáforo funcional en Minecraft</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Cómo decide exactamente un semáforo cuándo ponerse en rojo? ¿Qué condición revisa antes de cambiar de color?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>if / else:</strong> "SI se cumple esta condición → hacer X. SI NO → hacer Y." El computador siempre toma una decisión binaria basada en datos. No existe la ambigüedad: es 0 o 1.</li><li><strong>Bloques condicionales en Scratch:</strong> "si <condición> entonces / fin" y "si <condición> entonces / si no / fin". Las condiciones pueden ser: posición, tecla presionada, toque de sprite, comparación de variable.</li><li><strong>Ejercicio guiado:</strong> Sprite que cambia de color si toca el borde rojo → decir "¡Peligro! Zona restringida". Si no toca → decir "Zona segura. Puedes avanzar."</li><li><strong>Code.org — Hero's Journey:</strong> Completar niveles 6–10 con condicionales visuales (studio.code.org/s/hero).</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: if toca borde → cambiar color del sprite</span>
+                  <span class="ch ch-m">MEDIO: if/else con sprite que reacciona distinto a 2 condiciones</span>
+                  <span class="ch ch-h">DIFÍCIL: Sistema de colisión con múltiples condiciones anidadas</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Puertas con lógica condicional avanzada:</strong> Puerta que se abre SOLO SI se activan 2 entradas simultáneamente (AND) o SOLO de noche usando detector solar invertido con NOT.</li><li><strong>Semáforo funcional:</strong> Temporizador de Redstone (reloj de Redstone) que cicla automáticamente rojo → verde → rojo usando lámparas de los colores correspondientes.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Variables y Puntaje</h3><span>Guardar información · Score · Vidas · Contador de eventos</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Cómo guarda un videojuego cuántos puntos tienes durante la partida? ¿Dónde "vive" exactamente ese número mientras estás jugando?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es una variable?</strong> Una "caja" con nombre que guarda un valor que puede cambiar durante la ejecución del programa. Tipos básicos: número entero, texto (cadena), booleano (verdadero o falso).</li><li><strong>Variables en Scratch:</strong> Crear variable, mostrar en pantalla, cambiar valor con evento, fijar valor inicial. La variable persiste en memoria mientras el programa está corriendo.</li><li><strong>Ejercicio — sistema de puntaje:</strong> Variable "puntos" inicia en 0. Cuando el sprite toca una estrella → puntos aumentan 10. Cuando toca un obstáculo → puntos disminuyen 5.</li><li><strong>Condición de victoria:</strong> "SI puntos > 50 → ir a escena de victoria." Combina variable + condicional en una sola lógica.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Variable que cuenta cuántas veces se hace clic</span>
+                  <span class="ch ch-m">MEDIO: Score que sube y baja con 2 eventos distintos</span>
+                  <span class="ch ch-h">DIFÍCIL: Sistema completo con puntos + vidas + pantalla de game over</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Área de minijuegos:</strong> Zona de entretenimiento con parkour, laberinto o pista de obstáculos que los compañeros puedan recorrer durante los descansos.</li><li><strong>Conexión conceptual:</strong> "Este parkour tiene condiciones: si caes, empiezas de nuevo. Si llegas al final, ganas. Eso mismo lo van a programar ahora en Scratch."</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Minijuego Completo en Scratch</h3><span>Cierre Módulo 6 · Game Jam · Insignia 🧩 Programador</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué hace que un videojuego sea genuinamente divertido? ¿Es más difícil programar el gameplay o los gráficos y sonidos?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — PRODUCCIÓN LIBRE</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Tiempo de creación del minijuego:</strong> Requisitos mínimos: loop principal ("por siempre"), condicional activo (si toca algo → reacción específica), variable de score visible, condición de victoria o derrota.</li><li><strong>Tipos de juego sugeridos:</strong> Atrapar objetos que caen, esquivar enemigos móviles, laberinto interactivo, quiz de preguntas con puntaje acumulado.</li><li><strong>Mentalidad de debugging:</strong> "El error no es el problema. No encontrar el error sí lo es." El docente modela en vivo cómo aislar y corregir un bug.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — GAME JAM + CIERRE</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Game Jam (20 min):</strong> Todos prueban los juegos de todos. Cada estudiante juega al menos 3 juegos de compañeros y deja un comentario escrito en Scratch.</li><li><strong>Presentación rápida (2 min c/u):</strong> Explicar qué hace el loop, cuál fue la condición usada y cómo funciona el sistema de score.</li><li><strong>Preview del Módulo 7:</strong> "¿Quieren ver cómo se ve exactamente este juego en código de texto real? El próximo módulo lo descubren."</li><li><strong>Insignia 🧩 Programador:</strong> Para quienes tengan minijuego con loop + condicional + variable funcionando correctamente.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><a href="modulo_04.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M4: Soluciones</a><a href="modulo_06.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M6: Interactivo →</a></div>
+
+<footer>
+  <p><span>MÓDULO 06</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

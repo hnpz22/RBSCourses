@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 05 — FUNDANDO LA CIUDAD INTELIGENTE — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#F7B731;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">05</span>
+  <div class="mod-label">// MÓDULO 05 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">FUNDANDO LA CIUDAD INTELIGENTE</h1>
+  <div class="mod-theme">Introducción Real a la Programación — Scratch + Code.org · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">Scratch</span><span class="tag tag-p">Code.org</span><span class="tag tag-p">Minecraft Education</span><span class="tag tag-s">Algoritmos</span><span class="tag tag-s">Secuencias</span><span class="tag tag-s">Eventos</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Comprender qué es programar usando Scratch como primer lenguaje visual. Algoritmos, secuencias, sprites y eventos como base del pensamiento computacional formal.</li></ul></div><div class="meta-cell"><h4>💻 CONCEPTOS</h4><ul><li>algoritmo y secuencia</li><li>instrucciones precisas</li><li>sprites y escenario</li><li>eventos de teclado y clic</li><li>disfraces y animación</li><li>bloques de sonido</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Plaza central de la Ciudad Inteligente</li><li>Primeras casas del barrio organizado</li><li>Red de caminos que conectan todos los sectores</li><li>Parque comunitario con zona verde</li></ul></div><div class="meta-cell"><h4>🎭 ACTIVIDAD ESPECIAL</h4><ul><li>"Programa a tu compañero": un estudiante da instrucciones verbales exactas, el otro las ejecuta como robot. Experimentan la lógica de un algoritmo con el cuerpo físico.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>¿Qué es Programar?</h3><span>Algoritmos con el cuerpo · Primera vez en Scratch</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Si le explicaras a alguien que nunca ha preparado un sándwich cómo hacerlo paso a paso, ¿cuántos pasos necesitarías exactamente? ¿Qué pasa si falta uno solo?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>"Programa a tu compañero" (actividad física):</strong> En parejas: uno da instrucciones verbales exactas ("avanza 3 pasos", "gira exactamente 90° a la izquierda"), el otro las ejecuta sin improvisar ni interpretar. ¿Qué pasa con instrucciones ambiguas o incompletas?</li><li><strong>Definición de algoritmo:</strong> Secuencia finita de instrucciones claras y ordenadas para resolver un problema específico. Ejemplos: receta de cocina, instrucciones de GPS, manual de ensamblaje.</li><li><strong>Introducción a Scratch (scratch.mit.edu):</strong> Interfaz: área de bloques, escenario, sprites. Primer programa: el gato camina 100 pasos al presionar la bandera verde.</li><li><strong>Ejercicio guiado:</strong> Mover el sprite desde el punto A hasta el punto B en línea recta usando bloques de movimiento y espera.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Gato que camina 100 pasos y dice "¡Hola!"</span>
+                  <span class="ch ch-m">MEDIO: Gato que traza un cuadrado perfecto de 4 lados</span>
+                  <span class="ch ch-h">DIFÍCIL: Gato que traza una espiral o figura geométrica compleja</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Plaza central de la Ciudad:</strong> Boceto en papel (máximo 5 min) y luego construir. Debe tener fuente o estatua central, bancas, caminos en cruz hacia los 4 sectores del servidor.</li><li><strong>Red de caminos:</strong> Pavimentar las calles principales que conectan los sectores de todos los estudiantes entre sí dentro del servidor compartido.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Eventos y Sprites Interactivos</h3><span>Cuando presionas un botón... algo sucede · Programación reactiva</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué pasa exactamente cuando presionas el botón de un ascensor? ¿Qué "instrucción" recibe el ascensor en ese preciso momento?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es un evento en programación?</strong> Una acción que dispara otra acción automáticamente. "Cuando ocurre X → ejecutar Y." Ejemplos: clic del mouse, tecla presionada, colisión entre objetos, temporizador.</li><li><strong>Bloques de evento en Scratch:</strong> "Cuando ⚑ se presione", "Cuando se presione tecla [espacio]", "Cuando este sprite sea cliqueado". Múltiples eventos pueden coexistir en el mismo sprite.</li><li><strong>Ejercicio guiado:</strong> Sprite que cambia de disfraz al presionar la tecla espacio. Crear al menos 2 eventos diferentes que disparen acciones distintas en el mismo sprite.</li><li><strong>Proyecto Scratch:</strong> Personaje en la ciudad que se mueve con las flechas del teclado y habla al presionar espacio.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Sprite que cambia de color al hacer clic sobre él</span>
+                  <span class="ch ch-m">MEDIO: Personaje que se mueve en 4 direcciones con las teclas de flecha</span>
+                  <span class="ch ch-h">DIFÍCIL: Personaje con 3 reacciones distintas según la tecla presionada</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Primeras casas del barrio:</strong> Al menos 3 casas con estilos arquitectónicos distintos alrededor de la plaza central construida en la clase anterior.</li><li><strong>Eventos físicos en Minecraft:</strong> Cada casa debe tener al menos 1 "evento" Redstone: puerta con placa de presión, luz con detector solar, o campana al entrar. Conexión con el concepto de evento en programación.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Sonido, Apariencia y Animaciones</h3><span>Scratch avanzado · Proyecto Ciudad Animada completo</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Cuál es tu videojuego favorito? ¿Qué animaciones tiene? ¿Cómo crees que se programaron esas animaciones?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Bloques de sonido:</strong> Importar sonidos del repositorio o subir propios. "Reproducir sonido [X] hasta el final". Sonido de fondo continuo. Los sonidos dan retroalimentación al usuario.</li><li><strong>Bloques de apariencia:</strong> Mostrar / ocultar sprites, cambiar tamaño, efectos visuales (color, fantasma, remolino, brillo). Cuándo usarlos efectivamente sin saturar la pantalla.</li><li><strong>Animación por disfraces:</strong> Crear ilusión de movimiento alternando disfraces con una pequeña espera entre cada cambio. Principio de animación de fotograma a fotograma.</li><li><strong>Proyecto Ciudad Animada:</strong> Al menos 3 sprites con animaciones y sonidos propios. Un sprite debe responder directamente a input del usuario.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Sprite con 2 disfraces que alterna en bucle continuo</span>
+                  <span class="ch ch-m">MEDIO: 3 sprites animados con sonidos distintos y coordinados</span>
+                  <span class="ch ch-h">DIFÍCIL: Escena de ciudad interactiva completa con fondo animado</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Red de caminos completa:</strong> Calles pavimentadas en todas las direcciones, señales de tráfico con letreros, alumbrado público conectado a detector de luz solar.</li><li><strong>Zona verde comunitaria:</strong> Parque con árboles, bancas, lago o fuente decorativa. Espacio de recreación central visible desde la plaza principal.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Primer Proyecto Scratch Completo</h3><span>Cierre Módulo 5 · Demo entre pares · Insignia 🏗️ Constructor</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué diferencia hay entre un programa que simplemente funciona y uno que funciona bien? ¿Qué hace especial a un buen software?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — PRODUCCIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Tiempo de creación y pulimiento:</strong> Completar el proyecto Scratch de ciudad animada. El docente circula dando feedback individual y específico a cada estudiante.</li><li><strong>Requisitos mínimos del proyecto:</strong> 3 sprites activos, 2 tipos de eventos distintos, animaciones y sonidos implementados. Al menos 1 sprite responde directamente al input del usuario.</li><li><strong>Introducción al debugging:</strong> ¿El programa hace exactamente lo que esperabas? Si no, ¿en qué bloque está el error? Metodología: aislar → identificar → corregir → verificar.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — DEMO + MINECRAFT</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Demo de proyectos Scratch (2 min c/u):</strong> El grupo da 1 cosa que le gustó específicamente y 1 sugerencia concreta y accionable.</li><li><strong>Minecraft — detalles finales:</strong> Señalización de barrios, vegetación decorativa, alumbrado completo, letreros con nombres de calles y edificios importantes.</li><li><strong>Insignia 🏗️ Constructor:</strong> Para quienes tengan plaza, casas, caminos y parque completados y correctamente interconectados en el servidor.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><a href="modulo_03.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M3: Intención</a><a href="modulo_05.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M5: Ciudad →</a></div>
+
+<footer>
+  <p><span>MÓDULO 05</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

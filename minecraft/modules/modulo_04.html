@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 04 — SOLUCIONES INTELIGENTES — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#8B5CF6;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">04</span>
+  <div class="mod-label">// MÓDULO 04 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">SOLUCIONES INTELIGENTES</h1>
+  <div class="mod-theme">Design Thinking · Proyecto Integrador · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">Minecraft Education</span><span class="tag tag-p">Code.org</span><span class="tag tag-o">ODS 7 Energía Limpia</span><span class="tag tag-o">ODS 9 Industria</span><span class="tag tag-s">Design Thinking</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Identificar problemas cotidianos reales y diseñar soluciones en Minecraft integrando automatización y energías limpias. Presentar el proyecto ante el grupo con argumentos.</li></ul></div><div class="meta-cell"><h4>💡 PROCESO</h4><ul><li>1. Identificar el problema real</li><li>2. Lluvia de ideas + selección</li><li>3. Boceto en papel (obligatorio)</li><li>4. Construir prototipo en Minecraft</li><li>5. Presentar y reflexionar</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Solución original al problema planteado</li><li>Sistema de automatización integrado al diseño</li><li>Almacenamiento eficiente y organizado</li><li>Energías limpias visibles en la construcción</li></ul></div><div class="meta-cell"><h4>🏆 MISIÓN</h4><ul><li>Misión Innovador: Identificar un problema real o de la ciudad virtual y construir en Minecraft la solución completa. Presentar con argumentos sólidos ante el grupo.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>Planteando el Problema</h3><span>Design Thinking · Lluvia de ideas · Boceto inicial obligatorio</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Cuál es el problema más urgente de tu barrio o ciudad? Si tuvieras recursos ilimitados y 30 días, ¿qué construirías primero para resolverlo?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Tipos de problemas:</strong> Ambientales (contaminación del agua, residuos sólidos, deforestación) y Sociales (movilidad, acceso a servicios básicos, seguridad urbana).</li><li><strong>Lluvia de ideas moderada:</strong> El docente facilita. Cada estudiante propone 3 problemas. Se agrupan por categorías en el tablero. Se vota por los más relevantes para el contexto local.</li><li><strong>Selección individual del problema:</strong> Cada estudiante elige su problema personal y formula: ¿qué lo causa? ¿a quién afecta? ¿cómo podría resolverse con construcción o tecnología?</li><li><strong>Hour of Code — Minecraft:</strong> aka.ms/hoc22lessonplan — actividad final de construcción guiada de toda la serie de tutoriales.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Boceto obligatorio en papel:</strong> Plano de la solución con medidas aproximadas en bloques, materiales necesarios y sistemas de automatización planeados. Sin boceto aprobado, no se construye.</li><li><strong>Inicio de construcción:</strong> Definir la zona en el servidor. Colocar piso + primeras paredes de la estructura. No avanzar más hasta la revisión del docente.</li><li><strong>Checkpoint del docente:</strong> Revisión individual de cada boceto. El docente da feedback específico antes de que cada estudiante continúe construyendo.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Mecanismos de Automatización en el Proyecto</h3><span>Pistones · Dispensadores · Implementación real en el proyecto</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Un pistón empuja bloques de forma automática. ¿Se te ocurre algún problema del mundo real que se resuelva eficientemente "empujando" o "jalando" cosas?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Pistones en aplicaciones avanzadas:</strong> Puertas ocultas detrás de paredes, puentes retráctiles sobre ríos, ascensores de bloques de materiales, sistemas de trampa automatizados. El docente demuestra 2 ejemplos en vivo.</li><li><strong>Dispensadores con temporizador:</strong> Combinar dispensador + reloj de Redstone para crear sistemas de distribución automática periódica de recursos o materiales.</li><li><strong>Code.org — Minecraft Designer:</strong> studio.code.org/s/minecraft — foco en funciones reutilizables y repetición estructurada de acciones.</li><li><strong>Planificación individual:</strong> Cada estudiante define cuáles 2 sistemas de automatización va a integrar en su solución y cómo se conectan con el problema que eligió.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: 1 sistema automático funcionando en el proyecto</span>
+                  <span class="ch ch-m">MEDIO: 2 sistemas integrados y coordinados entre sí</span>
+                  <span class="ch ch-h">DIFÍCIL: 3 sistemas con lógica de compuertas aplicada al proyecto</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Implementar automatización:</strong> Al menos 2 sistemas Redstone funcionando integrados en la construcción de la solución, según el plan del boceto aprobado.</li><li><strong>Revisión de sostenibilidad:</strong> ¿La solución usa energías limpias? ¿Optimiza el uso de recursos? ¿Tiene algún impacto negativo que deba corregirse antes de la presentación?</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Accesibilidad, Eficiencia y Energías Limpias</h3><span>Pulimiento del proyecto integrador · ODS 7</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Tu solución podría ser usada por alguien con alguna discapacidad física? ¿Qué cambios harías para que fuera accesible para todos sin excepción?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Diseño universal y accesibilidad:</strong> Rampas en lugar de escaleras, señalización clara con letreros, espacios amplios para circulación. No es un extra de diseño: es un estándar de responsabilidad.</li><li><strong>Almacenamiento eficiente:</strong> Cofres etiquetados y organizados por categoría. Embudos automáticos para clasificación. El orden y la organización son parte integral del buen diseño.</li><li><strong>ODS 7 — Energía asequible y no contaminante:</strong> ¿Cómo garantizar que todos en la ciudad tengan acceso a energía limpia? Conexión directa con el proyecto de cada estudiante.</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Añadir accesibilidad:</strong> Rampas, señalización con letreros descriptivos, espacios amplios claramente visibles en el diseño de la solución.</li><li><strong>Sistema de almacenamiento:</strong> Cofres organizados por categoría + sistema de embudos automáticos si el nivel de conocimiento lo permite.</li><li><strong>Energía limpia visible:</strong> Panel solar (vidrio + hierro), molino de viento (lana + madera) o represa claramente integrados en la construcción de la solución.</li><li><strong>Ensayo de presentación:</strong> 2 minutos practicando la estructura del discurso de presentación del proyecto para el cierre de la siguiente clase.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Presentación Final — Cierre Fase 1 del Curso</h3><span>Demo Day · Cierre Módulo 4 · Preview de la Fase 2 de programación</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Si pudieras mostrarle tu solución al alcalde de tu ciudad hoy mismo, ¿qué le dirías primero? ¿Por qué tu proyecto realmente importa?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — PREPARACIÓN (30 min)</span>
+                <span class="time-tag">30 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Pulimiento final:</strong> Últimos ajustes a la construcción, señalización completa y documentación de todos los sistemas. El docente verifica el checklist mínimo de cada proyecto.</li><li><strong>Estructura de presentación:</strong> 1) ¿Cuál era el problema? 2) ¿Qué construiste? 3) ¿Cómo funciona la automatización? 4) ¿Cómo es sostenible? 5) ¿Qué ODS conecta?</li></ul>
+                
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — PRESENTACIONES Y CIERRE (90 min)</span>
+                <span class="time-tag">90 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Presentaciones (3–4 min c/u):</strong> Tour en Minecraft explicando el problema y la solución construida. 2 compañeros dan retroalimentación constructiva después de cada presentación.</li><li><strong>CIERRE FASE 1:</strong> ¿Qué aprendieron en estos 4 módulos? ¿Qué los sorprendió? ¿Qué fue lo más difícil de lograr?</li><li><strong>Preview de la Fase 2:</strong> El docente muestra un demo de Scratch con un sprite animado. "A partir del próximo módulo, van a escribir código de verdad."</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><a href="modulo_02.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M2: Redstone</a><a href="modulo_04.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M4: Soluciones →</a></div>
+
+<footer>
+  <p><span>MÓDULO 04</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

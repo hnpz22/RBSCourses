@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 1 — Moviéndose sobre Ruedas | LEGO Boost | ROBOTSchool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --robot-teal: #2BC2D4;
+    --robot-teal-dark: #1B9AAA;
+    --robot-red: #E63946;
+    --robot-red-dark: #C1272D;
+    --lego-yellow: #FFCF00;
+    --lego-blue: #0055BF;
+    --lego-green: #237841;
+    --lego-orange: #FF8A00;
+    --ink: #1A2233;
+    --ink-soft: #3D4556;
+    --paper: #FFFDF7;
+    --cream: #FFF4D6;
+    --mist: #F0F7F9;
+    --cloud: #E8EEF2;
+
+    --shadow-brick: 4px 4px 0 var(--ink);
+    --shadow-brick-lg: 6px 6px 0 var(--ink);
+    --shadow-soft: 0 4px 20px rgba(26, 34, 51, 0.08);
+    --shadow-lift: 0 12px 40px rgba(26, 34, 51, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(26, 34, 51, 0.06) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  /* ═══════════ NAV STICKY ═══════════ */
+  nav.topnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 0;
+    box-shadow: 0 4px 0 var(--robot-teal);
+  }
+  nav.topnav .inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  nav.topnav .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  nav.topnav .brand .owl-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--robot-teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  nav.topnav .links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  nav.topnav .links a {
+    color: var(--paper);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  nav.topnav .links a:hover {
+    background: var(--robot-teal);
+    border-color: var(--paper);
+  }
+
+  /* ═══════════ HERO ═══════════ */
+  header.hero {
+    position: relative;
+    background:
+      linear-gradient(135deg, var(--robot-teal) 0%, var(--robot-teal-dark) 100%);
+    color: var(--paper);
+    padding: 80px 32px 100px;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(255, 207, 0, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 85% 70%, rgba(230, 57, 70, 0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  header.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--paper);
+    clip-path: polygon(0 100%, 0 50%, 5% 30%, 10% 50%, 15% 30%, 20% 50%, 25% 30%, 30% 50%, 35% 30%, 40% 50%, 45% 30%, 50% 50%, 55% 30%, 60% 50%, 65% 30%, 70% 50%, 75% 30%, 80% 50%, 85% 30%, 90% 50%, 95% 30%, 100% 50%, 100% 100%);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--lego-yellow);
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-brick);
+  }
+  .hero-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    margin-bottom: 20px;
+    text-shadow: 4px 4px 0 rgba(26, 34, 51, 0.25);
+  }
+  .hero-title .accent {
+    display: block;
+    color: var(--lego-yellow);
+    font-size: 0.55em;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-shadow: 2px 2px 0 rgba(26, 34, 51, 0.2);
+  }
+  .hero-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    max-width: 720px;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    font-weight: 500;
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+  }
+  .meta-card {
+    background: rgba(255, 253, 247, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 253, 247, 0.4);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .meta-card .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    opacity: 0.85;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .meta-card .value {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  /* ═══════════ CONTAINER ═══════════ */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* ═══════════ SECTION HEADERS ═══════════ */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 3px dashed var(--robot-teal);
+  }
+  .section-header .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--robot-teal-dark);
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .section-header h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  /* ═══════════ OVERVIEW GRID ═══════════ */
+  .overview {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow-brick-lg);
+    position: relative;
+  }
+  .overview::before {
+    content: '🦉';
+    position: absolute;
+    top: -25px;
+    right: 40px;
+    font-size: 40px;
+    background: var(--lego-yellow);
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-brick);
+  }
+  .overview h3 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 28px;
+    margin-bottom: 16px;
+    color: var(--robot-red);
+  }
+  .overview p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .progression-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .progression-table thead {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .progression-table th {
+    padding: 16px 14px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .progression-table td {
+    padding: 18px 14px;
+    border-bottom: 1px solid var(--cloud);
+    background: var(--paper);
+    font-size: 15px;
+  }
+  .progression-table tr:last-child td { border-bottom: none; }
+  .progression-table tr:nth-child(even) td { background: var(--mist); }
+  .progression-table td:first-child {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--robot-teal-dark);
+    text-align: center;
+    width: 70px;
+  }
+  .progression-table td:nth-child(2) {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ═══════════ SESSION CARDS ═══════════ */
+  .session {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 24px;
+    margin-bottom: 70px;
+    overflow: hidden;
+    box-shadow: var(--shadow-brick-lg);
+    scroll-margin-top: 100px;
+  }
+
+  .session-hero {
+    padding: 40px 40px 32px;
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .session-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0);
+    background-size: 20px 20px;
+    opacity: 0.5;
+  }
+  .session-hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  .session[data-s="1"] .session-hero { background: linear-gradient(135deg, #E63946, #C1272D); }
+  .session[data-s="2"] .session-hero { background: linear-gradient(135deg, #FFCF00, #F59E00); color: var(--ink); }
+  .session[data-s="3"] .session-hero { background: linear-gradient(135deg, #0055BF, #003F8F); }
+  .session[data-s="4"] .session-hero { background: linear-gradient(135deg, #237841, #1A5B30); }
+
+  .session-tag {
+    display: inline-block;
+    background: rgba(255, 253, 247, 0.95);
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+    border: 2px solid var(--ink);
+  }
+  .session-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .session-subtitle {
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0.95;
+    max-width: 700px;
+  }
+
+  .session-body {
+    padding: 40px;
+  }
+
+  /* ═══════════ INFO GRID ═══════════ */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .info-card {
+    background: var(--mist);
+    border: 2px solid var(--cloud);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+  }
+  .info-card .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .info-card h4 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: var(--robot-red);
+  }
+  .info-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* ═══════════ PHASE BLOCKS ═══════════ */
+  .phase {
+    margin-bottom: 32px;
+    border-left: 5px solid var(--robot-teal);
+    padding-left: 24px;
+    padding-bottom: 8px;
+    position: relative;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    background: var(--robot-teal);
+    border: 3px solid var(--paper);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--robot-teal);
+  }
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .phase-time {
+    font-family: 'Space Mono', monospace;
+    background: var(--ink);
+    color: var(--lego-yellow);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .phase-name {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .phase-content {
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+  .phase-content > p { margin-bottom: 12px; }
+  .phase-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+  }
+  .phase-content ul li {
+    padding: 8px 0 8px 32px;
+    position: relative;
+  }
+  .phase-content ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 8px;
+    color: var(--robot-teal);
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  /* ═══════════ GUIDE BOX (preguntas de facilitación) ═══════════ */
+  .guide-box {
+    background: var(--cream);
+    border: 2px dashed var(--lego-orange);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .guide-box .guide-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 15px;
+    color: var(--lego-orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .guide-box .guide-title::before {
+    content: '💬';
+    font-size: 20px;
+  }
+  .guide-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .guide-box ul li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    color: var(--ink);
+    font-weight: 500;
+    font-style: italic;
+  }
+  .guide-box ul li::before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -4px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 26px;
+    color: var(--lego-orange);
+    font-weight: 700;
+  }
+
+  /* ═══════════ MISSIONS ═══════════ */
+  .missions-wrap {
+    background: var(--mist);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 20px 0 28px;
+  }
+  .missions-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px dashed var(--robot-teal);
+  }
+  .missions-header h4 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .missions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .mission {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow-brick);
+    position: relative;
+  }
+  .mission .medal {
+    position: absolute;
+    top: -14px;
+    left: -14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 3px solid var(--ink);
+  }
+  .mission[data-level="basic"] .medal { background: #CD7F32; }
+  .mission[data-level="intermediate"] .medal { background: #C0C0C0; }
+  .mission[data-level="advanced"] .medal { background: #FFD700; }
+  .mission .level-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    margin-left: 36px;
+  }
+  .mission h5 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .mission p {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* ═══════════ CODE BOX (programación) ═══════════ */
+  .code-box {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 16px 0;
+    font-family: 'Space Mono', monospace;
+    position: relative;
+    overflow-x: auto;
+  }
+  .code-box .code-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    color: var(--lego-yellow);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .code-box .blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .block {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.2);
+    white-space: nowrap;
+  }
+  .block.start { background: var(--lego-yellow); color: var(--ink); }
+  .block.motor { background: var(--lego-green); color: var(--paper); }
+  .block.loop { background: var(--lego-orange); color: var(--paper); }
+  .block.sensor { background: #FF8A00; color: var(--paper); }
+  .block.wait { background: #8B5CF6; color: var(--paper); }
+  .block.arrow { background: transparent; border: none; color: var(--lego-yellow); font-size: 18px; }
+
+  /* ═══════════ EXTENSION CHALLENGE ═══════════ */
+  .extension {
+    background: linear-gradient(135deg, #FFF4D6, #FFE5A0);
+    border: 3px solid var(--lego-orange);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    position: relative;
+  }
+  .extension::before {
+    content: '🎯';
+    position: absolute;
+    top: -18px;
+    left: 24px;
+    background: var(--paper);
+    border: 3px solid var(--lego-orange);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .extension h4 {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--lego-orange);
+    font-size: 20px;
+    margin: 6px 0 10px;
+  }
+  .extension p {
+    color: var(--ink);
+    font-size: 15px;
+  }
+
+  /* ═══════════ REFLECTION ═══════════ */
+  .reflection {
+    background: linear-gradient(135deg, #F0F7F9, #D5EBEF);
+    border: 3px solid var(--robot-teal);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-top: 24px;
+    position: relative;
+  }
+  .reflection::before {
+    content: '🦉';
+    position: absolute;
+    top: -20px;
+    left: 24px;
+    background: var(--paper);
+    border: 3px solid var(--robot-teal);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .reflection h4 {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--robot-teal-dark);
+    font-size: 20px;
+    margin: 8px 0 12px;
+  }
+  .reflection p {
+    color: var(--ink);
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .signs-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--paper);
+    border-radius: 10px;
+  }
+  .sign-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .sign-emoji {
+    font-size: 32px;
+  }
+
+  /* ═══════════ LEARNING OUTCOMES ═══════════ */
+  .outcomes {
+    background: var(--paper);
+    border: 2px solid var(--cloud);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .outcomes h4 {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--robot-red);
+    font-size: 18px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .outcomes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .outcome-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .outcome-item::before {
+    content: '✓';
+    background: var(--robot-teal);
+    color: var(--paper);
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 13px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════ BADGE FOOTER ═══════════ */
+  .badge-footer {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    margin-top: 60px;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid var(--lego-yellow);
+  }
+  .badge-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(43, 194, 212, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(255, 207, 0, 0.2) 0%, transparent 50%);
+  }
+  .badge-footer-content { position: relative; z-index: 1; }
+  .big-badge {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 24px;
+    background: radial-gradient(circle, var(--lego-yellow), #F59E00);
+    border: 6px solid var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 70px;
+    box-shadow:
+      0 0 0 6px var(--ink),
+      0 0 40px rgba(255, 207, 0, 0.5);
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .badge-footer h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 16px;
+    color: var(--lego-yellow);
+  }
+  .badge-footer p {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 17px;
+    opacity: 0.9;
+  }
+
+  /* ═══════════ SCHEMA FOOTER ═══════════ */
+  .final-footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    border-top: 2px dashed var(--cloud);
+    margin-top: 40px;
+  }
+  .final-footer .robotschool {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--robot-red);
+    margin-bottom: 4px;
+  }
+  .final-footer .robotschool span { color: var(--robot-teal); }
+
+  /* ═══════════ BADGE EMOJIS FLOATING ═══════════ */
+  .floating-emoji {
+    position: absolute;
+    font-size: 60px;
+    opacity: 0.12;
+    pointer-events: none;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  /* ═══════════ RESPONSIVE ═══════════ */
+  @media (max-width: 768px) {
+    main { padding: 40px 20px; }
+    header.hero { padding: 60px 20px 80px; }
+    .overview { padding: 28px 20px; }
+    .session-hero, .session-body { padding: 28px 20px; }
+    .missions-wrap { padding: 20px; }
+    .progression-table { font-size: 13px; }
+    .progression-table th, .progression-table td { padding: 10px 8px; }
+    nav.topnav .links a { font-size: 12px; padding: 6px 10px; }
+  }
+
+  /* Print styles */
+  @media print {
+    nav.topnav { position: static; }
+    .session { page-break-inside: avoid; break-inside: avoid; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="topnav">
+  <div class="inner">
+    <div class="brand">
+      <div class="owl-icon">🦉</div>
+      <span>ROBOTSchool · Módulo 1</span>
+    </div>
+    <div class="links">
+      <a href="#overview">Inicio</a>
+      <a href="#sesion-1">S1</a>
+      <a href="#sesion-2">S2</a>
+      <a href="#sesion-3">S3</a>
+      <a href="#sesion-4">S4</a>
+      <a href="#distintivo">Distintivo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">LEGO BOOST · CURSO 2026</span>
+    <h1 class="hero-title">
+      <span class="accent">Módulo 1</span>
+      Moviéndose sobre Ruedas
+    </h1>
+    <p class="hero-subtitle">
+      Un viaje introductorio al mundo de la robótica educativa con LEGO Boost. Los estudiantes construyen cuatro robots únicos, descubren cómo los motores transforman la energía en movimiento, y dan sus primeros pasos en programación visual.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-card">
+        <div class="label">Edades</div>
+        <div class="value">6 a 12 años</div>
+      </div>
+      <div class="meta-card">
+        <div class="label">Sesiones</div>
+        <div class="value">4 × 2 horas</div>
+      </div>
+      <div class="meta-card">
+        <div class="label">Duración total</div>
+        <div class="value">8 horas</div>
+      </div>
+      <div class="meta-card">
+        <div class="label">Plataforma</div>
+        <div class="value">LEGO Boost App</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<section id="overview">
+  <div class="section-header">
+    <div>
+      <div class="num">01 · VISIÓN GENERAL</div>
+      <h2>Un módulo para rodar con propósito</h2>
+    </div>
+  </div>
+
+  <div class="overview">
+    <h3>¿De qué se trata este módulo?</h3>
+    <p>
+      El Módulo 1 es la puerta de entrada al curso LEGO Boost. Su eje temático es el <strong>movimiento robótico con ruedas</strong>: cómo los motores, la dirección y los engranajes convierten energía eléctrica en desplazamiento controlado. A lo largo de cuatro sesiones, los estudiantes construirán y programarán cuatro robots con personalidades distintas, progresando desde el movimiento básico hasta el control por joystick con sensores y transmisión mecánica.
+    </p>
+    <p>
+      El módulo está diseñado para ser <strong>100% manipulativo</strong>: los estudiantes solo necesitan su tablet con la app LEGO Boost y el kit de piezas. No requiere escritura ni cuadernos. Todas las reflexiones son orales, gestuales o fotográficas, permitiendo que niños desde los 6 hasta los 12 años participen plenamente sin barreras de lectoescritura.
+    </p>
+
+    <table class="progression-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Robot</th>
+          <th>Construcción</th>
+          <th>Programación</th>
+          <th>Concepto clave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Mira a Dónde Vas</td>
+          <td>Chasis con dos motores y ruedas</td>
+          <td>Movimiento, dirección, joystick</td>
+          <td>Motores A/B y potencia</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Rodando de Pie</td>
+          <td>Robot vertical con alas</td>
+          <td>Bucles y giros controlados</td>
+          <td>Equilibrio y repetición</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Macaón Rodante</td>
+          <td>Ruedas de oruga y brazo lateral</td>
+          <td>Trayectoria triangular, joystick ÷3</td>
+          <td>Rutas geométricas y reducción</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Renacuajo</td>
+          <td>Transmisión de engranajes 8:24</td>
+          <td>Sensor de color y acciones</td>
+          <td>Velocidad vs. fuerza</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ GENERAL INFO CARDS ═══════════ -->
+<div class="info-grid">
+  <div class="info-card">
+    <span class="icon">🎯</span>
+    <h4>Enfoque pedagógico</h4>
+    <p>Construcción guiada, programación por bloques y exploración libre. El facilitador acompaña con preguntas, no con soluciones.</p>
+  </div>
+  <div class="info-card">
+    <span class="icon">🎮</span>
+    <h4>Gamificación</h4>
+    <p>Cada sesión tiene tres misiones con medallas (bronce, plata, oro) y un reto de extensión para quienes terminan rápido.</p>
+  </div>
+  <div class="info-card">
+    <span class="icon">📸</span>
+    <h4>Bitácora fotográfica</h4>
+    <p>Al final de cada sesión, el facilitador toma una foto del robot y el estudiante explica oralmente qué aprendió.</p>
+  </div>
+  <div class="info-card">
+    <span class="icon">🤝</span>
+    <h4>Reflexión gestual</h4>
+    <p>Las reflexiones usan señas con los dedos y círculos orales. No se requiere que los estudiantes escriban.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════ SESIÓN 1 ═════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="session" data-s="1" id="sesion-1">
+  <div class="session-hero">
+    <div class="session-hero-content">
+      <span class="session-tag">SESIÓN 01 · 120 MINUTOS</span>
+      <h2 class="session-title">Mira a Dónde Vas</h2>
+      <p class="session-subtitle">Primer encuentro con los motores: construimos un carro de dos ruedas y lo hacemos mirar en todas direcciones.</p>
+    </div>
+  </div>
+
+  <div class="session-body">
+
+    <div class="outcomes">
+      <h4>🎯 Al finalizar la sesión, los estudiantes podrán…</h4>
+      <div class="outcomes-list">
+        <div class="outcome-item">Identificar los motores A y B del Move Hub de LEGO Boost.</div>
+        <div class="outcome-item">Ensamblar un chasis con dos ruedas motrices siguiendo las instrucciones visuales.</div>
+        <div class="outcome-item">Usar el bloque de movimiento para avanzar, girar y retroceder.</div>
+        <div class="outcome-item">Comprender que la dirección del robot depende de la velocidad relativa de cada motor.</div>
+      </div>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:00 – 00:15</span>
+        <span class="phase-name">Bienvenida y Presentación del Búho Rodante</span>
+      </div>
+      <div class="phase-content">
+        <p>El facilitador presenta el curso mostrando la imagen del robot terminado en la tablet. Los estudiantes se sientan en círculo y comparten qué creen que hace este robot.</p>
+        <ul>
+          <li>Mostrar el robot "Mira a Dónde Vas" en la portada del PDF del kit.</li>
+          <li>Explicar que este módulo tiene 4 robots, uno por clase, y al final ganan el distintivo <strong>"Conductor Búho Rodante"</strong>.</li>
+          <li>Entregar los kits y pedir que los abran organizadamente, sin mezclar piezas.</li>
+        </ul>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía (orales)</div>
+          <ul>
+            <li>¿Qué creen que significan las letras A y B en el centro del robot?</li>
+            <li>¿Han visto un carro que se mueva solo, sin control remoto? ¿Dónde?</li>
+            <li>¿Qué parte del cuerpo de ustedes les ayuda a moverse? ¿Y al robot?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:15 – 01:15</span>
+        <span class="phase-name">Construcción del Robot</span>
+      </div>
+      <div class="phase-content">
+        <p>Los estudiantes siguen las 13 instrucciones visuales del PDF del kit, avanzando a su propio ritmo. El facilitador rota entre grupos apoyando sin resolver.</p>
+        <ul>
+          <li>Identificar el Move Hub con las letras A y B visibles en los laterales.</li>
+          <li>Montar las dos ruedas traseras con ejes rojos (paso 2-3).</li>
+          <li>Agregar los conectores amarillos laterales (paso 4).</li>
+          <li>Construir la estructura de los ojos con las ruedas blancas pequeñas (pasos 5-9).</li>
+          <li>Añadir los conos naranjas que dan personalidad al robot (paso 10).</li>
+          <li>Completar el motor externo y el acabado visual (pasos 11-13).</li>
+        </ul>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía durante la construcción</div>
+          <ul>
+            <li>¿Qué piensas que va a pasar con las ruedas cuando se prenda?</li>
+            <li>¿Por qué crees que las ruedas están en el centro y no adelante?</li>
+            <li>Si los conectores amarillos se sueltan, ¿qué pasa con la estructura?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:15 – 01:45</span>
+        <span class="phase-name">Programación y Misiones</span>
+      </div>
+      <div class="phase-content">
+        <p>Abrimos la app LEGO Boost y conectamos el Move Hub. Los estudiantes replican la <strong>Programación 1</strong>: un solo bloque de movimiento verde con los valores <strong>50 (potencia) · 0 (dirección) · 1 (segundo)</strong>.</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 1 — Movimiento básico</div>
+          <div class="blocks">
+            <span class="block start">▶ Inicio</span>
+            <span class="block arrow">→</span>
+            <span class="block motor">🚗 Mover · Potencia 50 · Dir 0 · Tiempo 1s</span>
+          </div>
+        </div>
+
+        <p>Luego prueban la <strong>Programación 2</strong>: tres bloques en secuencia que forman una "L" y un segundo programa con movimiento ondulado.</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 2 — Trayectoria en L (3 bloques)</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block motor">🚗 50 · 0 · 0.5s</span>
+            <span class="block motor">🚗 20 · 100 · 0.5s</span>
+            <span class="block motor">🚗 50 · 0 · 0.5s</span>
+          </div>
+        </div>
+
+        <div class="missions-wrap">
+          <div class="missions-header">
+            <h4>🏁 Misiones de la Sesión 1</h4>
+          </div>
+          <div class="missions-grid">
+            <div class="mission" data-level="basic">
+              <div class="medal">🥉</div>
+              <div class="level-name">Nivel Bronce</div>
+              <h5>Línea Recta Perfecta</h5>
+              <p>Haz que el robot avance en línea recta por 3 segundos sin tocar los costados de la mesa.</p>
+            </div>
+            <div class="mission" data-level="intermediate">
+              <div class="medal">🥈</div>
+              <div class="level-name">Nivel Plata</div>
+              <h5>La Esquina Mágica</h5>
+              <p>Programa el robot para que avance, gire 90° y vuelva a avanzar formando una "L".</p>
+            </div>
+            <div class="mission" data-level="advanced">
+              <div class="medal">🥇</div>
+              <div class="level-name">Nivel Oro</div>
+              <h5>Serpiente Feliz</h5>
+              <p>Logra que el robot se mueva en zigzag como una serpiente, combinando giros a izquierda y derecha.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="extension">
+          <h4>Reto de extensión: "El Capitán del Joystick"</h4>
+          <p>Para quienes terminen las misiones antes: prueben la <strong>Programación 3</strong> con el widget de joystick de la app. Experimenten con el bloque de espera de 0.1 segundos. ¿Qué pasa si lo quitan? ¿Qué pasa si lo hacen más largo?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:45 – 02:00</span>
+        <span class="phase-name">Bitácora y Reflexión Final</span>
+      </div>
+      <div class="phase-content">
+        <p>Cada estudiante muestra su robot al grupo en un círculo final. El facilitador toma una foto del robot con la tablet como bitácora de la sesión.</p>
+
+        <div class="reflection">
+          <h4>Reflexión del Búho · Señas con los dedos</h4>
+          <p>El facilitador hace las preguntas y los estudiantes responden con señas:</p>
+          <div class="signs-row">
+            <div class="sign-item"><span class="sign-emoji">👍</span> Lo logré fácil</div>
+            <div class="sign-item"><span class="sign-emoji">✋</span> Más o menos</div>
+            <div class="sign-item"><span class="sign-emoji">👎</span> Me costó</div>
+          </div>
+          <p style="margin-top:14px;"><strong>Preguntas de cierre:</strong></p>
+          <ul style="list-style:none; padding:0;">
+            <li>· ¿Pudieron hacer avanzar el robot en línea recta?</li>
+            <li>· ¿Descubrieron cómo hacerlo girar?</li>
+            <li>· ¿Desarmaron todo al final y guardaron las piezas?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════ SESIÓN 2 ═════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="session" data-s="2" id="sesion-2">
+  <div class="session-hero">
+    <div class="session-hero-content">
+      <span class="session-tag">SESIÓN 02 · 120 MINUTOS</span>
+      <h2 class="session-title">Rodando de Pie</h2>
+      <p class="session-subtitle">¿Pueden dos ruedas sostener a un robot vertical? Construimos un robot alto con alas y descubrimos el poder del equilibrio y los bucles.</p>
+    </div>
+  </div>
+
+  <div class="session-body">
+
+    <div class="outcomes">
+      <h4>🎯 Al finalizar la sesión, los estudiantes podrán…</h4>
+      <div class="outcomes-list">
+        <div class="outcome-item">Construir un robot vertical y analizar por qué se mantiene en pie.</div>
+        <div class="outcome-item">Identificar el concepto de centro de gravedad de forma intuitiva.</div>
+        <div class="outcome-item">Usar el bloque de repetición (bucle) para que un programa se ejecute varias veces.</div>
+        <div class="outcome-item">Programar giros sobre el propio eje del robot.</div>
+      </div>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:00 – 00:10</span>
+        <span class="phase-name">Conexión con la Sesión Anterior</span>
+      </div>
+      <div class="phase-content">
+        <p>El facilitador muestra la foto del robot anterior y pregunta qué recuerdan. Luego presenta el nuevo desafío: <strong>un robot que rueda de pie, como si estuviera parado</strong>.</p>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía</div>
+          <ul>
+            <li>¿Han visto a alguien andando en patineta o en patineta eléctrica? ¿Cómo se mantiene parado?</li>
+            <li>Si este robot es alto y tiene solo dos ruedas, ¿qué puede pasar cuando se mueva?</li>
+            <li>¿Qué pasa si el robot es muy pesado arriba? ¿Y si es muy liviano?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:10 – 01:20</span>
+        <span class="phase-name">Construcción del Robot Vertical</span>
+      </div>
+      <div class="phase-content">
+        <p>Este robot tiene 16 pasos de construcción, con una estructura más alta y vertical. Los estudiantes deben ser cuidadosos con los brazos technic azules y las alas doradas.</p>
+        <ul>
+          <li>Pasos 1-2: Base del Move Hub y ruedas principales.</li>
+          <li>Pasos 3-8: Construcción de la estructura vertical con vigas azules technic.</li>
+          <li>Pasos 9-12: Agregar la cabeza con el pico amarillo, ojos negros y alas doradas.</li>
+          <li>Pasos 13-16: Detalles finales y la plataforma naranja superior.</li>
+        </ul>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía durante la construcción</div>
+          <ul>
+            <li>¿Dónde está la parte más pesada del robot? ¿Arriba o abajo?</li>
+            <li>¿Por qué creen que las ruedas son tan grandes?</li>
+            <li>¿Qué pasaría si le pusiéramos el Move Hub en la parte de arriba?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:20 – 01:50</span>
+        <span class="phase-name">Programación con Bucles</span>
+      </div>
+      <div class="phase-content">
+        <p>Los estudiantes replican la <strong>Programación 1</strong> (movimiento básico de 1 segundo) y luego exploran la <strong>Programación 2</strong>, que introduce el concepto de <strong>bucle o repetición</strong>: el robot gira sobre su eje varias veces.</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 1 — Primer movimiento de pie</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block motor">🚗 Potencia 50 · Dir 0 · Tiempo 1s</span>
+          </div>
+        </div>
+
+        <div class="code-box">
+          <div class="code-title">Programación 2 — Giro en círculo (con bucle)</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block loop">🔁 Repetir</span>
+            <span class="block motor">🚗 50 · 25 · 4s</span>
+          </div>
+        </div>
+
+        <div class="missions-wrap">
+          <div class="missions-header">
+            <h4>🏁 Misiones de la Sesión 2</h4>
+          </div>
+          <div class="missions-grid">
+            <div class="mission" data-level="basic">
+              <div class="medal">🥉</div>
+              <div class="level-name">Nivel Bronce</div>
+              <h5>Parado Firme</h5>
+              <p>Haz que el robot avance 2 segundos sin caerse.</p>
+            </div>
+            <div class="mission" data-level="intermediate">
+              <div class="medal">🥈</div>
+              <div class="level-name">Nivel Plata</div>
+              <h5>Giro Completo</h5>
+              <p>Programa al robot para que dé una vuelta completa sobre su propio eje.</p>
+            </div>
+            <div class="mission" data-level="advanced">
+              <div class="medal">🥇</div>
+              <div class="level-name">Nivel Oro</div>
+              <h5>El Bailarín</h5>
+              <p>Usa un bucle para que el robot gire 3 veces seguidas, como si estuviera bailando.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="extension">
+          <h4>Reto de extensión: "El Unicornio Mágico"</h4>
+          <p>Quienes terminen rápido pueden probar la <strong>Programación 3</strong> (joystick dividido por 5), que permite controlar el robot vertical con movimientos suaves y lentos, ideal para su centro de gravedad alto.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:50 – 02:00</span>
+        <span class="phase-name">Bitácora y Reflexión Final</span>
+      </div>
+      <div class="phase-content">
+        <p>Foto del robot vertical y círculo de cierre oral.</p>
+
+        <div class="reflection">
+          <h4>Reflexión del Búho · Círculo de palabra</h4>
+          <p>Cada estudiante responde en una palabra cómo se sintió al ver su robot parado y moviéndose:</p>
+          <div class="signs-row">
+            <div class="sign-item"><span class="sign-emoji">😃</span> Emocionado</div>
+            <div class="sign-item"><span class="sign-emoji">🤔</span> Sorprendido</div>
+            <div class="sign-item"><span class="sign-emoji">😌</span> Tranquilo</div>
+            <div class="sign-item"><span class="sign-emoji">💪</span> Orgulloso</div>
+          </div>
+          <p style="margin-top:14px;"><strong>Pregunta final del Búho:</strong> "¿Qué fue más difícil: que el robot se quedara parado o que avanzara sin caerse?"</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════ SESIÓN 3 ═════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="session" data-s="3" id="sesion-3">
+  <div class="session-hero">
+    <div class="session-hero-content">
+      <span class="session-tag">SESIÓN 03 · 120 MINUTOS</span>
+      <h2 class="session-title">Macaón Rodante</h2>
+      <p class="session-subtitle">Un robot azul con ruedas de oruga y brazo lateral que dibuja triángulos en el suelo. Exploramos trayectorias geométricas y reducción de velocidad.</p>
+    </div>
+  </div>
+
+  <div class="session-body">
+
+    <div class="outcomes">
+      <h4>🎯 Al finalizar la sesión, los estudiantes podrán…</h4>
+      <div class="outcomes-list">
+        <div class="outcome-item">Construir un robot con ruedas de oruga de forma irregular y un brazo articulado.</div>
+        <div class="outcome-item">Programar una trayectoria triangular combinando movimientos rectos y giros precisos.</div>
+        <div class="outcome-item">Usar un bucle para repetir la trayectoria varias veces.</div>
+        <div class="outcome-item">Comprender cómo dividir la velocidad del joystick (÷3) permite un control más preciso.</div>
+      </div>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:00 – 00:10</span>
+        <span class="phase-name">Bienvenida y Conexión</span>
+      </div>
+      <div class="phase-content">
+        <p>El facilitador muestra el Macaón Rodante y pregunta qué tiene de diferente respecto a los robots anteriores. Los estudiantes observan las ruedas con forma de oruga y el brazo lateral.</p>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía</div>
+          <ul>
+            <li>¿Estas ruedas son redondas o tienen otra forma? ¿Por qué?</li>
+            <li>¿Para qué creen que sirve el brazo naranja del lado?</li>
+            <li>¿Pueden dibujar con los dedos un triángulo en el aire? ¿Y recorrerlo caminando?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:10 – 01:25</span>
+        <span class="phase-name">Construcción del Macaón</span>
+      </div>
+      <div class="phase-content">
+        <p>El Macaón tiene la construcción más elaborada del módulo (alrededor de 24 pasos), con ruedas de oruga compuestas por múltiples piezas plásticas y un brazo articulado con manivela.</p>
+        <ul>
+          <li>Pasos 1-6: Base con Move Hub y estructura inferior.</li>
+          <li>Pasos 7-15: Ensamblaje de las ruedas de oruga (piezas 57518 negras, 22 unidades por rueda).</li>
+          <li>Pasos 16-19: Brazo lateral articulado con manivela amarilla.</li>
+          <li>Pasos 20-24: Cuerpo azul-blanco, ojos grandes expresivos y acabados.</li>
+        </ul>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía durante la construcción</div>
+          <ul>
+            <li>¿Cuántas piezas tiene cada rueda de oruga? (Pista: cuéntenlas juntos.)</li>
+            <li>¿Qué pasa si empujan el brazo lateral? ¿Qué se mueve dentro del robot?</li>
+            <li>¿Creen que este robot va a ir más rápido o más lento que los anteriores? ¿Por qué?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:25 – 01:50</span>
+        <span class="phase-name">Programación Geométrica</span>
+      </div>
+      <div class="phase-content">
+        <p>La <strong>Programación 1</strong> es una prueba suave (potencia baja 20, por 2 segundos) para que los estudiantes vean cómo se mueven las orugas. Luego la <strong>Programación 2</strong> introduce el concepto más interesante: un <strong>bucle de 3 repeticiones</strong> con dos movimientos que forman un triángulo.</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 1 — Macaón despierta</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block motor">🚗 Potencia 20 · Dir 0 · Tiempo 2s</span>
+          </div>
+        </div>
+
+        <div class="code-box">
+          <div class="code-title">Programación 2 — Triángulo (×2 repeticiones)</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block loop">🔁 Repetir 3</span>
+            <span class="block motor">🚗 20 · -30 · 1s</span>
+            <span class="block motor">🚗 -20 · 30 · 1s</span>
+          </div>
+        </div>
+
+        <div class="missions-wrap">
+          <div class="missions-header">
+            <h4>🏁 Misiones de la Sesión 3</h4>
+          </div>
+          <div class="missions-grid">
+            <div class="mission" data-level="basic">
+              <div class="medal">🥉</div>
+              <div class="level-name">Nivel Bronce</div>
+              <h5>Despertar del Macaón</h5>
+              <p>Haz que el robot se mueva suavemente durante 3 segundos sin chocar.</p>
+            </div>
+            <div class="mission" data-level="intermediate">
+              <div class="medal">🥈</div>
+              <div class="level-name">Nivel Plata</div>
+              <h5>El Triángulo Mágico</h5>
+              <p>Replica la Programación 2 y observa cómo el robot intenta formar un triángulo en el suelo.</p>
+            </div>
+            <div class="mission" data-level="advanced">
+              <div class="medal">🥇</div>
+              <div class="level-name">Nivel Oro</div>
+              <h5>Danza Geométrica</h5>
+              <p>Modifica el bucle para que el robot repita la figura 4 veces y termine cerca del punto de inicio.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="extension">
+          <h4>Reto de extensión: "El Piloto Preciso"</h4>
+          <p>Activar la <strong>Programación 3</strong>: el joystick con división ÷3. Los estudiantes notarán que el Macaón se vuelve mucho más lento y controlable. <strong>Pregunta del Búho:</strong> "¿Por qué a veces es mejor ir más lento?"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:50 – 02:00</span>
+        <span class="phase-name">Bitácora y Reflexión</span>
+      </div>
+      <div class="phase-content">
+        <p>Foto del Macaón en movimiento (el facilitador puede grabar un video corto de 5 segundos de la trayectoria triangular).</p>
+
+        <div class="reflection">
+          <h4>Reflexión del Búho · La forma en el aire</h4>
+          <p>Cada estudiante dibuja en el aire con el dedo la figura que hizo su robot. Luego comparten en círculo:</p>
+          <ul style="list-style:none; padding:0;">
+            <li>· ¿El triángulo les salió perfecto o un poco torcido?</li>
+            <li>· ¿Qué creen que pasó si el triángulo no cerró donde empezó?</li>
+            <li>· ¿Qué sintieron al ver al Macaón haciendo la figura solo?</li>
+          </ul>
+          <p style="margin-top:14px;"><em>Concepto clave para el Búho: la precisión del robot también depende del suelo, la batería y las ruedas, no solo del código.</em></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════ SESIÓN 4 ═════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="session" data-s="4" id="sesion-4">
+  <div class="session-hero">
+    <div class="session-hero-content">
+      <span class="session-tag">SESIÓN 04 · 120 MINUTOS</span>
+      <h2 class="session-title">Renacuajo</h2>
+      <p class="session-subtitle">Nuestro último robot del módulo trae un secreto poderoso: engranajes. Descubrimos cómo una rueda pequeña mueve una rueda grande, y cómo usar el sensor de color.</p>
+    </div>
+  </div>
+
+  <div class="session-body">
+
+    <div class="outcomes">
+      <h4>🎯 Al finalizar la sesión, los estudiantes podrán…</h4>
+      <div class="outcomes-list">
+        <div class="outcome-item">Identificar engranajes de distintos tamaños y su función en la transmisión.</div>
+        <div class="outcome-item">Comprender intuitivamente que cuando la velocidad baja, la fuerza aumenta.</div>
+        <div class="outcome-item">Programar el sensor de color para que el robot reaccione a estímulos externos.</div>
+        <div class="outcome-item">Integrar todos los aprendizajes del módulo en un robot más complejo.</div>
+      </div>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:00 – 00:15</span>
+        <span class="phase-name">Presentación del Desafío Final</span>
+      </div>
+      <div class="phase-content">
+        <p>El facilitador celebra que es la última sesión del módulo y muestra el Renacuajo terminado. Hace énfasis en los engranajes grises visibles en el cuerpo del robot.</p>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía</div>
+          <ul>
+            <li>¿Han visto una bicicleta de varias velocidades? ¿Cómo cambian las ruedas dentadas?</li>
+            <li>¿Por qué un carro tiene marcha lenta para subir cuestas?</li>
+            <li>¿Qué piensan que haga el sensor de color en este robot?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">00:15 – 01:20</span>
+        <span class="phase-name">Construcción con Transmisión</span>
+      </div>
+      <div class="phase-content">
+        <p>El Renacuajo tiene 15 pasos de construcción con una característica especial: un sistema de engranajes 8:24 (ruedas dentadas pequeña y grande) que reduce la velocidad y aumenta la fuerza, con una proporción de transmisión de 1:3.</p>
+        <ul>
+          <li>Pasos 1-4: Base con Move Hub y vigas de soporte lateral.</li>
+          <li>Paso 5: Montar los ejes con los engranajes pequeños grises (8 dientes) sobre los motores.</li>
+          <li>Pasos 6-7: Colocar las ruedas grandes con engranajes grandes (24 dientes) que conectan con los pequeños.</li>
+          <li>Pasos 8-12: Agregar los ojos azules expresivos, el pico naranja y las patas delanteras.</li>
+          <li>Pasos 13-15: Instalar el sensor de color (pieza blanca y gris) mirando al frente.</li>
+        </ul>
+
+        <div class="guide-box">
+          <div class="guide-title">Preguntas guía durante la construcción</div>
+          <ul>
+            <li>¿Cuántos dientes tiene la rueda pequeña? ¿Y la grande?</li>
+            <li>Si la pequeña da 3 vueltas, ¿cuántas dará la grande? (Pista: cuéntenlo con el dedo.)</li>
+            <li>¿Dónde creen que está "mirando" el sensor de color?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:20 – 01:50</span>
+        <span class="phase-name">Programación con Sensores</span>
+      </div>
+      <div class="phase-content">
+        <p>Comenzamos con la <strong>Programación 1</strong>, que es simplemente retroceso (potencia negativa -50). Esto sorprende: un valor negativo significa ir hacia atrás.</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 1 — Nadar hacia atrás</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block motor">🚗 Potencia -50 · Dir 0 · Tiempo 2s</span>
+          </div>
+        </div>
+
+        <p>La <strong>Programación 2</strong> encadena varios movimientos negativos para que el robot haga una "L invertida" y luego repite un patrón con bucle. La <strong>Programación 3</strong> es un bucle simple pero con alternancia de dirección (gira a un lado y luego al otro).</p>
+
+        <div class="code-box">
+          <div class="code-title">Programación 2 — Trayectoria completa</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block motor">🚗 -50 · 0 · 1s</span>
+            <span class="block motor">🚗 -50 · -100 · 1s</span>
+            <span class="block motor">🚗 -50 · 0 · 1s</span>
+          </div>
+        </div>
+
+        <div class="code-box">
+          <div class="code-title">Programación 4 — Joystick + sensor de color</div>
+          <div class="blocks">
+            <span class="block start">▶</span>
+            <span class="block sensor">🎨 Si ve ROJO</span>
+            <span class="block arrow">→</span>
+            <span class="block motor">🚗 50 → -50 (baile)</span>
+            <span class="block sensor">🎨 Si ve AZUL</span>
+            <span class="block arrow">→</span>
+            <span class="block motor">😃 Expresión</span>
+            <span class="block sensor">🎨 Si ve AMARILLO</span>
+            <span class="block arrow">→</span>
+            <span class="block motor">🔊 Sonido</span>
+          </div>
+        </div>
+
+        <div class="missions-wrap">
+          <div class="missions-header">
+            <h4>🏁 Misiones de la Sesión 4</h4>
+          </div>
+          <div class="missions-grid">
+            <div class="mission" data-level="basic">
+              <div class="medal">🥉</div>
+              <div class="level-name">Nivel Bronce</div>
+              <h5>Renacuajo al Charco</h5>
+              <p>Haz que el robot retroceda 2 segundos sin caerse de la mesa.</p>
+            </div>
+            <div class="mission" data-level="intermediate">
+              <div class="medal">🥈</div>
+              <div class="level-name">Nivel Plata</div>
+              <h5>El Girador Negativo</h5>
+              <p>Combina potencia negativa con un bucle para hacer un círculo hacia atrás.</p>
+            </div>
+            <div class="mission" data-level="advanced">
+              <div class="medal">🥇</div>
+              <div class="level-name">Nivel Oro</div>
+              <h5>El Renacuajo Inteligente</h5>
+              <p>Logra que el robot reaccione cuando le muestres una ficha roja (que baile), una azul (que sonría), y una amarilla (que haga un sonido).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="extension">
+          <h4>Reto de extensión: "Maestro de Colores"</h4>
+          <p>Preparar un pequeño recorrido sobre la mesa con fichas LEGO de varios colores. El estudiante debe programar al Renacuajo para que haga <strong>tres acciones distintas</strong> cuando pase sobre cada color.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-time">01:50 – 02:00</span>
+        <span class="phase-name">Cierre del Módulo y Entrega del Distintivo</span>
+      </div>
+      <div class="phase-content">
+        <p>El facilitador celebra el fin del módulo. Cada estudiante pasa al frente con su Renacuajo, lo muestra en acción (aunque sea solo 10 segundos) y recibe el <strong>Distintivo "Conductor Búho Rodante"</strong>.</p>
+
+        <div class="reflection">
+          <h4>Reflexión final del Módulo 1 · El Viaje Completo</h4>
+          <p>El facilitador muestra las 4 fotos de las sesiones en la tablet. Los estudiantes responden en círculo:</p>
+          <div class="signs-row">
+            <div class="sign-item"><span class="sign-emoji">🚗</span> Mi robot favorito fue…</div>
+            <div class="sign-item"><span class="sign-emoji">💡</span> Aprendí que…</div>
+            <div class="sign-item"><span class="sign-emoji">🎉</span> Lo más divertido fue…</div>
+          </div>
+          <p style="margin-top:14px;"><strong>Cierre del Búho:</strong> "Ahora ustedes saben que un robot no se mueve por magia: hay motores, hay ruedas, hay engranajes, y hay un código que ustedes mismos escribieron. ¡Son oficialmente Conductores Búho Rodantes!"</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ BADGE FOOTER ═══════════ -->
+<section id="distintivo" class="badge-footer">
+  <div class="badge-footer-content">
+    <div class="big-badge">🏅</div>
+    <h2>Distintivo "Conductor Búho Rodante"</h2>
+    <p>
+      Al completar las cuatro sesiones del Módulo 1, cada estudiante ha construido y programado cuatro robots, ha comprendido cómo los motores, las ruedas, los engranajes y los sensores trabajan juntos, y está listo para avanzar al Módulo 2 del curso LEGO Boost de ROBOTSchool.
+    </p>
+  </div>
+</section>
+
+<div class="final-footer">
+  <div class="robotschool">ROBOT<span>School</span> 🦉</div>
+  <p>Escuelas STEAM Colombia · Curso LEGO Boost · Módulo 1 · Versión 1.0 · 2026</p>
+</div>
+
+</main>
+
+</body>
+</html>

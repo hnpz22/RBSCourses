@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Módulo 02 — AUTOMATIZACIÓN CON REDSTONE — Minecraft Coding Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F7B731;--green:#5DA130;--diamond:#4ECDC4;--red:#E84118;
+  --purple:#8B5CF6;--blue:#3A86FF;--emerald:#2ECC71;
+  --night:#0a0a18;--card:#12121f;--card2:#16162a;--border:#1e1e35;
+  --text:#e2e8f0;--muted:#64748b;--light:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
+
+/* MODULE COVER */
+.mod-cover{
+  padding:60px 40px 40px;
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
+  border-bottom:4px solid var(--accent);
+  position:relative;overflow:hidden;
+}
+.mod-cover::after{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
+  opacity:.05;pointer-events:none;
+}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
+  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
+  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+.mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
+.tag-p{color:var(--diamond);}
+.tag-o{color:var(--emerald);}
+.tag-s{color:var(--purple);}
+
+/* BODY */
+.body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+
+/* META GRID */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta-cell{background:var(--card);padding:18px 20px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
+  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
+.meta-cell ul{list-style:none;}
+.meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
+
+/* CLASS CARD */
+.class-card{margin-bottom:24px;}
+.class-head{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card2);
+  border:1px solid var(--border);border-left:5px solid var(--gold);
+  padding:14px 18px;
+}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
+  color:var(--gold);min-width:40px;}
+.class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.class-title span{font-size:11px;color:var(--muted);}
+.class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
+
+/* DETONADORA */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
+  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
+  font-style:italic;font-weight:700;line-height:1.6;}
+
+/* PART */
+.part{margin-bottom:22px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
+  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title.p2{color:var(--green);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
+  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p2 .time-tag{background:var(--green);}
+.part-border{border-left:3px solid var(--diamond);padding-left:15px;}
+.part-border.p2{border-left-color:var(--green);}
+
+/* ITEMS */
+.items{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.items li{font-size:13px;color:var(--light);line-height:1.6;
+  padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;
+  font-size:7px;color:var(--diamond);}
+.part-border.p2 .items li::before{color:var(--green);}
+.items li strong{color:#fff;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:rgba(255,255,255,.05);padding:1px 5px;
+  border:1px solid var(--border);color:var(--diamond);}
+
+/* CHALLENGES */
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
+  font-family:'JetBrains Mono',monospace;}
+.ch-e{color:var(--emerald);border-color:var(--emerald);}
+.ch-m{color:var(--gold);border-color:var(--gold);}
+.ch-h{color:var(--red);border-color:var(--red);}
+
+/* PIXEL DIVIDER */
+.px-div{height:5px;background:repeating-linear-gradient(90deg,
+  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+
+/* FOOTER */
+footer{background:#000;padding:32px 20px;text-align:center;
+  border-top:3px solid var(--gold);}
+footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
+footer span{color:var(--gold);}
+
+/* CONCEPT TAGS */
+.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:rgba(58,134,255,.1);border:1px solid var(--blue);
+  color:var(--blue);padding:2px 8px;}
+</style>
+
+<style>:root{--accent:#E84118;}</style>
+</head>
+<body>
+
+<div class="mod-cover">
+  <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <span class="mod-big-num">02</span>
+  <div class="mod-label">// MÓDULO 02 DE 8 · 4 CLASES · 8 HORAS</div>
+  <h1 class="mod-title">AUTOMATIZACIÓN CON REDSTONE</h1>
+  <div class="mod-theme">Lógica Computacional Aplicada — Circuitos y Compuertas · 4 clases · 8 horas</div>
+  <div class="mod-tags"><span class="tag tag-p">Minecraft Education</span><span class="tag tag-p">Code.org</span><span class="tag tag-o">ODS 9 Industria e Innovación</span><span class="tag tag-s">Compuertas Lógicas</span><span class="tag tag-s">Automatización</span></div>
+</div>
+
+<div class="px-div"></div>
+
+<div class="body">
+  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Comprender el Redstone como simulación de circuitos eléctricos. Aplicar compuertas lógicas AND, OR, NOT para automatizar sistemas en la Ciudad Inteligente.</li></ul></div><div class="meta-cell"><h4>💡 CONCEPTOS CLAVE</h4><ul><li>Circuitos en serie y en paralelo</li><li>Compuertas AND, OR, NOT</li><li>Tablas de verdad (señal 0 y 1)</li><li>Detector de luz solar</li><li>Optimización de circuitos con Redstone</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Sistema de luces automáticas (detector solar)</li><li>Puertas automáticas con lógica AND</li><li>Dispensadores inteligentes activados por sensor</li><li>Sistema de defensa perimetral del sector</li></ul></div><div class="meta-cell"><h4>🏆 MISIÓN</h4><ul><li>Misión Ingeniero Eléctrico: Automatizar el sector completo. Luces, puerta y sistema de defensa deben funcionar solos, sin intervención manual.</li></ul></div></div>
+  
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C1</div>
+            <div class="class-title"><h3>¿Qué es el Redstone?</h3><span>Circuitos básicos · Serie y Paralelo · Hour of Code Minecraft</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Cómo crees que funciona el interruptor de la luz de tu cuarto? ¿Qué es lo que viaja por los cables cuando lo prendes?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es el Redstone?</strong> Analogía con la electricidad real. Alcance máximo: 15 bloques sin repetidor. Necesita fuente de energía (palanca, botón, placa de presión, detector de luz solar).</li><li><strong>Componentes básicos:</strong> Polvo de Redstone (cable), palanca (interruptor permanente), botón (pulso momentáneo), lámpara de Redstone (receptor de carga), repetidor (amplificador de señal).</li><li><strong>Hour of Code — Minecraft Education:</strong> Abrir hourofcode.com/minecrAfttimecraft. Actividad guiada de programación por bloques dentro del entorno educativo del juego.</li><li><strong>Circuito en serie:</strong> Una fuente → cable continuo → destino. Todos los componentes en la misma línea. Si se corta en un punto, todo falla.</li><li><strong>Circuito en paralelo:</strong> Una fuente → múltiples ramales independientes. Si un ramal falla, los demás siguen funcionando.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Palanca que enciende una lámpara</span>
+                  <span class="ch ch-m">MEDIO: 3 lámparas en serie con un solo interruptor</span>
+                  <span class="ch ch-h">DIFÍCIL: Sistema paralelo: botón enciende unas lámparas, palanca enciende otras</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Automatizar luces de la casa:</strong> Instalar detector de luz solar invertido conectado a las lámparas del interior. Las luces deben encenderse solas al anochecer sin intervención del jugador.</li><li><strong>Extensión a la granja:</strong> Circuito paralelo que encienda lámparas adicionales en la zona de cultivos al anochecer para simular iluminación agrícola.</li><li><strong>Documentar el circuito:</strong> Cada estudiante dibuja en papel el esquema de su circuito con flechas indicando el flujo de señal de Redstone.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C2</div>
+            <div class="class-title"><h3>Compuertas Lógicas</h3><span>AND · OR · NOT · Tablas de verdad construidas en Minecraft</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 Imagina una caja fuerte que solo se abre si presionas DOS botones exactamente al mismo tiempo. ¿Qué tipo de lógica usa ese mecanismo?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>¿Qué es una compuerta lógica?</strong> Es el bloque fundamental de todos los computadores del mundo. Recibe señales de entrada (0 o 1) y produce una salida única según una regla fija.</li><li><strong>Compuerta AND:</strong> Salida = 1 SOLO SI ambas entradas son 1. Tabla: 0+0=0, 0+1=0, 1+0=0, 1+1=1. Ejemplo real: sistema de seguridad con doble autenticación.</li><li><strong>Compuerta OR:</strong> Salida = 1 si AL MENOS UNA entrada es 1. Ejemplo real: alarma con múltiples sensores — si cualquiera detecta movimiento, suena.</li><li><strong>Compuerta NOT:</strong> Invierte la señal. Entrada 1 → Salida 0. Entrada 0 → Salida 1. Ejemplo real: luz que se apaga cuando detecta claridad exterior.</li><li><strong>Code.org — Voyage Aquatic:</strong> studio.code.org/s/aquatic. Refuerza la lógica condicional en formato visual interactivo.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Compuerta AND con 2 palancas y 1 lámpara</span>
+                  <span class="ch ch-m">MEDIO: Puerta que se abre usando lógica AND (ambos botones)</span>
+                  <span class="ch ch-h">DIFÍCIL: Caja fuerte con sistema combinado AND + NOT</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Construir las 3 compuertas físicas:</strong> Representar AND, OR y NOT con Redstone en el suelo del sector. Colocar letreros al lado de cada una con su tabla de verdad completa.</li><li><strong>Integrar al proyecto:</strong> Puerta principal de la casa con lógica AND (requiere 2 botones para abrirse). Granja con lógica OR (cualquier sensor de presión activa el sistema).</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C3</div>
+            <div class="class-title"><h3>Automatizando Tareas con Redstone</h3><span>Dispensadores · Pistones · Trampas · Granjas automáticas</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué 3 tareas de tu casa podrías automatizar si tuvieras un sistema eléctrico inteligente? ¿Cuál sería la más útil para tu familia?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Aplicaciones reales de la automatización:</strong> Puertas automáticas de supermercado, semáforos inteligentes, sistemas de riego por goteo, brazos robóticos en líneas de ensamblaje.</li><li><strong>Dispensadores:</strong> Lanzan objetos, agua o proyectiles al recibir una señal de Redstone. Usos: distribución de alimentos, sistemas de trampa, riego automático de cultivos.</li><li><strong>Pistones:</strong> Normales (solo empujan) vs. pegajosos (empujan y jalan bloques). Aplicaciones: puertas secretas, puentes retráctiles, ascensores simples, trampas.</li><li><strong>Code.org — Voyage Aquatic:</strong> Niveles intermedios con foco en funciones reutilizables y patrones de repetición.</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Dispensador que entrega ítems al presionar botón</span>
+                  <span class="ch ch-m">MEDIO: Trampa con placa de presión + dispensador de proyectiles</span>
+                  <span class="ch ch-h">DIFÍCIL: Sistema de defensa perimetral con 3 o más dispensadores</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — MINECRAFT LAB</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Automatización completa de la casa:</strong> Luces (detector solar) + puerta (placa de presión) + dispensador de ítems de bienvenida al entrar. Los 3 sistemas deben funcionar simultáneamente.</li><li><strong>Sistema de defensa:</strong> Perímetro con dispensadores activados por placas de presión en las zonas de acceso al sector.</li><li><strong>Mini expo entre pares:</strong> 3 minutos para mostrar el sistema a un compañero y explicar cada componente: qué hace, cómo se activa, qué lógica usa.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+        <div class="class-card">
+          <div class="class-head">
+            <div class="class-num">C4</div>
+            <div class="class-title"><h3>Optimización y Cierre del Módulo 2</h3><span>Eficiencia en circuitos · Presentación · Insignia ⚡ Automatizador</span></div>
+          </div>
+          <div class="class-body"><div class="det">💬 ¿Qué significa que un sistema sea "eficiente"? ¿Es mejor hacer más con menos recursos, o hacer lo mismo más rápido?</div>
+            <div class="part">
+              <div class="part-title">
+                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border">
+                <ul class="items"><li><strong>Optimización en Redstone:</strong> ¿Se puede lograr lo mismo con menos bloques de cable? El docente revisa en vivo los circuitos de 3–4 estudiantes voluntarios. El grupo propone mejoras.</li><li><strong>ODS 9 — Industria, Innovación e Infraestructura:</strong> ¿Cómo la automatización industrial transforma comunidades en Colombia? Casos de estudio breves y concretos.</li><li><strong>Reflexión del grupo:</strong> ¿Qué sistemas del mundo real se podrían mejorar usando la lógica AND, OR o NOT que aprendieron?</li></ul>
+                <div class="challenges">
+                  <span class="ch ch-e">FÁCIL: Reducir un circuito existente en 2 bloques</span>
+                  <span class="ch ch-m">MEDIO: Combinar 2 sistemas independientes en uno solo</span>
+                  <span class="ch ch-h">DIFÍCIL: Sector completamente automatizado con menos de 30 bloques de Redstone total</span>
+                </div>
+              </div>
+            </div>
+            <div class="part">
+              <div class="part-title p2">
+                <span>▶ PARTE 2 — PRESENTACIÓN + CIERRE</span>
+                <span class="time-tag">60 MIN</span>
+              </div>
+              <div class="part-border p2">
+                <ul class="items"><li><strong>Ajuste final (20 min):</strong> Pulir circuitos, verificar que todos los sistemas funcionen, decorar los mecanismos visibles.</li><li><strong>CIERRE MÓDULO 2:</strong> Cada estudiante presenta su sector (3 min): qué automatizó, cómo funciona, qué lógica usó (AND / OR / NOT). El docente facilita preguntas del grupo.</li><li><strong>Insignia ⚡ Automatizador:</strong> Se otorga a quienes tengan al menos 3 sistemas automáticos funcionando y puedan explicarlos con claridad.</li></ul>
+                
+              </div>
+            </div></div>
+        </div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;
+          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
+          max-width:960px;margin:0 auto;"><span></span><a href="modulo_02.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M2: Redstone →</a></div>
+
+<footer>
+  <p><span>MÓDULO 02</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+</body>
+</html>

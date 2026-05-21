@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
-COPY index.html /usr/share/nginx/html/index.html
-COPY roblox_curso_completo.html /usr/share/nginx/html/roblox_curso_completo.html
-COPY minecraft_curso.html /usr/share/nginx/html/minecraft_curso.html
+# Copia todo el sitio (index + carpetas por curso: roblox/, minecraft/, lego_boost/...).
+# Lo que no debe entrar a la imagen se excluye en .dockerignore.
+COPY . /usr/share/nginx/html/
 
 EXPOSE 80
