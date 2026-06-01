@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Coding Lab — ROBOTSchool</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #F7B731;
+  --grass: #5DA130;
+  --diamond: #4ECDC4;
+  --redstone: #E84118;
+  --night: #0a0a1a;
+  --card: #111122;
+  --card2: #16162a;
+  --border: #1e1e35;
+  --emerald: #2ECC71;
+  --purple: #8B5CF6;
+  --lapis: #3A86FF;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --light: #94a3b8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--night); color: var(--text); line-height: 1.6; }
+
+/* HERO */
+.hero {
+  min-height: 90vh;
+  background: linear-gradient(180deg, #1a3a5c 0%, #0a1628 50%, #000 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 60px 20px 80px; position: relative; overflow: hidden;
+}
+.stars {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 20%, white, transparent),
+    radial-gradient(2px 2px at 75% 15%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px 1px at 40% 35%, white, transparent),
+    radial-gradient(1px 1px at 85% 55%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 25% 80%, white, transparent),
+    radial-gradient(1px 1px at 92% 30%, white, transparent);
+  animation: twinkle 3s infinite alternate;
+}
+@keyframes twinkle { from { opacity: .7; } to { opacity: 1; } }
+
+.terrain {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; align-items: flex-end; height: 100px; overflow: hidden;
+}
+.block { width: 48px; height: 48px; flex-shrink: 0; border: 2px solid rgba(0,0,0,.5); }
+.bg { background: var(--grass); }
+.bd { background: #8B5E3C; }
+.bw { background: #9C6B2E; }
+.bl { background: #3A7D1E; }
+.bq { background: #2980B9; }
+.bgo { background: var(--gold); }
+.bdi { background: var(--diamond); }
+
+.hero-badge {
+  display: inline-block; background: var(--redstone); color: #fff;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  padding: 8px 16px; border: 3px solid #000; box-shadow: 3px 3px 0 #000;
+  margin-bottom: 24px; letter-spacing: 1px;
+}
+.hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(20px, 4.5vw, 40px); line-height: 1.5; color: var(--gold);
+  text-shadow: 4px 4px 0 #000; margin-bottom: 12px;
+}
+.hero-tagline {
+  font-size: clamp(14px, 2vw, 20px); color: #ddd; font-weight: 700;
+  max-width: 680px; margin: 0 auto 32px; line-height: 1.6;
+}
+.hero-stats {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;
+}
+.stat {
+  background: rgba(0,0,0,.7); border: 3px solid var(--gold);
+  padding: 14px 22px; text-align: center; box-shadow: 3px 3px 0 #000; min-width: 110px;
+}
+.stat-num { font-family: 'Press Start 2P', monospace; font-size: 22px; color: var(--gold); display: block; margin-bottom: 6px; }
+.stat-label { font-size: 11px; color: #aaa; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+.cta-hero {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--grass); color: #fff;
+  font-family: 'Press Start 2P', monospace; font-size: 10px;
+  padding: 16px 28px; border: 4px solid #000; box-shadow: 4px 4px 0 #000;
+  cursor: pointer; text-decoration: none; transition: transform .1s; letter-spacing: 1px;
+}
+.cta-hero:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+.cta-wa {
+  background: #25D366; margin-left: 8px;
+}
+
+/* PIXEL DIVIDER */
+.px-div {
+  height: 8px;
+  background: repeating-linear-gradient(90deg,
+    var(--grass) 0,var(--grass) 8px,#8B5E3C 8px,#8B5E3C 16px,
+    #7E7E7E 16px,#7E7E7E 24px,var(--gold) 24px,var(--gold) 32px,
+    var(--diamond) 32px,var(--diamond) 40px,var(--redstone) 40px,var(--redstone) 48px);
+}
+
+/* SECTIONS */
+.section { max-width: 1100px; margin: 0 auto; padding: 70px 20px; }
+.sec-label { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--diamond); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.sec-title { font-family: 'Press Start 2P', monospace; font-size: clamp(13px, 2.2vw, 20px); color: var(--gold); text-shadow: 3px 3px 0 #000; line-height: 1.6; margin-bottom: 40px; text-align: center; }
+
+/* OUTCOME */
+.outcome-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
+.outcome-card {
+  background: var(--card); border: 2px solid var(--border);
+  border-left: 6px solid var(--diamond); padding: 22px;
+  transition: border-color .2s, transform .2s;
+}
+.outcome-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+.outcome-card .icon { font-size: 28px; margin-bottom: 10px; }
+.outcome-card h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 10px; line-height: 1.6; }
+.outcome-card p { font-size: 13px; color: var(--light); line-height: 1.7; }
+
+/* JOURNEY */
+.journey {
+  display: flex; align-items: center; gap: 0; overflow-x: auto;
+  padding: 24px 0 8px; justify-content: center; flex-wrap: nowrap;
+}
+.j-step { display: flex; flex-direction: column; align-items: center; min-width: 90px; text-align: center; }
+.j-dot {
+  width: 52px; height: 52px; border: 4px solid; border-radius: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 8px; background: #000;
+}
+.j-label { font-size: 11px; font-weight: 800; color: var(--light); line-height: 1.4; }
+.j-sub { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); margin-top: 4px; }
+.j-arrow { font-size: 18px; color: var(--gold); margin: 0 4px; padding-bottom: 28px; flex-shrink: 0; }
+.s1 { border-color: var(--grass); }
+.s2 { border-color: var(--gold); }
+.s3 { border-color: var(--diamond); }
+.s4 { border-color: var(--purple); }
+.s5 { border-color: var(--redstone); }
+
+/* BUILDS */
+.builds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.build-card {
+  background: var(--card2); border: 2px solid var(--border);
+  padding: 22px; border-top: 4px solid var(--grass);
+}
+.build-card .icon { font-size: 32px; margin-bottom: 10px; display: block; }
+.build-card h3 { font-size: 14px; font-weight: 900; color: #fff; margin-bottom: 8px; }
+.build-card p { font-size: 12px; color: var(--light); line-height: 1.6; }
+
+/* SKILLS */
+.skills-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+.skills-box { background: var(--card); border: 2px solid var(--border); padding: 24px; }
+.skills-box h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 14px; line-height: 1.6; }
+.skills-box ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.skills-box ul li { font-size: 13px; color: var(--light); padding-left: 20px; position: relative; }
+.skills-box ul li::before { content: "▶"; position: absolute; left: 0; font-size: 8px; color: var(--diamond); top: 4px; }
+
+/* FOR WHOM */
+.quien-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.quien-card {
+  background: var(--card); border: 2px solid var(--border); padding: 24px;
+  border-bottom: 4px solid var(--gold);
+}
+.quien-card h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 12px; line-height: 1.6; }
+.quien-card p { font-size: 13px; color: var(--light); line-height: 1.7; }
+
+/* MODULES PREVIEW */
+.mods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.mod-row {
+  background: var(--card2); border: 1px solid var(--border);
+  padding: 16px 20px; display: flex; align-items: flex-start; gap: 16px;
+  border-left: 5px solid var(--diamond);
+}
+.mod-num { font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--gold); min-width: 32px; flex-shrink: 0; }
+.mod-info h4 { font-size: 13px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+.mod-info p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.mod-badge { font-size: 10px; font-weight: 800; padding: 2px 8px; border: 1.5px solid; margin-top: 8px; display: inline-block; }
+.mb-p { color: var(--diamond); border-color: var(--diamond); }
+.mb-s { color: var(--grass); border-color: var(--grass); }
+.mb-g { color: var(--gold); border-color: var(--gold); }
+
+/* DIFF */
+.diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.diff-card { background: var(--card); border: 2px solid var(--border); padding: 22px; text-align: center; }
+.diff-card .icon { font-size: 36px; margin-bottom: 12px; display: block; }
+.diff-card h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gold); margin-bottom: 10px; line-height: 1.6; }
+.diff-card p { font-size: 12px; color: var(--light); line-height: 1.6; }
+
+/* CTA SECTION */
+.cta-section {
+  background: linear-gradient(135deg, #0a1628 0%, #1a0a28 100%);
+  border-top: 4px solid var(--gold); border-bottom: 4px solid var(--gold);
+  padding: 70px 20px; text-align: center;
+}
+.cta-section h2 { font-family: 'Press Start 2P', monospace; font-size: clamp(12px, 2vw, 18px); color: var(--gold); margin-bottom: 16px; line-height: 1.8; }
+.cta-section p { font-size: 15px; color: #ccc; max-width: 580px; margin: 0 auto 36px; line-height: 1.7; }
+.cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.cta-btn {
+  display: inline-block; font-family: 'Press Start 2P', monospace; font-size: 10px;
+  padding: 14px 26px; border: 4px solid #000; box-shadow: 4px 4px 0 #000;
+  cursor: pointer; text-decoration: none; transition: transform .1s; letter-spacing: 1px;
+}
+.cta-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+.cta-main { background: var(--grass); color: #fff; }
+.cta-secondary { background: #25D366; color: #fff; }
+.cta-info { background: var(--lapis); color: #fff; }
+
+/* HIGHLIGHT BOX */
+.highlight { background: rgba(247,183,49,.07); border-left: 4px solid var(--gold); padding: 14px 18px; margin: 0 0 30px; font-size: 13px; color: #ddd; line-height: 1.7; }
+.highlight strong { color: var(--gold); }
+
+/* FOOTER */
+footer { background: #000; padding: 36px 20px; text-align: center; border-top: 4px solid var(--gold); }
+footer p { font-family: 'Press Start 2P', monospace; font-size: 8px; color: #444; line-height: 2.2; }
+footer span { color: var(--gold); }
+
+/* BACK NAV */
+.back-nav {
+  padding: 14px 20px; background: var(--card2); border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+}
+.back-nav a { color: var(--gold); font-family: 'Press Start 2P', monospace; font-size: 7px; text-decoration: none; }
+.back-nav a:hover { color: #fff; }
+.back-sep { color: var(--border); font-size: 12px; }
+.back-nav span { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="back-nav">
+  <a href="../index.html">⬅ Inicio</a>
+  <span class="back-sep">·</span>
+  <span>Minecraft Coding Lab — Ventas</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="stars"></div>
+  <div style="position:relative;z-index:10;max-width:820px;">
+    <div class="hero-badge">⬛ ROBOTSchool — Escuelas STEAM Colombia</div>
+    <h1 class="hero-title">MINECRAFT<br>CODING LAB</h1>
+    <p class="hero-tagline">
+      Tu hijo va a aprender a <strong>programar de verdad</strong> —
+      construyendo una Ciudad Inteligente Sostenible en Minecraft.
+      De bloques visuales a Python real, en 8 módulos.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">8</span><span class="stat-label">Módulos</span></div>
+      <div class="stat"><span class="stat-num">32</span><span class="stat-label">Clases</span></div>
+      <div class="stat"><span class="stat-num">64h</span><span class="stat-label">Horas</span></div>
+      <div class="stat"><span class="stat-num">8–14</span><span class="stat-label">Años</span></div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://wa.me/573186541859" class="cta-hero cta-wa" target="_blank">💬 PREGUNTAR POR WHATSAPP</a>
+      <a href="https://robotschool.co" class="cta-hero" target="_blank" style="background:var(--lapis);">🌐 VER PROGRAMA</a>
+    </div>
+  </div>
+  <div class="terrain">
+    <div class="block bg" style="height:80px"></div><div class="block bg" style="height:80px"></div>
+    <div class="block bg" style="height:96px"></div><div class="block bl" style="height:112px"></div>
+    <div class="block bw" style="height:128px"></div><div class="block bl" style="height:112px"></div>
+    <div class="block bg" style="height:80px"></div><div class="block bq" style="height:56px"></div>
+    <div class="block bq" style="height:56px"></div><div class="block bg" style="height:80px"></div>
+    <div class="block bg" style="height:96px"></div><div class="block bgo" style="height:112px"></div>
+    <div class="block bgo" style="height:112px"></div><div class="block bg" style="height:80px"></div>
+    <div class="block bdi" style="height:120px"></div><div class="block bdi" style="height:120px"></div>
+    <div class="block bg" style="height:80px"></div><div class="block bg" style="height:80px"></div>
+    <div class="block bg" style="height:80px"></div><div class="block bg" style="height:96px"></div>
+    <div class="block bd" style="height:80px"></div><div class="block bd" style="height:80px"></div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- OUTCOMES -->
+<section style="background:#060611; padding:70px 20px;">
+  <div class="section" style="padding:0;">
+    <p class="sec-label" style="text-align:center;">// lo que van a lograr</p>
+    <h2 class="sec-title">AL FINAL DEL CURSO, TU HIJO PODRÁ</h2>
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="icon">🐍</div>
+        <h3>PROGRAMAR EN PYTHON REAL</h3>
+        <p>No solo arrastrar bloques — escribirá código Python funcional como los programadores profesionales que usan Google, Netflix o la NASA.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🏙️</div>
+        <h3>CONSTRUIR UNA CIUDAD INTELIGENTE</h3>
+        <p>Un proyecto completo en Minecraft Education con casas, granjas, automatizaciones Redstone, código y IA. Es suyo y lo presentará ante el grupo.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🤖</div>
+        <h3>ENTRENAR UN MODELO DE IA</h3>
+        <p>Usará Teachable Machine para entrenar su propia inteligencia artificial que reconoce gestos o imágenes. La misma tecnología que usa tu celular.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">⚡</div>
+        <h3>DOMINAR LÓGICA Y CIRCUITOS</h3>
+        <p>Comprenderá compuertas lógicas AND/OR/NOT con Redstone, la misma lógica que está dentro de todos los computadores del mundo.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🧩</div>
+        <h3>CREAR UN VIDEOJUEGO FUNCIONAL</h3>
+        <p>Diseñará y programará su propio minijuego en Scratch con score, vidas, loops y condicionales. Lo podrán jugar sus compañeros en clase.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🌱</div>
+        <h3>CONECTAR TECNOLOGÍA Y SOSTENIBILIDAD</h3>
+        <p>Cada módulo conecta con los ODS de la ONU — aprende que la tecnología es una herramienta para construir un mundo mejor, no solo para jugar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- JOURNEY -->
+<section class="section" style="text-align:center;">
+  <p class="sec-label">// ruta de aprendizaje</p>
+  <h2 class="sec-title">UN RECORRIDO DE VERDAD — NO ATAJOS</h2>
+  <div class="highlight"><strong>Filosofía:</strong> Los estudiantes no memorizan comandos — aprenden a pensar como programadores. Cada bloque de código que jalan en Minecraft tiene su equivalente en Python. Cuando escriben Python por primera vez, <strong>ya entienden lo que hace</strong>.</div>
+  <div class="journey">
+    <div class="j-step">
+      <div class="j-dot s1">🎮</div>
+      <div class="j-label">Lógica visual</div>
+      <div class="j-sub">M1–2</div>
+    </div>
+    <div class="j-arrow">→</div>
+    <div class="j-step">
+      <div class="j-dot s2">🔴</div>
+      <div class="j-label">Redstone &amp; Circuitos</div>
+      <div class="j-sub">M2–4</div>
+    </div>
+    <div class="j-arrow">→</div>
+    <div class="j-step">
+      <div class="j-dot s3">🐱</div>
+      <div class="j-label">Scratch + Código</div>
+      <div class="j-sub">M5–6</div>
+    </div>
+    <div class="j-arrow">→</div>
+    <div class="j-step">
+      <div class="j-dot s4">📝</div>
+      <div class="j-label">Pseudocódigo</div>
+      <div class="j-sub">M7</div>
+    </div>
+    <div class="j-arrow">→</div>
+    <div class="j-step">
+      <div class="j-dot s5">🐍</div>
+      <div class="j-label">Python + IA</div>
+      <div class="j-sub">M8</div>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- WHAT THEY BUILD -->
+<section style="background:#060611; padding:70px 20px;">
+  <div class="section" style="padding:0;">
+    <p class="sec-label" style="text-align:center;">// el proyecto central</p>
+    <h2 class="sec-title">CONSTRUYEN UNA CIUDAD INTELIGENTE SOSTENIBLE</h2>
+    <p style="text-align:center;font-size:14px;color:var(--light);max-width:680px;margin:0 auto 40px;">
+      No son ejercicios aislados. Desde el módulo 1 hasta el 8, cada estudiante construye su propio sector de ciudad en Minecraft Education — y lo presenta en el Demo Day final.
+    </p>
+    <div class="builds-grid">
+      <div class="build-card">
+        <span class="icon">🏠</span>
+        <h3>Casa Sostenible</h3>
+        <p>Con huerta, granja, fuente de energía renovable y automatizaciones. Módulos 1–2.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">⚡</span>
+        <h3>Automatizaciones Redstone</h3>
+        <p>Luces solares, puertas inteligentes, sistema de defensa. Compuertas AND/OR/NOT reales. M2.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">🏫</span>
+        <h3>Espacios Comunitarios</h3>
+        <p>Restaurante sostenible, escuela automatizada, casa del árbol con IoT simulado. M3.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">💡</span>
+        <h3>Solución a un Problema Real</h3>
+        <p>Cada estudiante identifica un problema de su ciudad y construye la solución. M4.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">🌆</span>
+        <h3>Plaza y Red de la Ciudad</h3>
+        <p>Plaza central, barrios, puentes, parques, calles. La ciudad toma forma completa. M5–6.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">🚉</span>
+        <h3>Transporte + Estructuras del Agent</h3>
+        <p>Red de rieles, estaciones, y estructuras construidas por su robot programado. M7.</p>
+      </div>
+      <div class="build-card">
+        <span class="icon">🤖</span>
+        <h3>Centro de Inteligencia Artificial</h3>
+        <p>Laboratorio de IA en Minecraft que representa visualmente su modelo entrenado. M8.</p>
+      </div>
+      <div class="build-card" style="border-top-color:var(--gold);">
+        <span class="icon">⭐</span>
+        <h3>Demo Day Final</h3>
+        <p>Presentación completa: tour en Minecraft + demo Python + modelo IA. Invitados especiales bienvenidos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- SKILLS -->
+<section class="section">
+  <p class="sec-label" style="text-align:center;">// habilidades</p>
+  <h2 class="sec-title">LO QUE APRENDEN — Y LO QUE SE LLEVAN</h2>
+  <div class="skills-cols">
+    <div class="skills-box">
+      <h3>💻 HABILIDADES TÉCNICAS</h3>
+      <ul>
+        <li>Pensamiento computacional y algorítmico</li>
+        <li>Lógica de Redstone (circuitos y compuertas)</li>
+        <li>Programación visual con Code.org</li>
+        <li>Scratch: eventos, loops, variables, videojuegos</li>
+        <li>Pseudocódigo con PSeInt</li>
+        <li>Python básico: print, input, for, while, if/else, funciones</li>
+        <li>Inteligencia Artificial con Teachable Machine</li>
+        <li>Programar el Agent de Minecraft Education</li>
+      </ul>
+    </div>
+    <div class="skills-box">
+      <h3>🌟 HABILIDADES PARA LA VIDA</h3>
+      <ul>
+        <li>Creatividad y diseño con propósito</li>
+        <li>Resolución de problemas reales</li>
+        <li>Trabajo colaborativo en servidor compartido</li>
+        <li>Comunicación oral (presentaciones en clase)</li>
+        <li>Pensamiento crítico y análisis</li>
+        <li>Conexión entre tecnología y responsabilidad social</li>
+        <li>Confianza para crear — no solo consumir tecnología</li>
+        <li>Autonomía y gestión del tiempo de proyecto</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- FOR WHOM -->
+<section style="background:#060611; padding:70px 20px;">
+  <div class="section" style="padding:0;">
+    <p class="sec-label" style="text-align:center;">// ¿para quién es?</p>
+    <h2 class="sec-title">EL CURSO ESTÁ HECHO PARA</h2>
+    <div class="quien-grid">
+      <div class="quien-card">
+        <h3>🎮 LOS QUE YA CONOCEN MINECRAFT</h3>
+        <p>Transformamos el juego que ya aman en la mejor excusa para aprender a programar. Aquí no juegan — <strong>construyen y crean</strong>.</p>
+      </div>
+      <div class="quien-card">
+        <h3>🌱 LOS QUE NUNCA HAN PROGRAMADO</h3>
+        <p>El curso arranca desde cero. Paso a paso, de lógica visual a Python real. No necesita ningún conocimiento previo de programación.</p>
+      </div>
+      <div class="quien-card">
+        <h3>🚀 LOS QUE YA PROGRAMAN</h3>
+        <p>La progresión llega hasta Python e IA. Los estudiantes más avanzados tienen retos de dificultad alta que los mantienen en el límite.</p>
+      </div>
+      <div class="quien-card">
+        <h3>🧠 LOS QUE NO SON "DE TECNOLOGÍA"</h3>
+        <p>Los proyectos de sostenibilidad, diseño urbano y solución de problemas reales enganchan también a quienes prefieren las ciencias sociales o el arte.</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;background:var(--card);border:2px solid var(--border);padding:24px;border-left:6px solid var(--gold);">
+      <p style="font-size:13px;color:var(--light);line-height:1.8;">
+        <strong style="color:var(--gold);">Rango de edad:</strong> 8 a 14 años. La progresión del curso está diseñada para adaptarse — los más jóvenes trabajan con bloques visuales, los más grandes llegan a Python e IA. Los retos tienen tres niveles (Fácil / Medio / Difícil) para que nadie se aburra ni se pierda.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- MODULES PREVIEW -->
+<section class="section">
+  <p class="sec-label" style="text-align:center;">// programa completo</p>
+  <h2 class="sec-title">8 MÓDULOS · 32 CLASES · 64 HORAS</h2>
+  <div class="mods-grid">
+    <div class="mod-row">
+      <div class="mod-num">01</div>
+      <div class="mod-info">
+        <h4>Introducción a Minecraft y Pensamiento Lógico</h4>
+        <p>Exploración del juego, Code.org, sostenibilidad. Construyen casa, huerta y energía renovable.</p>
+        <span class="mod-badge mb-p">Minecraft Education</span>
+        <span class="mod-badge mb-s">Code.org</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">02</div>
+      <div class="mod-info">
+        <h4>Automatización con Redstone</h4>
+        <p>Circuitos, compuertas lógicas AND/OR/NOT. Sector completamente automatizado.</p>
+        <span class="mod-badge mb-p">Minecraft Education</span>
+        <span class="mod-badge mb-g">Compuertas Lógicas</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">03</div>
+      <div class="mod-info">
+        <h4>Construcciones con Intención</h4>
+        <p>Arquitectura sostenible, IoT simulado. Restaurante, escuela y casa del árbol inteligente.</p>
+        <span class="mod-badge mb-p">Minecraft Education</span>
+        <span class="mod-badge mb-s">IoT</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">04</div>
+      <div class="mod-info">
+        <h4>Soluciones Inteligentes</h4>
+        <p>Design Thinking aplicado. Identifica un problema real y construye la solución en Minecraft.</p>
+        <span class="mod-badge mb-g">Design Thinking</span>
+        <span class="mod-badge mb-s">ODS 7 &amp; 9</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">05</div>
+      <div class="mod-info">
+        <h4>Fundando la Ciudad Inteligente</h4>
+        <p>Scratch por primera vez. Algoritmos, eventos, sprites. Primer proyecto de programación real.</p>
+        <span class="mod-badge mb-p">Scratch</span>
+        <span class="mod-badge mb-s">Algoritmos</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">06</div>
+      <div class="mod-info">
+        <h4>Infraestructura y Sistemas Interactivos</h4>
+        <p>Loops, condicionales, variables en Scratch. Construyen su primer videojuego funcional.</p>
+        <span class="mod-badge mb-p">Scratch</span>
+        <span class="mod-badge mb-g">Videojuego</span>
+      </div>
+    </div>
+    <div class="mod-row">
+      <div class="mod-num">07</div>
+      <div class="mod-info">
+        <h4>Pseudocódigo y Robots Constructores</h4>
+        <p>PSeInt: transición del visual al texto. Programan el Agent de Minecraft para construir solo.</p>
+        <span class="mod-badge mb-p">PSeInt</span>
+        <span class="mod-badge mb-p">Agent Minecraft</span>
+      </div>
+    </div>
+    <div class="mod-row" style="border-left-color:var(--gold);">
+      <div class="mod-num" style="color:var(--gold);">08</div>
+      <div class="mod-info">
+        <h4>Código Real — Python e Inteligencia Artificial</h4>
+        <p>Python desde cero, Teachable Machine, Demo Day. Ciudad presentada al grupo. Insignia ⭐ Ciudad Inteligente.</p>
+        <span class="mod-badge mb-g">Python</span>
+        <span class="mod-badge" style="color:var(--purple);border-color:var(--purple);">IA</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- DIFFERENTIATORS -->
+<section style="background:#060611;padding:70px 20px;">
+  <div class="section" style="padding:0;">
+    <p class="sec-label" style="text-align:center;">// por qué ROBOTSchool</p>
+    <h2 class="sec-title">NO ES UNA CLASE DE MINECRAFT — ES INGENIERÍA</h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <span class="icon">🎯</span>
+        <h3>PROYECTO CENTRAL</h3>
+        <p>Una ciudad completa que crece con el estudiante durante todo el año. No ejercicios sueltos — un portafolio real.</p>
+      </div>
+      <div class="diff-card">
+        <span class="icon">📈</span>
+        <h3>PROGRESIÓN REAL</h3>
+        <p>Bloques → Scratch → PSeInt → Python → IA. Cada herramienta construye sobre la anterior. Nadie llega a Python sin entenderlo.</p>
+      </div>
+      <div class="diff-card">
+        <span class="icon">🌱</span>
+        <h3>CONEXIÓN CON EL MUNDO</h3>
+        <p>Cada módulo conecta con los ODS de la ONU. Aprenden que programar es una herramienta de cambio, no solo entretenimiento.</p>
+      </div>
+      <div class="diff-card">
+        <span class="icon">🏆</span>
+        <h3>GAMIFICACIÓN QUE MOTIVA</h3>
+        <p>Sistema de insignias y retos por niveles (Fácil/Medio/Difícil). Cada estudiante avanza a su ritmo sin aburrirse ni perderse.</p>
+      </div>
+      <div class="diff-card">
+        <span class="icon">🤝</span>
+        <h3>COLABORATIVO POR DISEÑO</h3>
+        <p>Server compartido donde todos construyen la misma ciudad. Aprenden a trabajar en equipo, dar feedback y respetar el trabajo ajeno.</p>
+      </div>
+      <div class="diff-card">
+        <span class="icon">🎤</span>
+        <h3>PRESENTACIÓN Y COMUNICACIÓN</h3>
+        <p>Demo Days, mini-expos y retroalimentación entre pares. Aprenden a explicar lo que hicieron — habilidad clave en cualquier carrera.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>¿LISTOS PARA EMPEZAR<br>A CONSTRUIR?</h2>
+  <p>
+    El cupo es limitado. Cada grupo tiene un servidor compartido y el tallerista hace seguimiento individual a cada estudiante.
+    Escríbenos para conocer horarios, sedes y disponibilidad.
+  </p>
+  <div class="cta-buttons">
+    <a href="https://wa.me/573186541859" class="cta-btn cta-secondary" target="_blank">💬 WHATSAPP</a>
+    <a href="https://robotschool.co" class="cta-btn cta-main" target="_blank">🌐 VER SEDES Y HORARIOS</a>
+  </div>
+  <p style="margin-top:28px;font-size:11px;color:var(--muted);">
+    Presencial y virtual · Sede 75, 134, Colombo, Gato con Botas, Hispanoamericano y más
+  </p>
+</section>
+
+<footer>
+  <p>⬛ <span>MINECRAFT CODING LAB</span> — ROBOTSchool / Escuelas STEAM Colombia S.A.S.</p>
+  <p>www.robotschool.co · info@robotschool.co · 318 654 1859</p>
+  <p style="margin-top:12px;font-size:6px;color:#333;">8 módulos · 32 clases · 64 horas · Edades 8–14 · Presencial y Virtual</p>
+</footer>
+
+</body>
+</html>

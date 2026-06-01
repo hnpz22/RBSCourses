@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Coding Lab — Guía Estudiante — ROBOTSchool</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#F7B731; --grass:#5DA130; --diamond:#4ECDC4; --red:#E84118;
+  --night:#0a0a18; --card:#12121f; --card2:#16162a; --border:#1e1e35;
+  --text:#e2e8f0; --muted:#64748b; --light:#94a3b8;
+  --emerald:#2ECC71; --purple:#8B5CF6; --blue:#3A86FF;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--night); color: var(--text); line-height: 1.6; }
+
+/* BACK NAV */
+.back-nav {
+  padding: 12px 20px; background: var(--card2); border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+}
+.back-nav a { color: var(--gold); font-family: 'Press Start 2P', monospace; font-size: 7px; text-decoration: none; }
+.back-nav span { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); }
+
+/* COVER */
+.cover {
+  padding: 48px 24px 32px;
+  background: linear-gradient(135deg, var(--card) 0%, #0a1628 60%, var(--card2) 100%);
+  border-bottom: 4px solid var(--grass);
+  position: relative; overflow: hidden;
+}
+.cover::after {
+  content: ''; position: absolute; right: -80px; top: -80px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, var(--grass) 0%, transparent 70%);
+  opacity: .04; pointer-events: none;
+}
+.cover-logo { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; }
+.cover-title { font-family: 'Press Start 2P', monospace; font-size: clamp(16px, 3.5vw, 30px); color: var(--gold); text-shadow: 3px 3px 0 #000; line-height: 1.5; margin-bottom: 8px; }
+.cover-sub { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--diamond); letter-spacing: 2px; margin-bottom: 20px; }
+.cover-desc { font-size: 14px; color: var(--light); max-width: 680px; line-height: 1.7; margin-bottom: 24px; }
+.cover-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+.cs { background: rgba(0,0,0,.5); border: 2px solid var(--gold); padding: 10px 16px; }
+.cs-n { font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--gold); display: block; margin-bottom: 4px; }
+.cs-l { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+/* MODULE NAV */
+.mod-nav {
+  background: #0d0d1a; border-bottom: 3px solid var(--gold);
+  position: sticky; top: 0; z-index: 100; padding: 0 20px; overflow-x: auto;
+}
+.mod-nav-inner { display: flex; max-width: 1100px; margin: 0 auto; }
+.nav-tab {
+  font-family: 'Press Start 2P', monospace; font-size: 7px; color: #555;
+  padding: 14px 16px; cursor: pointer; border-bottom: 3px solid transparent;
+  white-space: nowrap; transition: all .2s; background: none; border-top: none;
+  border-left: none; border-right: none; text-decoration: none; display: block;
+}
+.nav-tab:hover, .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* PX DIVIDER */
+.px-div { height: 5px; background: repeating-linear-gradient(90deg,
+  var(--grass) 0,var(--grass) 8px,#8B5E3C 8px,#8B5E3C 16px,
+  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
+  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px); }
+
+/* MODULE SECTION */
+.mod-section { padding: 56px 20px; border-bottom: 2px solid var(--border); }
+.mod-section:nth-child(odd) { background: #0a0a15; }
+.mod-section:nth-child(even) { background: var(--night); }
+.mod-container { max-width: 960px; margin: 0 auto; }
+
+.mod-head { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+.mod-num { font-family: 'Press Start 2P', monospace; font-size: 40px; color: var(--gold); text-shadow: 3px 3px 0 #000; line-height: 1; min-width: 70px; flex-shrink: 0; }
+.mod-info h2 { font-family: 'Press Start 2P', monospace; font-size: clamp(11px, 1.8vw, 16px); color: #fff; margin-bottom: 6px; line-height: 1.6; }
+.mod-info .theme { font-size: 12px; color: var(--diamond); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 9px; font-weight: 800; padding: 2px 8px; border: 1.5px solid; letter-spacing: .5px; }
+.tp { color: var(--diamond); border-color: var(--diamond); }
+.ts { color: var(--emerald); border-color: var(--emerald); }
+.tg { color: var(--gold); border-color: var(--gold); }
+
+/* BUILD BOX */
+.build-box {
+  background: rgba(93,161,48,.08); border: 2px solid var(--grass);
+  padding: 16px 20px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.build-box .icon { font-size: 24px; flex-shrink: 0; }
+.build-box h3 { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--grass); margin-bottom: 6px; }
+.build-box p { font-size: 13px; color: var(--light); line-height: 1.6; }
+
+/* CLASS CARDS */
+.class-card { margin-bottom: 18px; }
+.class-head {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-left: 5px solid var(--diamond); padding: 14px 18px; cursor: pointer;
+}
+.class-num { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--gold); min-width: 38px; }
+.class-title h3 { font-size: 14px; font-weight: 900; margin-bottom: 3px; }
+.class-title span { font-size: 11px; color: var(--muted); }
+.expand-icon { margin-left: auto; color: var(--gold); font-size: 14px; transition: transform .3s; }
+.class-body { background: var(--card); border: 1px solid var(--border); border-top: none; padding: 20px; display: none; }
+.class-body.open { display: block; animation: fadein .25s ease; }
+@keyframes fadein { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+
+/* GANCHO */
+.gancho {
+  background: rgba(247,183,49,.07); border-left: 3px solid var(--gold);
+  padding: 12px 16px; margin-bottom: 16px;
+  font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--gold);
+  line-height: 2;
+}
+/* OBJETIVO */
+.objetivo {
+  background: rgba(78,205,196,.06); border-left: 3px solid var(--diamond);
+  padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: var(--diamond);
+  font-weight: 700;
+}
+.objetivo strong { color: #fff; }
+
+/* STEPS */
+.steps { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.steps li {
+  font-size: 13px; color: var(--light); padding-left: 22px; position: relative; line-height: 1.6;
+}
+.steps li::before { content:"▶"; position:absolute;left:0;top:4px;font-size:7px;color:var(--grass); }
+.steps li strong { color: #fff; }
+.steps li code { font-family: 'JetBrains Mono',monospace; font-size: 11px; background:rgba(255,255,255,.05); padding:1px 5px; border:1px solid var(--border); color:var(--diamond); }
+
+/* PARTE HEADER */
+.parte-h { font-family: 'Press Start 2P',monospace; font-size: 7px; color: var(--grass); margin-bottom: 10px; letter-spacing: 1px; padding: 4px 0; border-bottom: 1px solid rgba(93,161,48,.2); }
+.parte-h.code-h { color: var(--diamond); border-bottom-color: rgba(78,205,196,.2); }
+
+/* CHALLENGES */
+.challenges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.ch { font-size: 10px; font-weight: 800; padding: 3px 10px; border: 1.5px solid; font-family: 'JetBrains Mono',monospace; }
+.ch-e { color: var(--emerald); border-color: var(--emerald); }
+.ch-m { color: var(--gold); border-color: var(--gold); }
+.ch-h { color: var(--red); border-color: var(--red); }
+
+/* NEXT MODULE */
+.next-mod { margin-top: 32px; background: var(--card2); border: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+.next-mod span { font-family: 'Press Start 2P',monospace; font-size: 7px; color: var(--muted); }
+.next-mod a { color: var(--gold); font-family: 'Press Start 2P',monospace; font-size: 8px; text-decoration: none; margin-left: auto; }
+.next-mod a:hover { color: #fff; }
+
+/* BADGES SECTION */
+.badges-wrap { max-width: 960px; margin: 0 auto; padding: 60px 20px; }
+.badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+.badge-card { background: var(--card); border: 2px solid var(--border); padding: 20px; text-align: center; transition: border-color .3s, transform .3s; }
+.badge-card:hover { border-color: var(--gold); transform: scale(1.03); }
+.badge-card .bi { font-size: 36px; display: block; margin-bottom: 10px; }
+.badge-card h3 { font-family: 'Press Start 2P',monospace; font-size: 8px; color: var(--gold); margin-bottom: 8px; line-height: 1.6; }
+.badge-card p { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+/* FOOTER */
+footer { background: #000; padding: 32px 20px; text-align: center; border-top: 3px solid var(--gold); }
+footer p { font-family: 'Press Start 2P',monospace; font-size: 7px; color: #333; line-height: 2.4; }
+footer span { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="../index.html">⬅ Inicio</a>
+  <span>·</span>
+  <span>Minecraft Coding Lab — Guía Estudiante</span>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
+  <h1 class="cover-title">TU GUÍA<br>DE CLASE</h1>
+  <p class="cover-sub">▶ AQUÍ ESTÁ TODO LO QUE VAS A CONSTRUIR</p>
+  <p class="cover-desc">
+    Cada módulo te dice exactamente qué vas a hacer hoy, qué vas a construir y cómo puedes ir más lejos si terminas antes. Sin spoilers del profe — solo vos y el código.
+  </p>
+  <div class="cover-stats">
+    <div class="cs"><span class="cs-n">8</span><span class="cs-l">Módulos</span></div>
+    <div class="cs"><span class="cs-n">32</span><span class="cs-l">Clases</span></div>
+    <div class="cs"><span class="cs-n">64h</span><span class="cs-l">De clase</span></div>
+    <div class="cs"><span class="cs-n">6</span><span class="cs-l">Insignias</span></div>
+  </div>
+</div>
+
+<!-- MODULE NAV -->
+<nav class="mod-nav">
+  <div class="mod-nav-inner">
+    <a class="nav-tab" href="#m1">M1</a>
+    <a class="nav-tab" href="#m2">M2</a>
+    <a class="nav-tab" href="#m3">M3</a>
+    <a class="nav-tab" href="#m4">M4</a>
+    <a class="nav-tab" href="#m5">M5</a>
+    <a class="nav-tab" href="#m6">M6</a>
+    <a class="nav-tab" href="#m7">M7</a>
+    <a class="nav-tab" href="#m8">M8 ⭐</a>
+  </div>
+</nav>
+
+<!-- ======= MÓDULO 1 ======= -->
+<section class="mod-section" id="m1">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">01</div>
+      <div class="mod-info">
+        <h2>INTRODUCCIÓN A MINECRAFT<br>Y PENSAMIENTO LÓGICO</h2>
+        <div class="theme">Fundamentos · 4 clases · 8 horas</div>
+        <div class="tags">
+          <span class="tag tp">Minecraft Education</span>
+          <span class="tag tp">Code.org</span>
+          <span class="tag ts">ODS 2 Hambre Cero</span>
+          <span class="tag ts">ODS 11 Ciudades Sostenibles</span>
+        </div>
+      </div>
+    </div>
+    <div class="build-box">
+      <span class="icon">🏠</span>
+      <div>
+        <h3>¿QUÉ VAS A CONSTRUIR?</h3>
+        <p>Tu sector en la Ciudad Inteligente arranca acá. Al final del módulo tenés casa con cocina y habitaciones, huerta con mínimo 3 cultivos, granja de animales y fuente de energía renovable. <strong>Misión: Fundador.</strong></p>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="class-head" onclick="toggle(this)">
+        <div class="class-num">C1</div>
+        <div class="class-title"><h3>¡Bienvenido a Minecraft Education!</h3><span>Primeros pasos · ¿qué es programar?</span></div>
+        <i class="expand-icon">▼</i>
+      </div>
+      <div class="class-body">
+        <div class="gancho">🎮 ¿ALGUNA VEZ LE DIS INSTRUCCIONES A ALGUIEN EXACTAS?<br>¿QUÉ PASÓ CUANDO FALLARON EN UN PASO?</div>
+        <div class="objetivo">🎯 Hoy explorás Minecraft Education y completás los primeros 5 niveles de Code.org.</div>
+        <div class="parte-h code-h">▶ CODE.ORG — PARTE DE CÓDIGO</div>
+        <ul class="steps">
+          <li>Entrá a <strong>studio.code.org</strong> — creá tu cuenta si no tenés una.</li>
+          <li>Buscá <strong>"Aventurero de Minecraft"</strong> y completá niveles 1 al 5.</li>
+          <li>¿Qué instrucciones usaste? Contale a alguien cómo llegaste a la oveja.</li>
+        </ul>
+        <div class="parte-h">▶ MINECRAFT LAB</div>
+        <ul class="steps">
+          <li>Entrá al servidor. Escuchá las reglas del profe sobre zonas y convivencia.</li>
+          <li>Explorá: WASD para moverte, E para inventario, clic derecho para colocar bloques.</li>
+          <li><strong>Misión Fundador Nivel 1:</strong> Construí la base de tu casa. Piso + paredes, mínimo 6×6 bloques. Dejá espacio para cocina y habitación.</li>
+          <li>Reto creativo: agregá la base del segundo piso y elegí tus materiales de decoración.</li>
+        </ul>
+        <div class="challenges">
+          <span class="ch ch-e">FÁCIL: Llegar a la oveja en 3 pasos exactos</span>
+          <span class="ch ch-m">MEDIO: Completar nivel 5 sin ayuda</span>
+          <span class="ch ch-h">DIFÍCIL: Llegar usando el mínimo posible de bloques</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="class-head" onclick="toggle(this)">
+        <div class="class-num">C2</div>
+        <div class="class-title"><h3>Introducción a la Sostenibilidad</h3><span>¿Por qué construir de forma responsable?</span></div>
+        <i class="expand-icon">▼</i>
+      </div>
+      <div class="class-body">
+        <div class="gancho">🌱 ¿QUÉ PASARÍA SI TU CIUDAD NO TUVIERA PARQUES NI ZONAS VERDES?</div>
+        <div class="objetivo">🎯 Completás la casa y construís tu primera huerta funcional.</div>
+        <div class="parte-h code-h">▶ CODE.ORG</div>
+        <ul class="steps">
+          <li>Completá niveles 6–10 del Aventurero. Fijate en las instrucciones que se repiten.</li>
+          <li>Boceto en papel (5 min): dibujá el plano de tu casa con al menos 3 elementos sostenibles: ventanas, huerta, fuente de energía.</li>
+        </ul>
+        <div class="parte-h">▶ MINECRAFT LAB</div>
+        <ul class="steps">
+          <li>Terminá la casa: techo, ventanas de vidrio, iluminación (glowstone — sin antorchas).</li>
+          <li><strong>Misión Fundador Nivel 2:</strong> Huerta funcional adosada a la casa. Mínimo 3 cultivos distintos. El agua debe estar a máx 4 bloques de los cultivos.</li>
+        </ul>
+        <div class="challenges">
+          <span class="ch ch-e">FÁCIL: Boceto con 3 elementos sostenibles</span>
+          <span class="ch ch-m">MEDIO: Boceto con zonas claramente distribuidas</span>
+          <span class="ch ch-h">DIFÍCIL: Boceto de dos pisos con elementos sostenibles en cada nivel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="class-head" onclick="toggle(this)">
+        <div class="class-num">C3</div>
+        <div class="class-title"><h3>Las Granjas y la Sostenibilidad Alimentaria</h3><span>ODS 2 — Hambre Cero</span></div>
+        <i class="expand-icon">▼</i>
+      </div>
+      <div class="class-body">
+        <div class="gancho">🌾 ¿DE DÓNDE VIENE LA COMIDA QUE HAY EN TU CASA?</div>
+        <div class="objetivo">🎯 Construís una granja completa con cultivos y animales.</div>
+        <div class="parte-h code-h">▶ CODE.ORG</div>
+        <ul class="steps">
+          <li>Niveles 11–14 del Aventurero. Fijate en los <strong>loops</strong> — instrucciones que se repiten varias veces.</li>
+        </ul>
+        <div class="parte-h">▶ MINECRAFT LAB</div>
+        <ul class="steps">
+          <li>Tierra labrada con agua cercana. Plantá trigo, zanahoria y papa.</li>
+          <li>Corral vallado con madera para animales (pollos, vacas o cerdos).</li>
+          <li>No dañes el bioma. Dejá zonas verdes alrededor.</li>
+          <li>Mini presentación de 2 min: mostrá tu granja y explicá qué produce.</li>
+        </ul>
+        <div class="challenges">
+          <span class="ch ch-e">FÁCIL: Granja de trigo 3×3 con canal de agua</span>
+          <span class="ch ch-m">MEDIO: Granja mixta: cultivos + área de animales</span>
+          <span class="ch ch-h">DIFÍCIL: Sistema de irrigación con canal central y cultivos a los lados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="class-card">
+      <div class="class-head" onclick="toggle(this)">
+        <div class="class-num">C4</div>
+        <div class="class-title"><h3>Energías Renovables</h3><span>Cierre Módulo 1 — Presentación de sectores</span></div>
+        <i class="expand-icon">▼</i>
+      </div>
+      <div class="class-body">
+        <div class="gancho">⚡ ¿QUÉ PASARÍA SI EL PETRÓLEO SE ACABARA MAÑANA?</div>
+        <div class="objetivo">🎯 Agregás una fuente de energía renovable y presentás tu sector completo.</div>
+        <div class="parte-h code-h">▶ CODE.ORG</div>
+        <ul class="steps">
+          <li>Completá los niveles finales del Aventurero (15+). ¡Conseguís la insignia de completar el tutorial!</li>
+        </ul>
+        <div class="parte-h">▶ MINECRAFT LAB</div>
+        <ul class="steps">
+          <li>Elegí tu fuente de energía renovable y construila cerca de la casa:
+            <br>— Molino de viento (lana + madera)
+            <br>— Paneles solares (vidrio + hierro)
+            <br>— Represa (agua + piedra)
+          </li>
+          <li><strong>CIERRE MÓDULO 1:</strong> Tour de tu sector — casa + granja + energía. Explicá cómo conecta con ODS 2 y 11.</li>
+        </ul>
+        <div class="challenges">
+          <span class="ch ch-e">FÁCIL: Identificar 3 energías renovables</span>
+          <span class="ch ch-m">MEDIO: Comparar solar vs eólica</span>
+          <span class="ch ch-h">DIFÍCIL: Boceto de ciudad 100% renovable con 3 fuentes</span>
+        </div>
+      </div>
+    </div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m2">M2: Automatización con Redstone →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 2 ======= -->
+<section class="mod-section" id="m2">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">02</div>
+      <div class="mod-info">
+        <h2>AUTOMATIZACIÓN CON REDSTONE</h2>
+        <div class="theme">Circuitos y Compuertas Lógicas · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tp">Minecraft Education</span><span class="tag tg">Compuertas Lógicas</span><span class="tag ts">ODS 9 Innovación</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">⚡</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Tu sector se automatiza completamente: luces solares, puertas con compuertas lógicas, dispensadores y sistema de defensa perimetral. <strong>Misión: Ingeniero Eléctrico.</strong></p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>¿Qué es el Redstone?</h3><span>Circuitos básicos · Luces automáticas</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔌 ¿CÓMO FUNCIONA EL INTERRUPTOR DE LA LUZ DE TU CUARTO?</div>
+      <div class="objetivo">🎯 Automatizás las luces de tu casa con un detector de luz solar.</div>
+      <div class="parte-h code-h">▶ MINECRAFT EDUCATION HOUR OF CODE</div>
+      <ul class="steps"><li>Abrí <strong>hourofcode.com/minecrAfttimecraft</strong> — actividad guiada de programación con bloques dentro del juego.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps">
+        <li>Instalar <strong>detector de luz solar</strong> + lámparas en tu casa. Deben encenderse solas de noche.</li>
+        <li>Reto: circuito que también ilumine la granja al anochecer.</li>
+        <li>Dibujá tu circuito con flechas mostrando el flujo de energía.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Encender 1 antorcha con palanca</span><span class="ch ch-m">MEDIO: 3 lámparas en serie</span><span class="ch ch-h">DIFÍCIL: Sistema paralelo con botón + palanca</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Compuertas Lógicas AND, OR, NOT</h3><span>Tablas de verdad en Minecraft</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔐 IMAGINÁ UNA CAJA FUERTE QUE SOLO SE ABRE CON DOS BOTONES A LA VEZ. ¿QUÉ LÓGICA USA?</div>
+      <div class="objetivo">🎯 Construís compuertas AND, OR y NOT reales con Redstone.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps">
+        <li>Construí las 3 compuertas con Redstone en el suelo. Cada una con su tabla de verdad en letreros.</li>
+        <li>Entrada de la casa: lógica <strong>AND</strong> (dos botones para abrir la puerta).</li>
+        <li>Granja: lógica <strong>OR</strong> (cualquier sensor activa el riego).</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Compuerta AND con 2 palancas</span><span class="ch ch-m">MEDIO: AND + OR para una puerta</span><span class="ch ch-h">DIFÍCIL: AND + NOT para caja fuerte</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Automatizando Tareas</h3><span>Dispensadores, trampas, granjas automáticas</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🤖 ¿QUÉ TAREAS DE TU CASA PODRÍAS AUTOMATIZAR?</div>
+      <div class="objetivo">🎯 Automatizás la casa completamente: luces + puerta + dispensador de ítems.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps">
+        <li>Casa completa: luces (detector solar) + puerta (placa de presión) + dispensador al entrar.</li>
+        <li>Sistema de defensa perimetral con dispensadores activados por placas de presión.</li>
+        <li>Mini expo: mostrále el sistema a un compañero y explicá cómo funciona.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Dispensador que da ítems al presionar botón</span><span class="ch ch-m">MEDIO: Trampa con placa + dispensador</span><span class="ch ch-h">DIFÍCIL: Sistema de defensa perimetral automático</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Optimización — Cierre Módulo 2</h3><span>Presentación de automatizaciones · Insignia ⚡</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">⚡ ¿PODÉS LOGRAR LO MISMO CON MENOS BLOQUES DE REDSTONE?</div>
+      <div class="objetivo">🎯 Presentás tu sector automatizado y ganás la insignia Automatizador si tenés 3 sistemas funcionando.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps">
+        <li>Revisá tus circuitos. ¿Se puede hacer lo mismo con menos bloques de Redstone? Optimizá.</li>
+        <li><strong>CIERRE M2:</strong> Presentá tu sector — qué automatizaste, cómo funciona, qué lógica usaste.</li>
+        <li>🏅 <strong>Insignia ⚡ Automatizador:</strong> ≥3 sistemas automáticos funcionando.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Reducir un circuito en 2 bloques</span><span class="ch ch-m">MEDIO: Combinar 2 sistemas en uno</span><span class="ch ch-h">DIFÍCIL: Todo con menos de 20 bloques de Redstone</span></div>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m3">M3: Construcciones con Intención →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 3 ======= -->
+<section class="mod-section" id="m3">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">03</div>
+      <div class="mod-info">
+        <h2>CONSTRUCCIONES CON INTENCIÓN</h2>
+        <div class="theme">Arquitectura Sostenible · IoT Simulado · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tp">Minecraft Education</span><span class="tag ts">IoT</span><span class="tag ts">ODS 4 y 12</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">🏫</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Tres edificios comunitarios: restaurante sostenible, escuela automatizada y casa del árbol con IoT simulado. <strong>Misión: Urbanista.</strong></p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>Arquitectura Comercial Sostenible</h3><span>Restaurante con huerta propia</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🍽️ SI ABRIRÁS UN RESTAURANTE, ¿CÓMO ASEGURARÍAS QUE NO CONTAMINA?</div>
+      <div class="objetivo">🎯 Construís un restaurante sostenible con cocina, salón y huerta propia.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Zona de mesas, cocina, huerta pequeña y fuente de energía renovable.</li><li>Letreros que expliquen las prácticas sostenibles del restaurante.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Restaurante básico con comedor</span><span class="ch ch-m">MEDIO: + cocina + cultivos propios</span><span class="ch ch-h">DIFÍCIL: Puerta + iluminación automática con Redstone</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Escuelas del Futuro</h3><span>Tecnología + educación automatizada</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🏫 ¿CÓMO SERÍA TU ESCUELA IDEAL? ¿QUÉ TECNOLOGÍA TENDRÍA?</div>
+      <div class="objetivo">🎯 Construís una escuela con 3 aulas, patio, cafetería y automatizaciones.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Mínimo 3 aulas, patio, cafetería y huerta educativa.</li><li>Luces automáticas en aulas + puerta de acceso Redstone.</li><li>Techos verdes, paneles solares, manejo de residuos visible.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Escuela con 3 aulas básicas</span><span class="ch ch-m">MEDIO: + patio y cafetería</span><span class="ch ch-h">DIFÍCIL: Sistema de acceso automático Redstone</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Internet of Things (IoT)</h3><span>Casa inteligente con sensores simulados</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">📡 ¿QUÉ OBJETOS DE TU CASA PODRÍAN "HABLAR" ENTRE SÍ?</div>
+      <div class="objetivo">🎯 Casa del árbol con al menos 3 sistemas Redstone interconectados simulando IoT.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps">
+        <li>Al menos 3 sistemas que "se comunican": ej. sensor de entrada → enciende luces + abre puerta + activa alarma.</li>
+        <li>Letreros explicando cada sensor/actuador como si fuera IoT real.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Casa árbol básica 2 pisos</span><span class="ch ch-m">MEDIO: + sistema de luces por zona</span><span class="ch ch-h">DIFÍCIL: 3 sistemas Redstone interconectados</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Construcción Integradora — Cierre M3</h3><span>Insignia 🌱 Sostenible</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🌱 ¿TECNOLOGÍA Y SOSTENIBILIDAD SON ALIADOS O ENEMIGOS?</div>
+      <div class="objetivo">🎯 Agregás un edificio que combine tecnología + sostenibilidad, y presentás los sectores.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Nuevo edificio con tech + sostenibilidad. Usá todo lo aprendido.</li><li>Tour de la ciudad. Votan los 3 sectores más creativos, sostenibles y automatizados.</li><li>🏅 <strong>Insignia 🌱 Sostenible:</strong> ≥3 construcciones con criterios documentados.</li></ul>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m4">M4: Soluciones Inteligentes →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 4 ======= -->
+<section class="mod-section" id="m4">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">04</div>
+      <div class="mod-info">
+        <h2>SOLUCIONES INTELIGENTES</h2>
+        <div class="theme">Design Thinking · Proyecto Integrador · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tg">Design Thinking</span><span class="tag ts">ODS 7 y 9</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">💡</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Identificás un problema real de tu ciudad (o del mundo) y construís la solución en Minecraft con automatización y energías limpias. <strong>Misión: Innovador.</strong></p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>Planteando el Problema</h3><span>¿Qué problema queremos resolver?</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🌍 ¿CUÁL ES EL PROBLEMA MÁS GRANDE DE TU BARRIO? ¿QUÉ HARÍAS?</div>
+      <div class="objetivo">🎯 Elegís un problema concreto y empezás a construir el piso + paredes de la solución.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Boceto en papel del plano de tu solución (5 min máx).</li><li>Piso de la construcción + primeras paredes en el servidor.</li><li>El profe revisa tu boceto antes de que sigas construyendo.</li></ul>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Mecanismos de Automatización</h3><span>Pistones y dispensadores en el proyecto</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔧 UN PISTÓN EMPUJA BLOQUES. ¿QUÉ PROBLEMA DEL MUNDO SE RESUELVE "EMPUJANDO" COSAS AUTOMÁTICAMENTE?</div>
+      <div class="objetivo">🎯 Implementás al menos 2 sistemas Redstone en tu solución.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Al menos 2 sistemas Redstone funcionando en tu construcción.</li><li>¿Es sostenible? ¿Usa energías limpias? Ajustá si hace falta.</li></ul>
+      <div class="challenges"><span class="ch ch-e">Pistón que mueve bloques</span><span class="ch ch-m">Puerta secreta retráctil</span><span class="ch ch-h">Mecanismo complejo de automatización</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Accesibilidad y Energías Limpias</h3><span>Puliendo el proyecto</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">♿ ¿TU SOLUCIÓN PODRÍA USARLA ALGUIEN CON DISCAPACIDAD?</div>
+      <div class="objetivo">🎯 Agregás rampas, señalización y energía limpia visible. Ensayo de presentación (2 min).</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Rampas en vez de escaleras, letreros de señalización, espacios amplios.</li><li>Cofres organizados + embudo automático si podés.</li><li>Energía limpia visible: paneles solares (vidrio), molino, o represa.</li><li>Practicá 2 min: ¿cuál era el problema? ¿qué construiste? ¿cómo funciona?</li></ul>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Presentación Final — Soluciones al Mundo</h3><span>Cierre Fase 1 del curso</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🎤 SI LE MOSTRARAS TU SOLUCIÓN AL ALCALDE, ¿QUÉ LE DIRÍAS PRIMERO?</div>
+      <div class="objetivo">🎯 Presentás tu solución ante el grupo: tour en Minecraft + explicación.</div>
+      <div class="parte-h">▶ PRESENTACIÓN (3–4 MIN)</div>
+      <ul class="steps"><li>1) ¿Cuál era el problema? 2) ¿Qué construiste? 3) ¿Cómo funciona la automatización? 4) ¿Cómo es sostenible?</li><li>Dos compañeros te dan un comentario constructivo.</li></ul>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m5">M5: Empezás a programar de verdad →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 5 ======= -->
+<section class="mod-section" id="m5">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">05</div>
+      <div class="mod-info">
+        <h2>FUNDANDO LA CIUDAD INTELIGENTE</h2>
+        <div class="theme">Scratch · Algoritmos · Eventos · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tp">Scratch</span><span class="tag ts">Algoritmos</span><span class="tag ts">Eventos</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">🐱</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Tu primer proyecto en Scratch: una escena animada de la ciudad. Y en Minecraft: la plaza central, barrios, caminos y parque. <strong>Mínimo:</strong> 3 sprites, 2 tipos de eventos, animaciones y sonidos.</p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>¿Qué es Programar?</h3><span>Algoritmos con el cuerpo · Scratch por primera vez</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🥪 SI EXPLICARAS A ALGUIEN QUE NUNCA HIZO UN SÁNDWICH, ¿CUÁNTOS PASOS NECESITARÍAS?</div>
+      <div class="objetivo">🎯 Hacés tu primer programa en Scratch: el gato se mueve y dibuja figuras.</div>
+      <div class="parte-h code-h">▶ SCRATCH — scratch.mit.edu</div>
+      <ul class="steps"><li>Sprites, escenario, bloques. Primer programa: gato camina 100 pasos.</li><li>Ejercicio: mové el sprite de A a B en línea recta.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Plaza central: diseño en papel (5 min). Fuente/estatua central, bancas, caminos en cruz, iluminación.</li><li>Empezá la red de caminos conectando los sectores.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Gato camina 100 pasos</span><span class="ch ch-m">MEDIO: Gato hace un cuadrado</span><span class="ch ch-h">DIFÍCIL: Gato hace una espiral</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Eventos y Sprites Interactivos</h3><span>Cuando presionás un botón... algo pasa</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🛗 ¿QUÉ INSTRUCCIÓN RECIBE EL ASCENSOR CUANDO PRESIONÁS EL BOTÓN?</div>
+      <div class="objetivo">🎯 Sprite que responde a teclas con eventos. Animación de personaje en la ciudad.</div>
+      <div class="parte-h code-h">▶ SCRATCH</div>
+      <ul class="steps"><li>Bloques de evento: "cuando se presione bandera", "cuando se presione tecla", "cuando se cliquee sprite".</li><li>Al menos 2 eventos diferentes en un mismo sprite.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Al menos 3 casas diferentes alrededor de la plaza. Cada una con "eventos físicos": puerta (placa de presión), luz (detector), campana al entrar.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Sprite que cambia color al hacer clic</span><span class="ch ch-m">MEDIO: Personaje que se mueve con flechas</span><span class="ch ch-h">DIFÍCIL: Personaje que dice algo diferente por tecla</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Sonido, Apariencia y Animaciones</h3><span>Proyecto: Ciudad Animada</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🎮 ¿CUÁL ES TU VIDEOJUEGO FAVORITO? ¿CÓMO CREES QUE PROGRAMARON SUS ANIMACIONES?</div>
+      <div class="objetivo">🎯 Escena de ciudad animada con 3 sprites con animaciones y sonidos propios.</div>
+      <div class="parte-h code-h">▶ SCRATCH</div>
+      <ul class="steps"><li>Importá sonidos, efectos visuales (color, fantasma, remolino).</li><li>Animación por disfraces: cambiá disfraces en secuencia con espera.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Terminá la red de caminos. Zona verde comunitaria: parque con árboles, bancas, lago o fuente.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Sprite con 2 disfraces que alterna</span><span class="ch ch-m">MEDIO: 3 sprites animados con sonidos</span><span class="ch ch-h">DIFÍCIL: Escena de ciudad interactiva completa</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Primer Proyecto Scratch Completo</h3><span>Cierre Módulo 5 · Insignia 🏗️ Constructor</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">✨ ¿QUÉ DIFERENCIA UN PROGRAMA QUE FUNCIONA DE UNO QUE FUNCIONA BIEN?</div>
+      <div class="objetivo">🎯 Presentás tu ciudad animada. Mínimo: 3 sprites, 2 eventos, animaciones, sonidos.</div>
+      <div class="parte-h code-h">▶ SCRATCH + PRESENTACIÓN</div>
+      <ul class="steps"><li>Demo 2 min: mostrá tu ciudad animada. El grupo da 1 cosa que le gustó y 1 sugerencia.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Detalles finales: señales, vegetación, alumbrado nocturno con detectores de luz.</li><li>🏅 <strong>Insignia 🏗️ Constructor:</strong> ciudad con plaza, casas, caminos y parque.</li></ul>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m6">M6: Loops, Condicionales y Videojuego →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 6 ======= -->
+<section class="mod-section" id="m6">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">06</div>
+      <div class="mod-info">
+        <h2>INFRAESTRUCTURA Y SISTEMAS INTERACTIVOS</h2>
+        <div class="theme">Loops · Condicionales · Variables · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tp">Scratch</span><span class="tag tg">Loops</span><span class="tag tg">if/else</span><span class="tag tg">Variables</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">🧩</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Tu primer videojuego funcional en Scratch con loop, condicional y variable de score. <strong>Misión: Programador.</strong></p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>Loops — Repetir es Programar</h3><span>Figuras con loops · Barrios en Minecraft</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔄 ¿QUÉ TAREAS HACÉS TODOS LOS DÍAS EXACTAMENTE IGUAL?</div>
+      <div class="objetivo">🎯 Dibujás figuras geométricas con loops en Scratch y construís un barrio repetido en Minecraft.</div>
+      <div class="parte-h code-h">▶ SCRATCH</div>
+      <ul class="steps"><li>Cuadrado = 4 veces (avanzar + girar 90°). Hexágono = 6 veces (avanzar + girar 60°).</li><li>Con loop: 3 bloques. Sin loop: 40 bloques para un octágono.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Al menos 4 casas iguales en patrón repetido. Eso ES un loop físico.</li><li>2 puentes con patrón repetido de arcos o pilares.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Cuadrado con repetir 4</span><span class="ch ch-m">MEDIO: Estrella o espiral con loop</span><span class="ch ch-h">DIFÍCIL: Patrón fractal o figura compleja</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Condicionales — Si… entonces… si no…</h3><span>if/else en Scratch · Decisiones en el código</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🚦 ¿CÓMO DECIDE UN SEMÁFORO CUÁNDO PONERSE EN ROJO?</div>
+      <div class="objetivo">🎯 Sprite que reacciona diferente según condiciones. Semáforo funcional en Minecraft.</div>
+      <div class="parte-h code-h">▶ SCRATCH</div>
+      <ul class="steps"><li>Si toca borde rojo → decir "¡Peligro!". Si no → decir "Seguro".</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Puertas automáticas avanzadas: se abre SOLO SI dos botones presionados (AND).</li><li>Semáforo con temporizador de Redstone que cicla entre rojo, amarillo y verde.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: if toca borde → cambiar color</span><span class="ch ch-m">MEDIO: if/else con sprite que reacciona diferente</span><span class="ch ch-h">DIFÍCIL: Sistema de colisión complejo con múltiples condiciones</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Variables y Puntaje</h3><span>Score, vidas y contador</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🎮 ¿CÓMO GUARDA EL JUEGO CUÁNTOS PUNTOS TENÉS?</div>
+      <div class="objetivo">🎯 Sistema de puntaje en Scratch: sprite atrapa estrellas, puntos suman y bajan con eventos.</div>
+      <div class="parte-h code-h">▶ SCRATCH</div>
+      <ul class="steps"><li>Variable "puntos": crear, mostrar en pantalla, cambiar con eventos.</li><li>SI puntos &gt; 50 → ¡Ganaste! (ir a pantalla de victoria).</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Zona de minijuegos o parque de diversiones. Parkour, laberinto u obstáculos que otros puedan jugar.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Variable que cuenta cuántas veces hacés clic</span><span class="ch ch-m">MEDIO: Score que sube y baja con eventos</span><span class="ch ch-h">DIFÍCIL: Vidas + puntos + pantalla de game over</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Minijuego Completo — Cierre M6</h3><span>Primer videojuego real · Insignia 🧩 Programador</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🕹️ ¿ES MÁS DIFÍCIL PROGRAMAR EL GAMEPLAY O LOS GRÁFICOS?</div>
+      <div class="objetivo">🎯 Tu minijuego completo: loop principal, condicional, score, condición de victoria.</div>
+      <div class="parte-h code-h">▶ GAME JAM</div>
+      <ul class="steps"><li>20 min: todos juegan los juegos de todos. Jugá al menos 3 de compañeros.</li><li>Presentación 2 min: explicá tu loop, tu condicional y cómo funciona el score.</li><li>🏅 <strong>Insignia 🧩 Programador:</strong> minijuego con loop + condicional + variable.</li></ul>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m7">M7: Pseudocódigo y el Robot Constructor →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 7 ======= -->
+<section class="mod-section" id="m7">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num">07</div>
+      <div class="mod-info">
+        <h2>PSEUDOCÓDIGO Y ROBOTS CONSTRUCTORES</h2>
+        <div class="theme">PSeInt · Agent de Minecraft · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tp">PSeInt</span><span class="tag tp">Agent Minecraft</span><span class="tag tg">Pseudocódigo</span></div>
+      </div>
+    </div>
+    <div class="build-box"><span class="icon">🤖</span><div><h3>¿QUÉ VAS A CONSTRUIR?</h3><p>Programás el Agent de Minecraft Education para que construya estructuras solo. También escribís pseudocódigo en PSeInt — el puente hacia Python.</p></div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C1</div><div class="class-title"><h3>Del Visual al Texto — PSeInt</h3><span>Primeros pasos con pseudocódigo</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">📝 SI SCRATCH USA BLOQUES DE COLORES, ¿CÓMO SE VE ESE PROGRAMA EN TEXTO PURO?</div>
+      <div class="objetivo">🎯 Primer programa en PSeInt: pedís el nombre, calculás la edad en meses.</div>
+      <div class="parte-h code-h">▶ PSEINT</div>
+      <ul class="steps"><li><code>Algoritmo Hola / Inicio / Escribir "¿Tu nombre?" / Leer nombre / Fin</code></li><li>Variables con ← (flecha de asignación). Comparación Scratch → PSeInt.</li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB — AGENT</div>
+      <ul class="steps"><li>Introducción al Agent: robot programable dentro del juego.</li><li>Primeros comandos: mover, girar, colocar bloque, recoger.</li><li>Misión: Agent camina en línea recta y coloca 10 bloques.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Programa que saluda con tu nombre</span><span class="ch ch-m">MEDIO: Calculadora de edad en días</span><span class="ch ch-h">DIFÍCIL: Conversor de temperatura C→F→K</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C2</div><div class="class-title"><h3>Ciclos y Condicionales en PSeInt</h3><span>Traducir el minijuego de Scratch a pseudocódigo</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔄 YA SABÉS CÓMO ES UN LOOP EN SCRATCH. ¿CÓMO SE ESCRIBE EN TEXTO?</div>
+      <div class="objetivo">🎯 Traducís tu minijuego de Scratch a pseudocódigo. Agent construye una pared con loop.</div>
+      <div class="parte-h code-h">▶ PSEINT</div>
+      <ul class="steps"><li><code>Para i←1 Hasta 10 Con Paso 1 Hacer / ... / FinPara</code></li><li><code>Si condicion Entonces / ... / SiNo / ... / FinSi</code></li></ul>
+      <div class="parte-h">▶ MINECRAFT LAB — AGENT</div>
+      <ul class="steps"><li>Agent con loop: colocar bloque → avanzar → repetir N veces.</li><li>Agent con condicional: si hay bloque adelante → girar. Si no → avanzar.</li><li>Agent coloca rieles para la estación de transporte.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Ciclo del 1 al 10</span><span class="ch ch-m">MEDIO: Programa que adivina par o impar</span><span class="ch ch-h">DIFÍCIL: Pseudocódigo completo del minijuego</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C3</div><div class="class-title"><h3>Agent Constructor Avanzado</h3><span>Automatizar construcción con código</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🏗️ SI TUVIERAS UN ROBOT CONSTRUCTOR, ¿QUÉ LE ORDENARÍAS CONSTRUIR PRIMERO?</div>
+      <div class="objetivo">🎯 Agent construye una habitación completa con loops anidados. Red de transporte en Minecraft.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Agent construye 4 paredes con loops anidados — sin colocar un bloque manualmente.</li><li>Actividad: red de transporte con rieles, estaciones y minecarts conectando 3 zonas.</li></ul>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)"><div class="class-num">C4</div><div class="class-title"><h3>Ciudad Inteligente — Agent Completa la Ciudad</h3><span>Cierre Módulo 7</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🏙️ ¿CUÁNTO CRECIÓ TU CIUDAD DESDE EL MÓDULO 1?</div>
+      <div class="objetivo">🎯 Agent construye una estructura decorativa. Tour de la ciudad completa.</div>
+      <div class="parte-h">▶ MINECRAFT LAB</div>
+      <ul class="steps"><li>Reto Agent: estructura de al menos 50 bloques usando loops — ni un bloque colocado a mano.</li><li>Agent mejora la ciudad: muro, torre, pavimento o jardín.</li><li>Tour: casa + granja + energía + restaurantes + escuelas + parques + transporte + estructuras del Agent.</li></ul>
+    </div></div>
+    <div class="next-mod"><span>SIGUIENTE →</span><a href="#m8">M8: Python real + IA — el módulo final ⭐ →</a></div>
+  </div>
+</section>
+
+<!-- ======= MÓDULO 8 ======= -->
+<section class="mod-section" id="m8" style="border-bottom:4px solid var(--gold);">
+  <div class="mod-container">
+    <div class="mod-head">
+      <div class="mod-num" style="color:var(--gold);">08</div>
+      <div class="mod-info">
+        <h2>CÓDIGO REAL — PYTHON<br>E INTELIGENCIA ARTIFICIAL</h2>
+        <div class="theme">Proyecto Final · Demo Day · 4 clases · 8 horas</div>
+        <div class="tags"><span class="tag tg">Python</span><span class="tag" style="color:var(--purple);border-color:var(--purple);">Teachable Machine</span><span class="tag tp">Minecraft Education</span></div>
+      </div>
+    </div>
+    <div class="build-box" style="border-color:var(--gold);background:rgba(247,183,49,.06);">
+      <span class="icon">⭐</span>
+      <div>
+        <h3 style="color:var(--gold);">EL MÓDULO FINAL</h3>
+        <p>Escribís Python real por primera vez. Entrenás tu propio modelo de IA. Presentás tu Ciudad Inteligente completa en el Demo Day. <strong>Insignia ⭐ Ciudad Inteligente.</strong></p>
+      </div>
+    </div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)" style="border-left-color:var(--gold)"><div class="class-num">C1</div><div class="class-title"><h3>Python — Primer Día con Código Real</h3><span>print(), input(), variables — ¡Bienvenido!</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🐍 ¿CÓMO SE VE EL CÓDIGO DE MINECRAFT? ¿O EL DE INSTAGRAM? HOY ESCRIBÍS EL TUYO.</div>
+      <div class="objetivo">🎯 Primer programa Python: te pide nombre y edad, calcula tu año de nacimiento y muestra un saludo.</div>
+      <div class="parte-h code-h">▶ PYTHON — VS CODE o replit.com</div>
+      <ul class="steps">
+        <li><code>print("¡Hola, Ciudad Inteligente!")</code> — celebrá, es tu primer Python real.</li>
+        <li>Variables: <code>nombre = "Ana"</code>. Sin declarar, sin tipos. f-strings: <code>f"Hola {nombre}"</code>.</li>
+        <li>Ejercicio: programa que pide nombre y edad → calcula año de nacimiento → muestra saludo personalizado.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: print con tu nombre y ciudad</span><span class="ch ch-m">MEDIO: Programa que calcula año de nacimiento</span><span class="ch ch-h">DIFÍCIL: Programa que hace 3 preguntas y da un resumen</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)" style="border-left-color:var(--gold)"><div class="class-num">C2</div><div class="class-title"><h3>Loops y Condicionales en Python</h3><span>Transportar el minijuego a Python real</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">🔄 YA SABÉS CÓMO ES UN LOOP EN SCRATCH Y EN PSEINT. APOSTÁ CÓMO SE VE EN PYTHON.</div>
+      <div class="objetivo">🎯 Juego de adivinar número con while, if/elif/else y módulo random.</div>
+      <div class="parte-h code-h">▶ PYTHON</div>
+      <ul class="steps">
+        <li><code>for i in range(10):</code> — la indentación es OBLIGATORIA en Python.</li>
+        <li><code>import random; secreto = random.randint(1, 100)</code></li>
+        <li>Juego: el computador "piensa" un número. Vos adivinás. Si es alto/bajo → hint.</li>
+      </ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: for que cuenta del 1 al 10</span><span class="ch ch-m">MEDIO: Juego de adivinar con hints</span><span class="ch ch-h">DIFÍCIL: Versión con límite de intentos y score</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)" style="border-left-color:var(--gold)"><div class="class-num">C3</div><div class="class-title"><h3>Funciones e Inteligencia Artificial</h3><span>Teachable Machine — Entrenás tu primer modelo de IA</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho">📱 ¿CÓMO RECONOCE TU CELULAR TU CARA PARA DESBLOQUEARSE? ¿QUÉ TUVO QUE APRENDER?</div>
+      <div class="objetivo">🎯 Entrenás tu modelo de IA con 3 gestos en Teachable Machine.</div>
+      <div class="parte-h code-h">▶ TEACHABLE MACHINE — teachablemachine.withgoogle.com</div>
+      <ul class="steps">
+        <li>Clase 1: mano abierta. Clase 2: puño. Clase 3: pulgar arriba.</li>
+        <li>Entrenás con ~50 fotos de cada clase.</li>
+        <li>Probás el modelo en tiempo real. ¿Por qué se equivoca? ¿Qué necesita para mejorar?</li>
+      </ul>
+      <div class="parte-h code-h">▶ PYTHON — FUNCIONES</div>
+      <ul class="steps"><li><code>def nombre_funcion(param):</code> — reutilizar código con <code>return</code>.</li></ul>
+      <div class="challenges"><span class="ch ch-e">FÁCIL: Modelo con 2 clases</span><span class="ch ch-m">MEDIO: 3 gestos que controlan algo</span><span class="ch ch-h">DIFÍCIL: Modelo que reconoce objetos del salón</span></div>
+    </div></div>
+
+    <div class="class-card"><div class="class-head" onclick="toggle(this)" style="border-left-color:var(--gold)"><div class="class-num">C4</div><div class="class-title"><h3>🏆 DEMO DAY — Ciudad Inteligente</h3><span>Presentación final del curso · Insignia ⭐</span></div><i class="expand-icon">▼</i></div>
+    <div class="class-body">
+      <div class="gancho" style="border-color:var(--gold);color:var(--gold);">⭐ HACE 8 MÓDULOS NO SABÍAS QUÉ ERA UN ALGORITMO.<br>HOY PODÉS PROGRAMAR EN PYTHON Y ENTRENAR UNA IA.</div>
+      <div class="objetivo">🎯 Presentás tu ciudad completa: tour Minecraft + demo Python + modelo IA (4–5 min).</div>
+      <div class="parte-h">▶ ESTRUCTURA DE PRESENTACIÓN</div>
+      <ul class="steps">
+        <li>1) Tour por la ciudad — construcciones y automatizaciones.</li>
+        <li>2) Demostrar al menos 3 sistemas automáticos funcionando.</li>
+        <li>3) Mostrar programa Python en pantalla y explicar qué hace.</li>
+        <li>4) Demo del modelo de IA en tiempo real.</li>
+        <li>5) Reflexión: ¿qué ODS conectan con tu ciudad?</li>
+      </ul>
+      <div style="margin-top:16px;background:rgba(247,183,49,.07);border:2px solid var(--gold);padding:16px;">
+        <p style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--gold);line-height:2;">
+          🏆 INSIGNIAS A GANAR EN EL DEMO DAY<br>
+          🏗️ Constructor · ⚡ Automatizador · 🌱 Sostenible · 🧩 Programador · 🤖 Agente IA<br>
+          Y la más especial: ⭐ Ciudad Inteligente — completaste el curso.
+        </p>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<div class="px-div"></div>
+
+<!-- BADGES -->
+<div class="badges-wrap">
+  <p style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--diamond);letter-spacing:3px;text-align:center;margin-bottom:8px;">// sistema de insignias</p>
+  <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(12px,2vw,18px);color:var(--gold);text-align:center;margin-bottom:32px;line-height:1.6;">COLECCIONÁ LAS 6 INSIGNIAS</h2>
+  <div class="badges-grid">
+    <div class="badge-card"><span class="bi">🏗️</span><h3>CONSTRUCTOR</h3><p>Ciudad con plaza, casas, caminos y parque. M5.</p></div>
+    <div class="badge-card"><span class="bi">⚡</span><h3>AUTOMATIZADOR</h3><p>≥3 sistemas Redstone automáticos. M2.</p></div>
+    <div class="badge-card"><span class="bi">🌱</span><h3>SOSTENIBLE</h3><p>3+ construcciones sostenibles documentadas. M1–4.</p></div>
+    <div class="badge-card"><span class="bi">🧩</span><h3>PROGRAMADOR</h3><p>Minijuego Scratch con loop + condicional + variable. M6.</p></div>
+    <div class="badge-card"><span class="bi">🤖</span><h3>AGENTE IA</h3><p>Agent que construye solo + modelo Teachable Machine. M7–8.</p></div>
+    <div class="badge-card" style="border-color:var(--gold);"><span class="bi">⭐</span><h3>CIUDAD INTELIGENTE</h3><p>Completaste el curso. Ciudad presentada. Python funcional.</p></div>
+  </div>
+</div>
+
+<footer>
+  <p><span>GUÍA ESTUDIANTE</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
+  <p>Escuelas STEAM Colombia S.A.S · www.robotschool.co</p>
+</footer>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const icon = header.querySelector('.expand-icon');
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  icon.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+const sections = document.querySelectorAll('[id^="m"]');
+const tabs = document.querySelectorAll('.nav-tab');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) cur = s.id; });
+  tabs.forEach(t => { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+});
+// Abrir primera clase de cada módulo
+document.querySelectorAll('.mod-section').forEach(s => {
+  const first = s.querySelector('.class-card .class-head');
+  if (first) toggle(first);
+});
+</script>
+</body>
+</html>
