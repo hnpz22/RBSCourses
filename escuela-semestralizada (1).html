@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Programa Escuela – Escuelas STEAM Colombia</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#00878A;--teal-dk:#005F61;--orange:#F5821F;--orange-lt:#FFA94D;
+  --yellow:#FFD63A;--bg:#F7F9FA;--white:#fff;--text:#1A2B35;
+  --muted:#5A7380;--border:#D8E5EA;--shadow:0 4px 28px rgba(0,0,0,.10);--r:14px;
+  --s1:#2E7D32;--s2:#1565C0;--s3:#6A1B9A;--s4:#E65100;--s5:#AD1457;--s6:#00695C;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+
+/* ── HEADER ── */
+header{background:linear-gradient(135deg,var(--teal-dk) 0%,var(--teal) 60%,#009FA3 100%);color:#fff;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.hd{position:relative;max-width:1000px;margin:0 auto;padding:48px 32px 42px;display:flex;flex-direction:column;gap:14px}
+.hd-brand{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:18px;margin-bottom:4px}
+.owl{width:52px;height:52px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.brand-txt .nm{font-family:'Poppins',sans-serif;font-size:18px;font-weight:800}
+.brand-txt .tg{font-size:11px;opacity:.72;font-weight:500}
+.steam{display:inline-flex;gap:1px;font-family:'Poppins',sans-serif;font-weight:900;font-size:12px;letter-spacing:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);border-radius:6px;padding:3px 9px;width:fit-content}
+.steam span:nth-child(1){color:#FF6B6B}.steam span:nth-child(2){color:#FFD63A}.steam span:nth-child(3){color:#69DB7C}.steam span:nth-child(4){color:#74C0FC}.steam span:nth-child(5){color:#E599F7}
+header h1{font-family:'Poppins',sans-serif;font-size:clamp(22px,4vw,36px);font-weight:800;line-height:1.2}
+header h1 em{color:var(--yellow);font-style:normal}
+header p.sub{font-size:15px;opacity:.85;max-width:640px;line-height:1.6}
+
+/* ── MAIN ── */
+main{max-width:1000px;margin:0 auto;padding:40px 22px 80px;display:flex;flex-direction:column;gap:40px}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.ch{background:var(--teal);color:#fff;padding:13px 22px;display:flex;align-items:center;gap:9px;font-family:'Poppins',sans-serif;font-weight:700;font-size:15px}
+.ch .ic{width:30px;height:30px;background:rgba(255,255,255,.18);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.cb{padding:24px}
+.ctx{font-size:14.5px;color:var(--muted);text-align:justify}
+.hi{background:linear-gradient(90deg,#FFF8EE,#FFF0D4);border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;font-size:14.5px;margin-bottom:18px}
+.hi strong{color:var(--orange)}
+.si{font-size:14px;color:var(--muted);margin-bottom:18px;text-align:justify}
+
+/* ── TARGET ── */
+.target-box{background:linear-gradient(90deg,var(--teal-dk),var(--teal));border-radius:12px;padding:22px 28px;color:#fff;display:flex;align-items:center;gap:20px;margin-bottom:18px}
+@media(max-width:580px){.target-box{flex-direction:column;text-align:center}}
+.target-box .age{font-family:'Poppins',sans-serif;font-size:48px;font-weight:900;color:var(--yellow);line-height:1;flex-shrink:0}
+.target-box .age span{font-size:18px;opacity:.8}
+.target-box p{font-size:14px;opacity:.9;line-height:1.6}
+
+/* ── PROPUESTA VALOR ── */
+.vals{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.val{background:#F0F8F8;border-radius:10px;padding:16px;border-left:4px solid var(--teal)}
+.val .vico{font-size:22px;margin-bottom:6px}
+.val h3{font-size:13.5px;font-weight:800;color:var(--teal-dk);margin-bottom:4px}
+.val p{font-size:12.5px;color:var(--muted)}
+
+/* ── CICLOS STRIP ── */
+.ciclos-strip{display:flex;border-radius:10px;overflow:hidden;border:2px solid var(--border)}
+.ciclo{flex:1;padding:12px 8px;text-align:center;border-right:2px solid var(--border);transition:background .2s}
+.ciclo:last-child{border-right:none}
+.ciclo .cnum{font-family:'Poppins',sans-serif;font-size:20px;font-weight:900}
+.ciclo .cname{font-size:11.5px;font-weight:800;margin:1px 0}
+.ciclo .cnick{font-size:10px;color:var(--muted);font-style:italic}
+
+/* ── SEMESTRES ── */
+.sems{display:flex;flex-direction:column;gap:28px}
+
+.sem-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.sem-hdr{display:flex;align-items:stretch;color:#fff}
+.sem-num-block{width:70px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.18);flex-shrink:0}
+.sem-num-block span{font-family:'Poppins',sans-serif;font-size:38px;font-weight:900;opacity:.6}
+.sem-hdr-txt{padding:16px 20px;flex:1}
+.sem-hdr-txt .slabel{font-size:9px;font-weight:700;letter-spacing:2.5px;opacity:.75;text-transform:uppercase}
+.sem-hdr-txt h2{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;line-height:1.1;margin:2px 0}
+.sem-hdr-txt .snick{font-size:12px;opacity:.82;font-style:italic}
+
+.sem-body{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff}
+@media(max-width:640px){.sem-body{grid-template-columns:1fr}}
+
+.sem-imgs{display:flex;flex-direction:column;gap:0;overflow:hidden}
+.sem-imgs img{width:100%;height:180px;object-fit:cover;object-position:center top;border-bottom:2px solid var(--border)}
+.sem-imgs img:last-child{border-bottom:none}
+.sem-imgs .single{height:100%;min-height:260px}
+
+.sem-content{padding:20px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:12px}
+@media(max-width:640px){.sem-content{border-left:none;border-top:2px solid var(--border)}}
+
+.sem-desc{font-size:14px;color:var(--muted);line-height:1.65}
+.sem-tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tool-tag{background:#F0F8F8;border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:700;color:var(--teal-dk)}
+.pf-box{background:linear-gradient(90deg,#FFF8EE,#FFF0D4);border-left:4px solid var(--orange);border-radius:8px;padding:10px 14px;margin-top:4px}
+.pf-box .pf-label{font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:3px}
+.pf-box p{font-size:13px;color:var(--text);font-weight:700}
+
+/* ── RUTA ── */
+.ruta{display:flex;align-items:center;overflow-x:auto;padding:4px 0 8px;gap:0}
+.ruta-step{display:flex;align-items:center;flex-shrink:0}
+.ruta-box{border:2px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;min-width:110px;background:#fff}
+.ruta-box .rn{font-family:'Poppins',sans-serif;font-size:18px;font-weight:900;line-height:1}
+.ruta-box .rt{font-size:11px;font-weight:800;margin-top:2px}
+.ruta-box .rs{font-size:10px;color:var(--muted)}
+.rarrow{font-size:18px;color:var(--border);padding:0 5px}
+
+/* ── INVERSIÓN ── */
+.inv{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#fff;border-radius:var(--r);padding:32px;text-align:center}
+.inv .price{font-family:'Poppins',sans-serif;font-size:52px;font-weight:900;color:var(--yellow);line-height:1;margin:8px 0 4px}
+.inv .pl{font-size:13px;opacity:.8}
+.inv .pn{margin-top:14px;font-size:13px;background:rgba(255,255,255,.12);border-radius:8px;padding:10px 18px;display:inline-block;opacity:.9}
+
+/* ── TABLA ── */
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:var(--teal);color:#fff;padding:7px 13px;text-align:left;font-size:11.5px;font-weight:700}
+td{padding:8px 13px;font-size:12.5px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#F8FBFC}
+
+/* ── FOOTER ── */
+footer{background:var(--teal-dk);color:rgba(255,255,255,.7);text-align:center;padding:24px;font-size:12.5px}
+footer strong{color:#fff}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hd">
+    <div class="hd-brand">
+      <div class="owl">🦉</div>
+      <div class="brand-txt">
+        <div class="nm">ROBOTSchool</div>
+        <div class="tg">Colombia · robotschool.com.co · Incentivando Mentes Innovadoras</div>
+      </div>
+    </div>
+    <div class="steam"><span>S</span><span>T</span><span>E</span><span>A</span><span>M</span></div>
+    <h1><em>Programa Escuela</em><br>Formación Semestralizada · Escuelas STEAM Colombia</h1>
+    <p class="sub">Programa académico de formación semestralizada ofrecido por <strong>Escuelas STEAM Colombia</strong>. Cada semestre es un ciclo completo con cartilla propia, módulos temáticos y un proyecto integrador. 100% presencial, materiales incluidos.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- QUÉ ES -->
+<div class="card">
+  <div class="ch"><div class="ic">🏫</div> ¿Qué es la Escuela Semestralizada?</div>
+  <div class="cb">
+    <div class="hi"><strong>Imagina</strong> un proceso formativo donde cada semestre tiene su propia identidad: un nombre, una cartilla, módulos temáticos y un proyecto final que el estudiante construye, programa y presenta. La Escuela Semestralizada no es un curso suelto — es una <strong>trayectoria de aprendizaje</strong> que transforma a un niño curioso en un creador de tecnología.</div>
+    <p class="ctx">La Escuela Semestralizada es la propuesta formativa de mayor alcance de ROBOTSchool. Funciona en ciclos: cada semestre el estudiante avanza un nivel, con nuevos contenidos, nuevas herramientas y un proyecto integrador que evidencia su crecimiento. El proceso va desde la exploración de máquinas simples en el 1.° semestre, hasta el desarrollo de aplicaciones móviles, robots autónomos y diseño web en el 6.° semestre.</p>
+  </div>
+</div>
+
+<!-- TARGET -->
+<div class="card">
+  <div class="ch"><div class="ic">🎯</div> ¿A quién va dirigida?</div>
+  <div class="cb">
+    <div class="target-box">
+      <div class="age">8<span>+</span></div>
+      <div>
+        <p><strong>Niños y jóvenes a partir de 8 años.</strong> El Programa Escuela es una propuesta académica de formación semestralizada que ofrece <strong>Escuelas STEAM Colombia</strong>. Cada semestre tiene su propio ciclo de aprendizaje con contenidos, herramientas y un proyecto integrador acordes al nivel del grupo, permitiendo que cualquier niño o joven pueda ingresar y avanzar a su propio ritmo.</p>
+      </div>
+    </div>
+    <div class="vals">
+      <div class="val"><div class="vico">📅</div><h3>Ciclo semestral</h3><p>Cada semestre es un ciclo completo con inicio, desarrollo y proyecto final. El estudiante ve su progreso de forma tangible al cierre de cada período.</p></div>
+      <div class="val"><div class="vico">📖</div><h3>Cartilla del estudiante</h3><p>Cada semestre incluye su propia cartilla con teoría, actividades y guías de proyectos, diseñada específicamente para ese nivel.</p></div>
+      <div class="val"><div class="vico">🔨</div><h3>Aprendizaje por proyectos</h3><p>Cada semestre culmina con un proyecto integrador real que el estudiante construye, programa y puede mostrar a su comunidad.</p></div>
+      <div class="val"><div class="vico">📈</div><h3>Progresión real</h3><p>La complejidad aumenta semestre a semestre: de máquinas simples hasta robots autónomos, diseño de apps y creación de sitios web.</p></div>
+      <div class="val"><div class="vico">🏫</div><h3>100% presencial</h3><p>Todas las clases se realizan en nuestras instalaciones, con materiales incluidos y acompañamiento permanente de un instructor certificado.</p></div>
+      <div class="val"><div class="vico">🏆</div><h3>Proyecto final por semestre</h3><p>Cada ciclo cierra con un proyecto integrador documentado, que evidencia el aprendizaje y sirve como portafolio del estudiante.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CICLOS -->
+<div class="card">
+  <div class="ch"><div class="ic">🔄</div> Los 6 ciclos de evolución</div>
+  <div class="cb">
+    <p class="si">Cada semestre tiene un nombre que refleja el perfil del estudiante al finalizar ese ciclo. La progresión va de <strong>Visionario</strong> a <strong>Emprendedor</strong>.</p>
+    <div class="ciclos-strip">
+      <div class="ciclo" style="color:var(--s1)"><div class="cnum">1°</div><div class="cname">Mariner</div><div class="cnick">Visionario</div></div>
+      <div class="ciclo" style="color:var(--s2)"><div class="cnum">2°</div><div class="cname">Viking</div><div class="cnick">Creativo</div></div>
+      <div class="ciclo" style="color:var(--s3)"><div class="cnum">3°</div><div class="cname">Pathfinder</div><div class="cnick">Innovador</div></div>
+      <div class="ciclo" style="color:var(--s4)"><div class="cnum">4°</div><div class="cname">Odyssey</div><div class="cnick">Constructor</div></div>
+      <div class="ciclo" style="color:var(--s5)"><div class="cnum">5°</div><div class="cname">Spirit</div><div class="cnick">Desarrollador</div></div>
+      <div class="ciclo" style="color:var(--s6)"><div class="cnum">6°</div><div class="cname">Opportunity</div><div class="cnick">Emprendedor</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SEMESTRES -->
+<div class="card">
+  <div class="ch"><div class="ic">📚</div> Descripción de cada semestre</div>
+  <div class="cb">
+    <p class="si">Cada semestre tiene su cartilla, sus módulos y su proyecto integrador. A continuación, una descripción de lo que el estudiante vive en cada ciclo.</p>
+    <div class="sems">
+
+      <!-- S1 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s1),#388E3C)">
+          <div class="sem-num-block"><span>1°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Primer Semestre</div>
+            <h2>Mariner</h2>
+            <div class="snick">Perfil de egreso: Visionario</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="sem1_portada.png" alt="Cartilla 1er Semestre"/>
+            <img src="s1_pf1.png" alt="Proyecto Oruga"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El estudiante da sus primeros pasos en el mundo de la tecnología a través de la exploración de <strong>máquinas simples</strong>: palancas, poleas, engranajes, plano inclinado, bielas y levas. Aprende a construir modelos con el kit Junior y comprende cómo estas máquinas están presentes en su vida cotidiana.<br><br>Descubre los primeros principios de la <strong>electricidad</strong> construyendo circuitos simples y un quiz eléctrico interactivo. Trabaja con el kit <strong>LEGO® Ciencia y Tecnología</strong> y da sus primeros pasos en programación con <strong>Scratch Jr</strong>, creando animaciones básicas.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">Kit Junior</span>
+              <span class="tool-tag">LEGO® C&T</span>
+              <span class="tool-tag">Scratch Jr</span>
+              <span class="tool-tag">Circuitos simples</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Oruga y Carro LEGO®: construcción de dos vehículos funcionales con tracción y movimiento usando el kit de robótica.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s2),#1976D2)">
+          <div class="sem-num-block"><span>2°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Segundo Semestre</div>
+            <h2>Viking</h2>
+            <div class="snick">Perfil de egreso: Creativo</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="s2_makey.png" alt="Makey Makey"/>
+            <img src="s2_pf2.png" alt="Semáforo Electrónico"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El estudiante entra al mundo de la <strong>programación visual</strong> con mBlock 5, creando videojuegos interactivos donde un gato persigue a un ratón, un panda navega laberintos y una avioneta esquiva enemigos.<br><br>Descubre la placa <strong>Makey Makey</strong>: convierte frutas, plastilina y papel de aluminio en instrumentos musicales, juegos de reflejos y semáforos interactivos. Profundiza en <strong>circuitos eléctricos</strong> en serie, paralelo y mixtos, construyendo circuitos de papel con LEDs y tarjetas iluminadas.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">mBlock 5</span>
+              <span class="tool-tag">Makey Makey</span>
+              <span class="tool-tag">Circuitos LED</span>
+              <span class="tool-tag">Scratch</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Semáforo Makey Makey + Semáforo Electrónico: sistema de semaforización físico programado con Scratch y construido con componentes electrónicos reales.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s3),#7B1FA2)">
+          <div class="sem-num-block"><span>3°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Tercer Semestre</div>
+            <h2>Pathfinder</h2>
+            <div class="snick">Perfil de egreso: Innovador</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="s3_arduino.png" alt="Arduino"/>
+            <img src="s3_pf.png" alt="Explorer V2"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El estudiante da el gran salto: programa su primera placa <strong>Arduino UNO</strong> en lenguaje C++. Aprende a controlar LEDs, construir semáforos y secuencias lumínicas. Trabaja con <strong>señales digitales y analógicas</strong>, conecta un potenciómetro y entiende cómo varía la intensidad de un LED.<br><br>Integra su primer <strong>servomotor</strong> y su primer <strong>sensor ultrasónico</strong> (HC-SR04), midiendo distancias reales. Complementa con <strong>Diseño 2D en Inkscape</strong> y el proceso de Design Thinking para desarrollar pensamiento de ingeniería.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">Arduino UNO</span>
+              <span class="tool-tag">C++</span>
+              <span class="tool-tag">Servomotor</span>
+              <span class="tool-tag">HC-SR04</span>
+              <span class="tool-tag">Inkscape 2D</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Explorer V2: robot con potenciómetro, servomotor y LEDs que responde al movimiento del operador, programado en Arduino e IDE.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s4),#F57C00)">
+          <div class="sem-num-block"><span>4°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Cuarto Semestre</div>
+            <h2>Odyssey</h2>
+            <div class="snick">Perfil de egreso: Constructor</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="s4_3d.png" alt="Diseño 3D"/>
+            <img src="s4_pf.png" alt="Proyecto Constructores"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El estudiante lleva la programación al siguiente nivel: conecta <strong>mBlock y Arduino</strong> para crear videojuegos físicos donde los LEDs de la protoboard responden a lo que pasa en pantalla. Un punto de mira, personajes de colores y botones físicos hacen parte de sus creaciones.<br><br>Profundiza en <strong>señales analógicas</strong> con potenciómetro, alarma de nivel de agua y videojuego Pong controlado con hardware real. Además, aprende <strong>diseño 3D con Tinkercad</strong>: vistas, dibujo técnico, bocetos isométricos y construcción de piezas en tres dimensiones.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">Arduino + mBlock</span>
+              <span class="tool-tag">Tinkercad 3D</span>
+              <span class="tool-tag">Dibujo técnico</span>
+              <span class="tool-tag">Design Thinking</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Juego de naves espaciales con Arduino y mBlock: nave controlada con pulsadores físicos que interactúa con LEDs de colores en tiempo real.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s5),#C2185B)">
+          <div class="sem-num-block"><span>5°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Quinto Semestre</div>
+            <h2>Spirit</h2>
+            <div class="snick">Perfil de egreso: Desarrollador</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="s5_motor.png" alt="Motores"/>
+            <img src="s5_pf.png" alt="Robot TÜKÚ"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El estudiante crea sus propias <strong>aplicaciones móviles Android</strong> con MIT App Inventor: desde una calculadora y un detector de par/impar, hasta un lienzo de dibujo y un videojuego Pong controlado por acelerómetro.<br><br>Aprende a controlar <strong>motores DC</strong> con puente H y a comunicarse de forma inalámbrica con el módulo <strong>Bluetooth HC-06</strong>. Ensambla y programa el <strong>Robot Carro TÜKÚ</strong>: un vehículo robótico real con modos autónomo, esquiva obstáculos y seguimiento de instrucciones.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">MIT App Inventor</span>
+              <span class="tool-tag">Motor DC</span>
+              <span class="tool-tag">Bluetooth HC-06</span>
+              <span class="tool-tag">Robot TÜKÚ</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Robot Carro TÜKÚ controlado por Bluetooth: App móvil creada en App Inventor que dirige al robot de forma inalámbrica desde el celular.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="sem-card">
+        <div class="sem-hdr" style="background:linear-gradient(90deg,var(--s6),#00796B)">
+          <div class="sem-num-block"><span>6°</span></div>
+          <div class="sem-hdr-txt">
+            <div class="slabel">Sexto Semestre</div>
+            <h2>Opportunity</h2>
+            <div class="snick">Perfil de egreso: Emprendedor</div>
+          </div>
+        </div>
+        <div class="sem-body">
+          <div class="sem-imgs">
+            <img src="sem6_portada.png" alt="Cartilla 6to Semestre"/>
+            <img src="s6_web.png" alt="Diseño Web"/>
+          </div>
+          <div class="sem-content">
+            <p class="sem-desc">El semestre final forma al estudiante como un <strong>creador digital completo</strong>. Aprende <strong>diseño web desde cero</strong>: HTML, CSS y Visual Studio Code, construyendo un sitio web real para TÜKÚ+ Casa Inteligente con navegación, imágenes, tipografía y estilo.<br><br>Profundiza en los principios de la <strong>automatización y el IoT</strong>, y aplica el proceso de <strong>Design Thinking</strong> para identificar problemas reales y proponer soluciones tecnológicas con impacto social y comercial. Al graduarse, el estudiante tiene las bases para emprender en tecnología.</p>
+            <div class="sem-tools">
+              <span class="tool-tag">HTML + CSS</span>
+              <span class="tool-tag">VS Code</span>
+              <span class="tool-tag">IoT</span>
+              <span class="tool-tag">Design Thinking</span>
+              <span class="tool-tag">Emprendimiento</span>
+            </div>
+            <div class="pf-box">
+              <div class="pf-label">🏆 Proyecto Final</div>
+              <p>Sitio web TÜKÚ+ Casa Inteligente: sitio web funcional con HTML y CSS, publicado localmente, que integra conceptos de automatización e IoT.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- RUTA -->
+<div class="card">
+  <div class="ch"><div class="ic">🗺️</div> Ruta de progresión tecnológica</div>
+  <div class="cb">
+    <p class="si">Cada semestre consolida las habilidades del anterior y agrega nuevas herramientas, garantizando una progresión coherente desde las máquinas simples hasta el emprendimiento tecnológico.</p>
+    <div class="ruta">
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s1);color:var(--s1)"><div class="rn">1°</div><div class="rt">Máquinas Simples</div><div class="rs">Kit + Scratch Jr</div></div><div class="rarrow">→</div></div>
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s2);color:var(--s2)"><div class="rn">2°</div><div class="rt">mBlock + Makey</div><div class="rs">Circuitos + Scratch</div></div><div class="rarrow">→</div></div>
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s3);color:var(--s3)"><div class="rn">3°</div><div class="rt">Arduino Básico</div><div class="rs">C++ + Sensores</div></div><div class="rarrow">→</div></div>
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s4);color:var(--s4)"><div class="rn">4°</div><div class="rt">Arduino + mBlock</div><div class="rs">Videojuegos + 3D</div></div><div class="rarrow">→</div></div>
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s5);color:var(--s5)"><div class="rn">5°</div><div class="rt">App Inventor</div><div class="rs">Motores + Bluetooth</div></div><div class="rarrow">→</div></div>
+      <div class="ruta-step"><div class="ruta-box" style="border-color:var(--s6);color:var(--s6)"><div class="rn">6°</div><div class="rt">Web + IoT</div><div class="rs">Emprendimiento</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABLA RESUMEN -->
+<div class="card">
+  <div class="ch"><div class="ic">📋</div> Resumen académico</div>
+  <div class="cb">
+    <table>
+      <thead><tr><th>Semestre</th><th>Nombre · Perfil</th><th>Énfasis principal</th><th>Proyecto final</th></tr></thead>
+      <tbody>
+        <tr><td>1°</td><td>Mariner · Visionario</td><td>Máquinas simples, circuitos, LEGO® C&T, Scratch Jr</td><td>Oruga y Carro LEGO®</td></tr>
+        <tr><td>2°</td><td>Viking · Creativo</td><td>mBlock 5, Makey Makey, circuitos LED</td><td>Semáforo Makey + Electrónico</td></tr>
+        <tr><td>3°</td><td>Pathfinder · Innovador</td><td>Arduino, servo, ultrasónico, Inkscape 2D</td><td>Explorer V2</td></tr>
+        <tr><td>4°</td><td>Odyssey · Constructor</td><td>Arduino + mBlock, Tinkercad 3D, dibujo técnico</td><td>Juego de Naves con Arduino</td></tr>
+        <tr><td>5°</td><td>Spirit · Desarrollador</td><td>App Inventor, motores DC, Bluetooth, Robot TÜKÚ</td><td>Robot TÜKÚ por Bluetooth</td></tr>
+        <tr><td>6°</td><td>Opportunity · Emprendedor</td><td>HTML/CSS, VS Code, IoT, Design Thinking</td><td>Sitio web TÜKÚ+ Casa Inteligente</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- INVERSIÓN -->
+<div class="inv">
+  <p class="pl">💰 Inversión total · Escuela Semestralizada completa (6 semestres)</p>
+  <p class="price">$1.800.000</p>
+  <p style="font-size:12.5px;opacity:.75">Materiales incluidos · Cartilla del estudiante · Proyecto final por semestre · Certificado de cada ciclo</p>
+  <div class="pn">✅ Se reciben todos los medios de pago · PSE · Transferencia · Efectivo · Tarjeta</div>
+</div>
+
+</main>
+
+<footer>
+  <p><strong>ROBOTSchool</strong> · Bogotá & Cali, Colombia · robotschool.com.co</p>
+  <p style="margin-top:5px">Incentivando Mentes Innovadoras · 🦉 Formando los inventores del mañana, hoy.</p>
+</footer>
+</body>
+</html>

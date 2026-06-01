@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SPIKE™ Prime – ROBOTSchool Colombia</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#00878A;--teal-dk:#005F61;--orange:#F5821F;--orange-lt:#FFA94D;
+  --yellow:#FFD63A;--bg:#F7F9FA;--white:#fff;--text:#1A2B35;
+  --muted:#5A7380;--border:#D8E5EA;--shadow:0 4px 24px rgba(0,0,0,.10);--r:14px;
+  --bog:#1565C0;--cali:#2E7D32;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+.back-bar{background:var(--white);border-bottom:1px solid var(--border);padding:12px 22px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.back-bar a{font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.back-bar a:hover{text-decoration:underline}
+.site-header{background:linear-gradient(135deg,var(--teal-dk) 0%,var(--teal) 60%,#009FA3 100%);color:#fff;position:relative;overflow:hidden}
+.site-header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.site-hd{position:relative;max-width:1000px;margin:0 auto;padding:32px 32px 28px;display:flex;flex-direction:column;gap:10px}
+.hd-brand{display:flex;align-items:center;gap:12px}
+.owl{width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.brand-txt .nm{font-family:'Poppins',sans-serif;font-size:16px;font-weight:800}
+.brand-txt .tg{font-size:11px;opacity:.72;font-weight:500}
+main{max-width:1000px;margin:0 auto;padding:40px 22px 80px;display:flex;flex-direction:column;gap:28px}
+.course{display:flex;flex-direction:column;gap:28px}
+.course-header{background:linear-gradient(90deg,var(--teal-dk),var(--teal));color:#fff;border-radius:var(--r);padding:28px 32px;display:flex;align-items:center;gap:20px}
+.course-header .emoji{font-size:44px;flex-shrink:0}
+.course-header-txt h2{font-family:'Poppins',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px}
+.course-header-txt p{font-size:13.5px;opacity:.85}
+.course-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.meta-tag{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.ch{background:var(--teal);color:#fff;padding:12px 22px;display:flex;align-items:center;gap:9px;font-family:'Poppins',sans-serif;font-weight:700;font-size:14.5px}
+.ch .ic{width:28px;height:28px;background:rgba(255,255,255,.18);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.cb{padding:20px 22px}
+.hi{background:linear-gradient(90deg,#FFF8EE,#FFF0D4);border-left:4px solid var(--orange);border-radius:8px;padding:13px 16px;font-size:13.5px;margin-bottom:14px}
+.hi strong{color:var(--orange)}
+.ctx{font-size:14px;color:var(--muted);text-align:justify}
+.si{font-size:13.5px;color:var(--muted);margin-bottom:16px;text-align:justify}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:580px){.ag{grid-template-columns:1fr}}
+.ai{background:#F0F8F8;border-left:4px solid var(--teal);border-radius:8px;padding:13px}
+.ai h3{font-size:13px;font-weight:800;color:var(--teal-dk);margin-bottom:4px}
+.ai p{font-size:12.5px;color:var(--muted)}
+.kit-specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px;margin-top:12px}
+.kit-spec{background:#F0F8F8;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:var(--muted);font-weight:600}
+.kit-spec strong{display:block;color:var(--teal-dk);font-size:12.5px;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:var(--teal);color:#fff;padding:7px 12px;text-align:left;font-size:11px;font-weight:700}
+td{padding:7px 12px;font-size:12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#F8FBFC}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px}
+.mi{border:2px solid var(--border);border-radius:9px;padding:10px 7px;text-align:center;font-size:11.5px;font-weight:700;color:var(--teal-dk)}
+.mi .ic{font-size:20px;margin-bottom:4px;display:block}
+.ciudad-tabs{display:flex;gap:0;border-radius:10px;overflow:hidden;border:2px solid var(--border);width:fit-content}
+.tab-btn{padding:9px 22px;font-size:13px;font-weight:800;cursor:pointer;border:none;background:var(--bg);color:var(--muted);font-family:'Nunito',sans-serif;transition:background .2s,color .2s}
+.tab-btn.bog.active{background:var(--bog);color:#fff}
+.tab-btn.cali.active{background:var(--cali);color:#fff}
+.tab-btn:not(.active):hover{background:var(--border)}
+.ciudad-panel{display:none}
+.ciudad-panel.active{display:block}
+.ciudad-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:580px){.ciudad-grid{grid-template-columns:1fr}}
+.ib{background:#F0F8F8;border-radius:10px;padding:15px}
+.ib h4{font-size:13px;font-weight:800;color:var(--teal-dk);margin-bottom:7px}
+.horario-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.horario-list li{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.horario-list li::before{content:'🕐';font-size:11px}
+.inv-box{border-radius:10px;padding:20px;text-align:center;color:#fff;margin-top:14px}
+.inv-box.bog{background:linear-gradient(135deg,#0D47A1,var(--bog))}
+.inv-box.cali{background:linear-gradient(135deg,#1B5E20,var(--cali))}
+.inv-box .price{font-family:'Poppins',sans-serif;font-size:40px;font-weight:900;color:var(--yellow);line-height:1;margin:6px 0 2px}
+.inv-box .pl{font-size:12px;opacity:.8}
+.inv-box .pn{margin-top:10px;font-size:12px;opacity:.85;background:rgba(255,255,255,.12);border-radius:7px;padding:7px 12px;display:inline-block}
+.unit-tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-bottom:3px}
+.unit-invention{background:#E8F5E9;color:#2E7D32}
+.unit-kickstart{background:#FFF3E0;color:#E65100}
+.unit-lifehacks{background:#E3F2FD;color:#1565C0}
+.unit-competition{background:#FCE4EC;color:#C62828}
+.unit-training{background:#F3E5F5;color:#6A1B9A}
+.unit-extra{background:#E0F7FA;color:#006064}
+footer{background:var(--teal-dk);color:rgba(255,255,255,.7);text-align:center;padding:22px;font-size:12.5px}
+footer strong{color:#fff}
+</style>
+</head>
+<body>
+
+<div class="back-bar"><a href="../index.html">← Volver a todos los cursos</a></div>
+
+<div class="site-header">
+  <div class="site-hd">
+    <div class="hd-brand">
+      <div class="owl">🦉</div>
+      <div class="brand-txt">
+        <div class="nm">ROBOTSchool</div>
+        <div class="tg">Colombia · robotschool.com.co</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="course" id="spike">
+  <div class="course-header">
+    <div class="emoji">⚡</div>
+    <div class="course-header-txt">
+      <h2>LEGO® SPIKE™ Prime</h2>
+      <p>5 unidades temáticas oficiales de LEGO Education. Scratch y Python, sensores reales y currículo alineado con NGSS, ISTE y CSTA.</p>
+      <div class="course-meta">
+        <span class="meta-tag">10+ años · Grados 6–8</span>
+        <span class="meta-tag">8 módulos</span>
+        <span class="meta-tag">32 clases</span>
+        <span class="meta-tag">64 horas</span>
+        <span class="meta-tag">Scratch + Python</span>
+        <span class="meta-tag">FLL · WRO</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ic">💡</div> ¿Por qué SPIKE™ Prime?</div>
+    <div class="cb">
+      <div class="hi"><strong>Imagina</strong> diseñar una prótesis de mano, programar una fábrica clasificadora de cajas, analizar datos de tu propio movimiento con sensores, o preparar tu estrategia para la FLL. Con SPIKE™ Prime, cada unidad conecta la ingeniería con el mundo real.</div>
+      <p class="ctx">528 piezas, Hub de 6 puertos con pantalla LED 5×5, 3 motores medianos, sensor de color, distancia y fuerza. Programación en <strong>Scratch y Python</strong>. Alineado con <strong>NGSS, ISTE y CSTA</strong>.</p>
+      <div class="kit-specs">
+        <div class="kit-spec"><strong>528 piezas</strong>LEGO® Technic + System</div>
+        <div class="kit-spec"><strong>Hub 6 puertos</strong>Pantalla 5×5 + altavoz</div>
+        <div class="kit-spec"><strong>3 motores</strong>Encoder de precisión</div>
+        <div class="kit-spec"><strong>Sensor color</strong>Luz y reflexión</div>
+        <div class="kit-spec"><strong>Sensor fuerza</strong>Presión y contacto</div>
+        <div class="kit-spec"><strong>Python + Scratch</strong>FLL Ready</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ic">🎯</div> ¿A quién va dirigido?</div>
+    <div class="cb"><div class="ag">
+      <div class="ai"><h3>👦 Jóvenes de 10 a 16 años (Grados 6–8)</h3><p>Diseñado para secundaria. Ideal para quienes ya tienen experiencia con WeDo o Apitor y quieren Python real con estándares internacionales.</p></div>
+      <div class="ai"><h3>🏆 Equipos FLL y WRO</h3><p>SPIKE™ Prime es la plataforma oficial de la FIRST® LEGO® League. La unidad Competition Ready prepara equipos con estrategias autónomas avanzadas.</p></div>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ic">📚</div> Plan de estudios – 5 unidades oficiales + 3 módulos avanzados</div>
+    <div class="cb">
+      <p class="si">Los módulos I–V corresponden a las <strong>5 unidades temáticas oficiales</strong> de LEGO Education para SPIKE™ Prime. Los módulos VI–VIII profundizan en Python avanzado, ciudad inteligente y creación libre.</p>
+      <table><thead><tr><th>Módulo</th><th>Unidad / Tema</th><th>Tipo</th><th>Clases</th><th>Horas</th></tr></thead><tbody>
+        <tr><td>I</td><td><span class="unit-tag unit-invention">Invention Squad</span></td><td>Oficial LEGO Education</td><td>4</td><td>8 h</td></tr>
+        <tr><td>II</td><td><span class="unit-tag unit-kickstart">Kickstart a Business</span></td><td>Oficial LEGO Education</td><td>4</td><td>8 h</td></tr>
+        <tr><td>III</td><td><span class="unit-tag unit-lifehacks">Life Hacks</span></td><td>Oficial LEGO Education</td><td>4</td><td>8 h</td></tr>
+        <tr><td>IV</td><td><span class="unit-tag unit-competition">Competition Ready</span></td><td>Oficial LEGO Education</td><td>4</td><td>8 h</td></tr>
+        <tr><td>V</td><td><span class="unit-tag unit-training">Training Trackers</span></td><td>Oficial LEGO Education</td><td>4</td><td>8 h</td></tr>
+        <tr><td>VI</td><td>Python Avanzado</td><td>Complementario ROBOTSchool</td><td>4</td><td>8 h</td></tr>
+        <tr><td>VII</td><td>Automatización y ciudad inteligente</td><td>Complementario ROBOTSchool</td><td>4</td><td>8 h</td></tr>
+        <tr><td>VIII</td><td>Creación avanzada</td><td>Complementario ROBOTSchool</td><td>4</td><td>8 h</td></tr>
+        <tr><td colspan="3" style="font-weight:800;color:var(--teal-dk)">TOTAL</td><td style="font-weight:800">32</td><td style="font-weight:800;color:var(--orange)">64 h</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ic">🧰</div> Materiales incluidos</div>
+    <div class="cb"><div class="mg">
+      <div class="mi"><span class="ic">🧱</span>Kit SPIKE™ Prime 45678</div>
+      <div class="mi"><span class="ic">🧠</span>Hub 6 puertos LED 5×5</div>
+      <div class="mi"><span class="ic">⚡</span>3 motores medianos</div>
+      <div class="mi"><span class="ic">🎨</span>Sensor de color</div>
+      <div class="mi"><span class="ic">📡</span>Sensor de distancia</div>
+      <div class="mi"><span class="ic">👆</span>Sensor de fuerza</div>
+      <div class="mi"><span class="ic">🐍</span>Scratch + Python</div>
+      <div class="mi"><span class="ic">📋</span>Guías por sesión</div>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ic">📍</div> Horarios e inversión por sede</div>
+    <div class="cb">
+      <div class="ciudad-tabs">
+        <button class="tab-btn bog active" onclick="switchTab('spike','bog',this)">📍 Bogotá</button>
+        <button class="tab-btn cali" onclick="switchTab('spike','cali',this)">📍 Cali</button>
+      </div>
+      <div id="spike-bog" class="ciudad-panel active">
+        <div class="ciudad-grid">
+          <div class="ib"><h4>📅 Día</h4><p style="font-size:13px;color:var(--muted)">Todos los sábados · 2 h por sesión</p></div>
+          <div class="ib"><h4>🕐 Franjas horarias</h4><ul class="horario-list"><li>8:00 a.m. – 10:00 a.m.</li><li>10:30 a.m. – 12:30 p.m.</li><li>1:00 p.m. – 3:00 p.m.</li></ul></div>
+        </div>
+        <div class="inv-box bog"><p class="pl">💰 Inversión total · Bogotá</p><p class="price">$200.000</p><p style="font-size:11.5px;opacity:.75">Pago de contado · Materiales incluidos · Certificado</p><div class="pn">✅ Todos los medios de pago · PSE · Transferencia · Efectivo</div></div>
+      </div>
+      <div id="spike-cali" class="ciudad-panel">
+        <div class="ciudad-grid">
+          <div class="ib"><h4>📅 Día</h4><p style="font-size:13px;color:var(--muted)">Todos los sábados · 2 h por sesión</p></div>
+          <div class="ib"><h4>🕐 Franjas horarias</h4><ul class="horario-list"><li>9:00 a.m. – 11:00 a.m.</li><li>11:00 a.m. – 1:00 p.m.</li><li>2:00 p.m. – 4:00 p.m.</li></ul></div>
+        </div>
+        <div class="inv-box cali"><p class="pl">💰 Inversión total · Cali</p><p class="price">$195.000</p><p style="font-size:11.5px;opacity:.75">Pago de contado · Materiales incluidos · Certificado</p><div class="pn">✅ Todos los medios de pago · PSE · Transferencia · Efectivo</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p><strong>ROBOTSchool</strong> · Bogotá & Cali, Colombia · robotschool.com.co</p>
+  <p style="margin-top:5px">Formando los inventores del mañana, hoy. 🦉</p>
+</footer>
+
+<script>
+function switchTab(course, city, btn) {
+  document.querySelectorAll(`[id^="${course}-"]`).forEach(p => p.classList.remove('active'));
+  btn.closest('.ciudad-tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`${course}-${city}`).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,30 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-role="docente">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cursos — ROBOTSchool Academy</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Clases — ROBOTSchool</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
+/* ── DS TOKENS (light mode — portal) ── */
 :root {
-  --bg: #0a0a12;
-  --surface: #13131d;
-  --surface2: #1a1a26;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0f0f5;
-  --muted: #8888a8;
-  --roblox-accent: #ff3d3d;
-  --roblox-accent2: #ff7043;
-  --mc-gold: #F7B731;
-  --mc-diamond: #4ECDC4;
-  --mc-grass: #5DA130;
-  --mc-redstone: #E84118;
-  --font: 'Space Grotesk', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --display: 'Bebas Neue', sans-serif;
-  --pixel: 'Press Start 2P', monospace;
-  --r: 16px;
+  /* Fondos */
+  --bg:         #F0F0EB;   /* rbs-ivory */
+  --surface:    #FFFFFF;
+  --surface2:   #F9F9F6;
+  --surface3:   #F3F3EF;
+
+  /* Bordes */
+  --border:     #E0DDD6;   /* rbs-border */
+  --border-hi:  #C8C4BC;
+
+  /* Texto */
+  --text:       #1A1A1A;   /* rbs-carbon */
+  --text-2:     #374151;   /* rbs-gray-700 */
+  --muted:      #6B7280;   /* rbs-gray-500 */
+  --muted-2:    #9CA3AF;   /* rbs-gray-400 */
+
+  /* Marca */
+  --rbs-red:    #E8302A;
+  --rbs-teal:   #009CCC;
+
+  /* Tipografía */
+  --font:       'Inter',    system-ui, sans-serif;
+  --font-display:'Sora',    system-ui, sans-serif;
+  --mono:       'JetBrains Mono', monospace;
+
+  /* DS radius */
+  --r:          10px;     /* radius-md */
+  --r-lg:       14px;     /* radius-lg */
+
+  /* DS sombras */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 8px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 10px 24px rgba(0,0,0,.08), 0 4px 8px rgba(0,0,0,.04);
+
+  /* Role color (actualizado por JS) */
+  --role-color: #009CCC;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,380 +57,551 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── BACKGROUND ── */
-.bg-effects {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+/* ── FONDO DINÁMICO (muy sutil, solo un tinte) ── */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
 }
-.bg-effects::before {
+.bg-layer::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 50% 50% at 25% 30%, rgba(255,61,61,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 50% at 75% 70%, rgba(78,205,196,0.06) 0%, transparent 70%);
+  position: absolute; inset: 0;
+  transition: background 0.6s ease;
 }
-.bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-  background-size: 48px 48px;
+html[data-role="docente"] .bg-layer::before {
+  background: radial-gradient(ellipse 60% 50% at 5% 0%, rgba(0,156,204,0.06) 0%, transparent 60%);
 }
-.bg-stars {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,0.5), transparent);
-  animation: twinkle 4s infinite alternate;
+html[data-role="estudiante"] .bg-layer::before {
+  background: radial-gradient(ellipse 60% 50% at 5% 0%, rgba(16,185,129,0.05) 0%, transparent 60%);
 }
-@keyframes twinkle {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+html[data-role="ventas"] .bg-layer::before {
+  background: radial-gradient(ellipse 60% 50% at 5% 0%, rgba(245,158,11,0.06) 0%, transparent 60%);
+}
+
+/* ── LAYOUT ── */
+.wrap {
+  position: relative; z-index: 10;
+  max-width: 1040px; margin: 0 auto; padding: 0 24px;
 }
 
 /* ── HEADER ── */
-.header {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 80px 24px 20px;
+.header { padding: 56px 0 44px; }
+.header-inner {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
 }
-.header-tag {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--roblox-accent);
-  border: 1px solid rgba(255,61,61,0.3);
-  background: rgba(255,61,61,0.08);
-  padding: 5px 14px;
-  border-radius: 20px;
-  margin-bottom: 24px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+.header-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--muted-2); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--role-color); transition: background 0.3s;
+  flex-shrink: 0;
 }
 .header h1 {
-  font-family: var(--display);
-  font-size: clamp(48px, 10vw, 96px);
-  letter-spacing: .04em;
-  line-height: 1;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: var(--text);
+}
+.h1-r { color: var(--rbs-red); }
+.header-sub {
+  font-size: 15px; font-weight: 400;
+  color: var(--muted); line-height: 1.6;
+  max-width: 460px;
+}
+
+/* ── DIVISOR ── */
+.divider { height: 1px; background: var(--border); margin: 0 0 36px; }
+
+/* ── ROLE SELECTOR ── */
+.role-section { margin-bottom: 40px; }
+.role-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted-2); letter-spacing: 0.1em; text-transform: uppercase;
   margin-bottom: 12px;
 }
-.header h1 .r { color: var(--roblox-accent); }
-.header h1 .s { color: var(--text); }
-.header-sub {
-  font-size: 16px;
-  color: var(--muted);
-  max-width: 500px;
-  margin: 0 auto;
-}
+.role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
-/* ── CARDS SECTION ── */
-.cards-section {
-  position: relative;
-  z-index: 10;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px 80px;
-}
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-  max-width: 960px;
-  width: 100%;
-}
-
-/* ── CARD BASE ── */
-.card {
-  position: relative;
+.role-card {
+  --c: #009CCC;
   background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--r);
-  overflow: hidden;
+  border: 1.5px solid var(--border);
+  border-top: 3px solid transparent;
+  border-radius: var(--r-lg);
+  padding: 20px 18px 18px;
   cursor: pointer;
-  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  transition: border-top-color 0.2s, box-shadow 0.2s, background 0.15s;
+  user-select: none; position: relative;
+}
+.role-card:hover {
+  border-top-color: color-mix(in srgb, var(--c) 50%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+.role-card.active {
+  border-top-color: var(--c);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--c) 10%, transparent),
+    var(--shadow-md);
+  background: var(--surface);
+}
+
+.role-icon { font-size: 26px; display: block; margin-bottom: 10px; }
+.role-name {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-2); margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.role-card.active .role-name { color: var(--c); }
+.role-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── SECTION HEADER ── */
+.section-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -0.01em; color: var(--text);
+}
+.section-meta {
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+.section-meta .n { color: var(--role-color); font-weight: 600; }
+
+/* ── COURSE GRID ── */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding-bottom: 88px;
+  transition: opacity 0.15s ease;
+}
+.courses-grid.fade { opacity: 0; }
+
+/* ── COURSE CARD ── */
+.course-card {
+  --cc: #009CCC;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-top: 3px solid var(--cc);
+  border-radius: var(--r-lg);
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
 }
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+.course-card:not(.locked):hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--cc) 30%, #E0DDD6);
 }
-
-/* ── CARD HEADER (top glow area) ── */
-.card-header {
-  position: relative;
-  padding: 48px 32px 40px;
-  text-align: center;
-  overflow: hidden;
-}
-.card-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+.course-card.locked {
+  opacity: 0.48;
+  cursor: default;
   pointer-events: none;
 }
 
-/* Roblox card */
-.card-roblox:hover { border-color: rgba(255,61,61,0.5); }
-.card-roblox .card-header::before {
-  background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(255,61,61,0.15) 0%, transparent 70%);
+.card-head {
+  padding: 16px 16px 12px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
 }
-.card-roblox .card-icon {
-  font-size: 56px;
-  margin-bottom: 20px;
-  display: block;
-  filter: drop-shadow(0 4px 20px rgba(255,61,61,0.3));
+.card-icon-box {
+  width: 40px; height: 40px;
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--cc) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cc) 22%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; flex-shrink: 0;
 }
-.card-roblox .card-title {
-  font-family: var(--display);
-  font-size: 48px;
-  letter-spacing: .03em;
-  line-height: 1;
-  color: var(--text);
+.card-badge {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 20px; font-weight: 500;
+  white-space: nowrap;
 }
-.card-roblox .card-title span { color: var(--roblox-accent); }
-
-/* Minecraft card */
-.card-minecraft:hover { border-color: rgba(78,205,196,0.5); }
-.card-minecraft .card-header::before {
-  background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(78,205,196,0.12) 0%, transparent 70%);
+.badge-ok {
+  color: #059669;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
 }
-.card-minecraft .card-icon {
-  font-size: 56px;
-  margin-bottom: 20px;
-  display: block;
-  filter: drop-shadow(0 4px 20px rgba(247,183,49,0.3));
-}
-.card-minecraft .card-title {
-  font-family: var(--pixel);
-  font-size: clamp(16px, 2.5vw, 22px);
-  line-height: 1.4;
-  color: var(--mc-gold);
-  text-shadow: 3px 3px 0 rgba(0,0,0,0.6);
-}
-
-/* ── CARD BODY ── */
-.card-body {
-  padding: 0 32px 32px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.card-desc {
-  font-size: 14px;
+.badge-soon {
   color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 24px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
 }
 
-/* ── CARD STATS ── */
-.card-stats {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
+.card-body { padding: 0 16px 16px; flex: 1; display: flex; flex-direction: column; }
+.card-name {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text); margin-bottom: 5px; line-height: 1.2;
 }
+.card-tagline {
+  font-size: 12px; font-weight: 400;
+  color: var(--muted); margin-bottom: 12px; line-height: 1.55;
+}
+
+.card-stats { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .cstat {
+  display: flex; flex-direction: column; align-items: center;
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  flex: 1;
-  min-width: 70px;
-  text-align: center;
+  border-radius: 8px; padding: 7px 10px; min-width: 48px;
 }
-.cstat .val {
-  font-family: var(--display);
-  font-size: 28px;
-  line-height: 1;
-  display: block;
+.cstat-val {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 700;
+  color: var(--cc); line-height: 1;
 }
-.card-roblox .cstat .val { color: var(--roblox-accent); }
-.card-minecraft .cstat .val { color: var(--mc-diamond); }
-.cstat .lbl {
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 4px;
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: .05em;
+.cstat-lbl {
+  font-family: var(--mono); font-size: 8px;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-top: 2px;
 }
 
-/* ── CARD TAGS ── */
-.card-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
+.card-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
 .ctag {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  letter-spacing: .04em;
-}
-.card-roblox .ctag {
-  color: var(--roblox-accent);
-  border: 1px solid rgba(255,61,61,0.25);
-  background: rgba(255,61,61,0.06);
-}
-.card-minecraft .ctag {
-  color: var(--mc-diamond);
-  border: 1px solid rgba(78,205,196,0.25);
-  background: rgba(78,205,196,0.06);
+  font-family: var(--mono); font-size: 9px; padding: 3px 7px;
+  border-radius: 6px; letter-spacing: 0.02em; font-weight: 500;
+  color: var(--cc);
+  background: color-mix(in srgb, var(--cc) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cc) 18%, transparent);
 }
 
-/* ── CARD CTA ── */
+/* ── BOTÓN CTA (estilo portal rbs-btn--primary) ── */
 .card-cta {
   margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: .02em;
-  transition: background .2s, transform .15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 14px;
+  border-radius: var(--r);
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 13px; letter-spacing: -0.01em;
+  background: var(--cc);
+  color: #FFFFFF;
+  border: none;
+  transition: filter 0.15s, transform 0.1s;
+  cursor: pointer;
 }
-.card-roblox .card-cta {
-  background: rgba(255,61,61,0.12);
-  color: var(--roblox-accent);
-  border: 1px solid rgba(255,61,61,0.2);
-}
-.card-roblox .card-cta:hover {
-  background: rgba(255,61,61,0.2);
-}
-.card-minecraft .card-cta {
-  background: rgba(78,205,196,0.1);
-  color: var(--mc-diamond);
-  border: 1px solid rgba(78,205,196,0.2);
-}
-.card-minecraft .card-cta:hover {
-  background: rgba(78,205,196,0.18);
-}
-.card-cta .arrow {
-  transition: transform .2s;
-}
-.card:hover .card-cta .arrow {
-  transform: translateX(4px);
+.course-card:hover .card-cta { filter: brightness(1.08); }
+.cta-arrow { display: inline-block; transition: transform 0.15s; }
+.course-card:hover .cta-arrow { transform: translateX(4px); }
+
+.card-locked {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px; border-radius: var(--r);
+  font-size: 12px; font-weight: 500;
+  color: var(--muted-2);
+  background: var(--surface3);
+  border: 1.5px dashed var(--border);
 }
 
 /* ── FOOTER ── */
 .footer {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 24px;
   border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--muted);
+  text-align: center; padding: 20px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted-2); letter-spacing: 0.06em;
 }
-.footer span { color: var(--roblox-accent); font-weight: 600; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 720px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-    max-width: 440px;
-  }
-  .header { padding: 60px 24px 10px; }
-  .cards-section { padding: 30px 16px 60px; }
+@media (max-width: 820px) {
+  .courses-grid { grid-template-columns: repeat(2, 1fr); }
+  .header { padding: 40px 0 32px; }
 }
+@media (max-width: 560px) {
+  .role-desc { font-size: 11px; }
+  .role-name { font-size: 14px; }
+}
+@media (max-width: 480px) {
+  .role-desc { display: none; }
+  .role-card { padding: 16px 12px 14px; }
+  .courses-grid { grid-template-columns: 1fr; }
+  .header h1 { font-size: 34px; }
+}
+
 </style>
 </head>
 <body>
 
-<div class="bg-effects">
-  <div class="bg-grid"></div>
-  <div class="bg-stars"></div>
+<div class="bg-layer"></div>
+
+<div class="wrap">
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Escuelas STEAM · Colombia
+      </div>
+      <h1><span class="h1-r">ROBOT</span>School · Clases</h1>
+      <p class="header-sub">Selecciona tu rol para ver el material correspondiente a cada curso.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <section class="role-section">
+    <p class="role-label">¿Cuál es tu rol?</p>
+    <div class="role-grid" id="roleGrid"></div>
+  </section>
+
+  <section>
+    <div class="section-hd">
+      <h2 class="section-title" id="sectionTitle">Material de Docente</h2>
+      <span class="section-meta" id="sectionMeta"></span>
+    </div>
+    <div class="courses-grid" id="coursesGrid"></div>
+  </section>
+
 </div>
 
-<header class="header">
-  <div class="header-tag">Escuelas STEAM Colombia</div>
-  <h1><span class="r">ROBOT</span><span class="s">SCHOOL</span></h1>
-  <p class="header-sub">Selecciona un curso para ver el programa completo de clases</p>
-</header>
+<footer class="footer">ROBOTSchool · Escuelas STEAM Colombia</footer>
 
-<main class="cards-section">
-  <div class="cards-grid">
+<script>
+const ROLES = [
+  { id: 'docente',    name: 'Docente',    icon: '📚', desc: 'Guías y planificación de clase',    color: '#009CCC' },
+  { id: 'estudiante', name: 'Estudiante', icon: '🎯', desc: 'Módulos, actividades y proyectos',  color: '#10B981' },
+  { id: 'ventas',     name: 'Ventas',     icon: '📊', desc: 'Brochures y propuestas comerciales', color: '#F59E0B' },
+];
 
-    <!-- ROBLOX -->
-    <a href="roblox/roblox_curso_completo.html" class="card card-roblox">
-      <div class="card-header">
-        <span class="card-icon">🎮</span>
-        <div class="card-title">ROBLOX<br><span>STUDIO</span></div>
+const COURSES = [
+  {
+    id: 'minecraft',
+    name: 'Minecraft\nCoding Lab',
+    tagline: 'Programación y pensamiento computacional usando Minecraft como punto de partida.',
+    icon: '⛏️', color: '#F7B731',
+    stats: [{ val:'8', lbl:'Módulos' }, { val:'32', lbl:'Clases' }, { val:'64h', lbl:'Total' }],
+    tags: ['Scratch', 'Python', 'Redstone', 'Code.org'],
+    roles: {
+      docente:    { ok:true,  url:'minecraft/minecraft_curso.html',    label:'Ver planificación' },
+      estudiante: { ok:true,  url:'minecraft/minecraft_curso.html',    label:'Ver módulos' },
+      ventas:     { ok:false },
+    }
+  },
+  {
+    id: 'roblox',
+    name: 'Roblox\nStudio',
+    tagline: 'Desarrollo de videojuegos 3D: aprende a programar construyendo en Roblox Studio.',
+    icon: '🎮', color: '#FF3D3D',
+    stats: [{ val:'8', lbl:'Módulos' }, { val:'32', lbl:'Clases' }, { val:'64h', lbl:'Total' }],
+    tags: ['Lua', '3D', 'Game Dev', '10–15 años'],
+    roles: {
+      docente:    { ok:true,  url:'roblox/roblox_curso_completo.html', label:'Ver planificación' },
+      estudiante: { ok:true,  url:'roblox/roblox_curso_completo.html', label:'Ver módulos' },
+      ventas:     { ok:false },
+    }
+  },
+  {
+    id: 'lego-boost',
+    name: 'LEGO\nBoost',
+    tagline: 'Robótica educativa con bloques LEGO: construye y programa tu primer robot.',
+    icon: '🤖', color: '#F25C05',
+    stats: [{ val:'4', lbl:'Módulos' }],
+    tags: ['Robótica', 'Programación', '6–9 años'],
+    roles: {
+      docente:    { ok:true, url:'lego_boost/Modulo_1_LEGO_Boost_ROBOTSchool%20%281%29.html', label:'Ver módulos' },
+      estudiante: { ok:true, url:'lego_boost/Modulo_1_LEGO_Boost_ROBOTSchool%20%281%29.html', label:'Ver módulos' },
+      ventas:     { ok:true, url:'lego_boost/Brochure%20Lego%20Boots.html',                   label:'Ver brochure' },
+    }
+  },
+  {
+    id: 'wedo',
+    name: 'WeDo 2.0',
+    tagline: 'Primera experiencia en robótica: sensores, motores y programación por bloques.',
+    icon: '🧱', color: '#22C55E',
+    stats: null,
+    tags: ['Robótica', 'Bloques', '7–10 años'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'wedo/index.html', label:'Ver curso WeDo 2.0' },
+    }
+  },
+  {
+    id: 'spike',
+    name: 'SPIKE™\nPrime',
+    tagline: 'Robótica avanzada con LEGO Spike Prime: sensores inteligentes, motores y Python.',
+    icon: '⚡', color: '#009CCC',
+    stats: null,
+    tags: ['SPIKE Prime', 'Python', 'Sensores'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'lego_spike/index.html', label:'Ver curso SPIKE Prime' },
+    }
+  },
+  {
+    id: 'mindstorms',
+    name: 'MINDSTORMS®',
+    tagline: 'Robot Inventor de LEGO Education: el kit estrella para programación y robótica avanzada.',
+    icon: '🧠', color: '#8B5CF6',
+    stats: null,
+    tags: ['Robot Inventor', 'Python', 'STEM avanzado'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'lego_inventor/index.html', label:'Ver curso MINDSTORMS®' },
+    }
+  },
+  {
+    id: 'ev3',
+    name: 'EV3',
+    tagline: 'LEGO Mindstorms EV3: ingeniería y programación con el clásico kit de robótica educativa.',
+    icon: '⚙️', color: '#3B82F6',
+    stats: null,
+    tags: ['EV3', 'Scratch', 'Ingeniería'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'ev3/index.html', label:'Ver curso EV3' },
+    }
+  },
+  {
+    id: 'apitor',
+    name: 'Apitor',
+    tagline: 'Robótica programable: construye robots avanzados con el kit Apitor y su app móvil.',
+    icon: '🔩', color: '#7C3AED',
+    stats: null,
+    tags: ['Robótica', 'App', 'Construcción'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'apitor/index.html', label:'Ver curso Apitor' },
+    }
+  },
+  {
+    id: 'escuela',
+    name: 'Escuela\nSemestralizada',
+    tagline: 'Modelo educativo por semestres: estructura curricular progresiva para colegios.',
+    icon: '🏫', color: '#EC4899',
+    stats: null,
+    tags: ['Semestral', 'Colegios', 'Currículo'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:true, url:'escuela-semestralizada%20%281%29.html', label:'Ver propuesta' },
+    }
+  },
+];
+
+const LABELS = {
+  docente:    'Material de Docente',
+  estudiante: 'Material de Estudiante',
+  ventas:     'Material de Ventas',
+};
+
+let current = 'docente';
+
+function initRoles() {
+  const grid = document.getElementById('roleGrid');
+  ROLES.forEach(role => {
+    const card = document.createElement('div');
+    card.className = 'role-card' + (role.id === current ? ' active' : '');
+    card.dataset.role = role.id;
+    card.style.setProperty('--c', role.color);
+    card.innerHTML = `
+      <span class="role-icon">${role.icon}</span>
+      <div class="role-name">${role.name}</div>
+      <p class="role-desc">${role.desc}</p>
+    `;
+    card.addEventListener('click', () => selectRole(role.id));
+    grid.appendChild(card);
+  });
+}
+
+function selectRole(roleId) {
+  if (roleId === current) return;
+  current = roleId;
+  const role = ROLES.find(r => r.id === roleId);
+
+  document.documentElement.dataset.role = roleId;
+  document.documentElement.style.setProperty('--role-color', role.color);
+  document.querySelector('.eyebrow-dot').style.background = role.color;
+
+  document.querySelectorAll('.role-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.role === roleId);
+  });
+
+  const grid = document.getElementById('coursesGrid');
+  grid.classList.add('fade');
+  setTimeout(() => {
+    renderCourses(roleId);
+    updateMeta(roleId);
+    grid.classList.remove('fade');
+  }, 150);
+}
+
+function renderCourses(roleId) {
+  const grid = document.getElementById('coursesGrid');
+  grid.innerHTML = '';
+  COURSES.forEach(course => {
+    const r = course.roles[roleId];
+    const locked = !r.ok;
+    const el = document.createElement(locked ? 'div' : 'a');
+    el.className = 'course-card' + (locked ? ' locked' : '');
+    if (!locked) el.href = r.url;
+    el.style.setProperty('--cc', course.color);
+
+    const statsHTML = course.stats
+      ? `<div class="card-stats">${course.stats.map(s =>
+          `<div class="cstat">
+            <span class="cstat-val">${s.val}</span>
+            <span class="cstat-lbl">${s.lbl}</span>
+          </div>`).join('')}</div>`
+      : '';
+
+    const tagsHTML = `<div class="card-tags">${
+      course.tags.map(t => `<span class="ctag">${t}</span>`).join('')
+    }</div>`;
+
+    const actionHTML = locked
+      ? `<div class="card-locked">🔒 Próximamente</div>`
+      : `<div class="card-cta">${r.label} <span class="cta-arrow">→</span></div>`;
+
+    el.innerHTML = `
+      <div class="card-head">
+        <div class="card-icon-box">${course.icon}</div>
+        <span class="card-badge ${locked ? 'badge-soon' : 'badge-ok'}">${locked ? 'Próximamente' : '✓ Disponible'}</span>
       </div>
       <div class="card-body">
-        <p class="card-desc">Curso completo de desarrollo de videojuegos para niños y adolescentes de 10 a 15 años. Construye CiudadRobot, un juego completo en Roblox, módulo a módulo.</p>
-        <div class="card-stats">
-          <div class="cstat"><span class="val">8</span><span class="lbl">Módulos</span></div>
-          <div class="cstat"><span class="val">32</span><span class="lbl">Clases</span></div>
-          <div class="cstat"><span class="val">64h</span><span class="lbl">Totales</span></div>
-        </div>
-        <div class="card-tags">
-          <span class="ctag">Lua</span>
-          <span class="ctag">3D</span>
-          <span class="ctag">Game Dev</span>
-          <span class="ctag">10-15 años</span>
-        </div>
-        <div class="card-cta">
-          Ver programa completo <span class="arrow">&rarr;</span>
-        </div>
+        <div class="card-name">${course.name.replace('\n', '<br>')}</div>
+        <p class="card-tagline">${course.tagline}</p>
+        ${statsHTML}
+        ${tagsHTML}
+        ${actionHTML}
       </div>
-    </a>
+    `;
+    grid.appendChild(el);
+  });
+}
 
-    <!-- MINECRAFT -->
-    <a href="minecraft/minecraft_curso.html" class="card card-minecraft">
-      <div class="card-header">
-        <span class="card-icon">&#9961;</span>
-        <div class="card-title">MINECRAFT<br>CODING LAB</div>
-      </div>
-      <div class="card-body">
-        <p class="card-desc">Curso completo de programación donde el gancho es Minecraft y el objetivo es programar. Construye una Ciudad Inteligente Sostenible, módulo a módulo.</p>
-        <div class="card-stats">
-          <div class="cstat"><span class="val">8</span><span class="lbl">Módulos</span></div>
-          <div class="cstat"><span class="val">32</span><span class="lbl">Clases</span></div>
-          <div class="cstat"><span class="val">64h</span><span class="lbl">Totales</span></div>
-        </div>
-        <div class="card-tags">
-          <span class="ctag">Scratch</span>
-          <span class="ctag">Python</span>
-          <span class="ctag">Redstone</span>
-          <span class="ctag">Code.org</span>
-        </div>
-        <div class="card-cta">
-          Ver programa completo <span class="arrow">&rarr;</span>
-        </div>
-      </div>
-    </a>
+function updateMeta(roleId) {
+  const n = COURSES.filter(c => c.roles[roleId].ok).length;
+  document.getElementById('sectionTitle').textContent = LABELS[roleId];
+  document.getElementById('sectionMeta').innerHTML =
+    `<span class="n">${n}</span> / ${COURSES.length} cursos disponibles`;
+}
 
-  </div>
-</main>
-
-<footer class="footer">
-  <span>ROBOTSchool Academy</span> — Escuelas STEAM Colombia
-</footer>
+// Init
+document.documentElement.style.setProperty('--role-color', ROLES[0].color);
+document.querySelector('.eyebrow-dot').style.background = ROLES[0].color;
+initRoles();
+renderCourses(current);
+updateMeta(current);
+</script>
 
 </body>
 </html>
