@@ -412,9 +412,9 @@ const COURSES = [
     stats: [{ val:'4', lbl:'Módulos' }],
     tags: ['Robótica', 'Programación', '6–9 años'],
     roles: {
-      docente:    { ok:true, url:'lego_boost/Modulo_1_LEGO_Boost_ROBOTSchool%20%281%29.html', label:'Ver módulos' },
-      estudiante: { ok:true, url:'lego_boost/Modulo_1_LEGO_Boost_ROBOTSchool%20%281%29.html', label:'Ver módulos' },
-      ventas:     { ok:true, url:'lego_boost/Brochure%20Lego%20Boots.html',                   label:'Ver brochure' },
+      docente:    { ok:true, url:'lego_boost/docente.html',          label:'Ver ruta docente' },
+      estudiante: { ok:true, url:'lego_boost/modules/modulo_01.html', label:'Ver módulos' },
+      ventas:     { ok:true, url:'lego_boost/ventas.html',            label:'Ver brochure' },
     }
   },
   {
@@ -427,7 +427,7 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'wedo/index.html', label:'Ver curso WeDo 2.0' },
+      ventas:     { ok:true, url:'wedo/ventas.html', label:'Ver curso WeDo 2.0' },
     }
   },
   {
@@ -440,7 +440,7 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'lego_spike/index.html', label:'Ver curso SPIKE Prime' },
+      ventas:     { ok:true, url:'lego_spike/ventas.html', label:'Ver curso SPIKE Prime' },
     }
   },
   {
@@ -453,7 +453,7 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'lego_inventor/index.html', label:'Ver curso MINDSTORMS®' },
+      ventas:     { ok:true, url:'lego_inventor/ventas.html', label:'Ver curso MINDSTORMS®' },
     }
   },
   {
@@ -466,7 +466,7 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'ev3/index.html', label:'Ver curso EV3' },
+      ventas:     { ok:true, url:'ev3/ventas.html', label:'Ver curso EV3' },
     }
   },
   {
@@ -479,7 +479,7 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'apitor/index.html', label:'Ver curso Apitor' },
+      ventas:     { ok:true, url:'apitor/ventas.html', label:'Ver curso Apitor' },
     }
   },
   {
@@ -492,7 +492,20 @@ const COURSES = [
     roles: {
       docente:    { ok:false },
       estudiante: { ok:false },
-      ventas:     { ok:true, url:'escuela-semestralizada%20%281%29.html', label:'Ver propuesta' },
+      ventas:     { ok:true, url:'escuela/ventas.html', label:'Ver propuesta' },
+    }
+  },
+  {
+    id: 'arduino',
+    name: 'Arduino',
+    tagline: 'Electrónica y programación física: desde LEDs hasta robots autónomos con Arduino UNO.',
+    icon: '🛠️', color: '#00979C',
+    stats: null,
+    tags: ['Arduino', 'Electrónica', 'C++', '12+ años'],
+    roles: {
+      docente:    { ok:false },
+      estudiante: { ok:false },
+      ventas:     { ok:false },
     }
   },
 ];
