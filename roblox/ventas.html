@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Roblox Studio — Desarrollo de Videojuegos – ROBOTSchool</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Baloo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --red:#C62828;--red-dk:#7B0000;--red-xdk:#3B0000;
+  --blue:#1565C0;--blue-dk:#0D47A1;
+  --gold:#F59E0B;--gold-lt:#FFD63A;--amber-dk:#92400E;
+  --bg:#FFF9F0;--card:#fff;--dark:#1A1A2B;--muted:#6B7280;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#FFEBEE;color:var(--dark);display:flex;flex-direction:column;align-items:center;padding:24px 12px;min-height:100vh}
+.flyer{width:100%;max-width:980px;background:var(--bg);border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(198,40,40,.2),0 4px 16px rgba(0,0,0,.08)}
+
+/* TOP */
+.top{background:var(--red-xdk);padding:14px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo-wrap{background:#fff;border-radius:10px;padding:7px 16px;display:flex;align-items:center;flex-shrink:0}
+.logo-wrap span{font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:900;color:var(--red-dk);letter-spacing:-0.5px}
+.top-div{width:1px;height:42px;background:rgba(255,255,255,.3);flex-shrink:0}
+.top-txt{flex:1;min-width:160px}
+.top-txt h1{font-family:'Baloo 2',sans-serif;font-size:clamp(13px,2.2vw,19px);font-weight:800;color:#fff;line-height:1.1}
+.top-txt p{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px}
+.age-pill{background:var(--gold-lt);color:var(--dark);font-family:'Baloo 2',sans-serif;font-weight:900;font-size:17px;border-radius:30px;padding:8px 20px;white-space:nowrap;flex-shrink:0}
+
+/* HERO */
+.hero{position:relative;height:430px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3B0000 0%,#7B1010 40%,#B71C1C 75%,#D32F2F 100%)}
+.hero-pattern{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:40px 40px}
+.hero .grad{position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,0,0,.97) 0%,rgba(123,16,16,.80) 45%,rgba(59,0,0,.15) 100%)}
+.hero .content{position:absolute;inset:0;display:flex;align-items:center;padding:36px 40px;gap:36px}
+.hero-txt{flex:1;max-width:440px}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;background:var(--blue);border-radius:10px;padding:6px 16px;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:800;color:#fff;margin-bottom:14px;width:fit-content;box-shadow:0 4px 12px rgba(21,101,192,.45)}
+.hero-h2{font-family:'Baloo 2',sans-serif;font-size:clamp(34px,5.8vw,62px);font-weight:900;line-height:.94;letter-spacing:-1.5px;color:#fff;margin-bottom:14px;text-shadow:0 2px 24px rgba(0,0,0,.3)}
+.hero-h2 em{color:var(--gold-lt);font-style:normal}
+.hero-desc{font-size:15px;color:rgba(255,255,255,.83);line-height:1.6;margin-bottom:20px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:800;color:#fff;display:flex;align-items:center;gap:5px}
+.pill em{color:var(--gold-lt);font-style:normal}
+
+/* BUILD GRID */
+.hero-builds{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-width:220px}
+.bbox{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .25s ease,background .2s}
+.bbox:hover{background:rgba(255,255,255,.22);transform:scale(1.08);position:relative;z-index:2}
+.bbox .ico{font-size:34px;line-height:1}
+.bbox span{font-size:12px;font-weight:800;color:rgba(255,255,255,.9);text-align:center;line-height:1.3}
+@media(max-width:640px){.hero .content{flex-direction:column;padding:24px}.hero-builds{display:none}.hero{height:auto;min-height:340px}}
+
+/* BADGES */
+.badges-strip{background:linear-gradient(90deg,#FEF3C7,#FDE68A,#FEF3C7);padding:12px 24px;display:flex;align-items:center;flex-wrap:wrap;border-top:2px solid #F59E0B;border-bottom:2px solid #F59E0B}
+.badge-item{flex:1;min-width:100px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border-right:1px solid rgba(245,158,11,.3);font-size:11px;font-weight:800;color:var(--amber-dk);text-align:center}
+.badge-item:last-child{border-right:none}
+.badge-ico{font-size:18px;margin-bottom:2px}
+
+/* STATS */
+.strip{background:#E65100;padding:13px 24px;display:flex;align-items:stretch;flex-wrap:wrap}
+.s-item{display:flex;align-items:center;gap:10px;flex:1;min-width:120px;padding:4px 16px;border-right:1px solid rgba(255,255,255,.25)}
+.s-item:last-child{border-right:none}
+.s-ico{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.s-val{font-family:'Baloo 2',sans-serif;font-size:21px;font-weight:900;color:#fff;line-height:1}
+.s-lbl{font-size:12px;color:rgba(255,255,255,.82);font-weight:600}
+
+/* BODY PANELS */
+.body{display:grid;grid-template-columns:1fr 1fr;background:var(--bg)}
+@media(max-width:560px){.body{grid-template-columns:1fr}}
+.panel{padding:22px}
+.panel.br{border-right:2px solid #FFCDD2}
+.panel-ttl{font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:800;color:var(--amber-dk);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel-ttl::after{content:'';flex:1;height:2px;background:#FFCDD2;border-radius:2px}
+
+.skill{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #FEF9F0}
+.skill:last-child{border-bottom:none}
+.sk-ico{width:30px;height:30px;border-radius:8px;background:#FFF3E0;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.sk-name{font-size:14px;font-weight:700;color:var(--dark)}
+
+.mod{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid #FEF9F0}
+.mod:last-child{border-bottom:none}
+.mn{width:26px;height:26px;border-radius:7px;background:var(--red);font-family:'Baloo 2',sans-serif;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:1px}
+.mn.gold{background:var(--gold)}
+.m-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:1px}
+.m-robots{font-size:12px;color:var(--muted);line-height:1.4;font-weight:600}
+.m-badge{display:inline-block;font-size:10px;font-weight:800;color:var(--amber-dk);background:#FDE68A;border-radius:4px;padding:1px 6px;margin-left:4px}
+.m-badge.blu{color:#1565C0;background:#BBDEFB}
+
+/* HIGHLIGHT STRIP */
+.hl-strip{position:relative;background:var(--red-xdk);padding:28px 36px;display:flex;align-items:flex-start;gap:28px;flex-wrap:wrap}
+.hl-strip::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(59,0,0,.98) 0%,rgba(123,16,16,.7) 50%,rgba(59,0,0,.2) 100%)}
+.hl-txt{flex:1;min-width:220px;position:relative;z-index:1}
+.hl-txt h3{font-family:'Baloo 2',sans-serif;font-size:clamp(14px,2vw,20px);font-weight:800;color:#fff;line-height:1.25;margin-bottom:12px}
+.hl-txt h3 em{color:var(--gold-lt);font-style:normal}
+.hl-list{display:flex;flex-direction:column;gap:7px;position:relative;z-index:1;min-width:180px}
+.hl-item{font-size:13.5px;font-weight:700;color:rgba(255,255,255,.9);display:flex;align-items:center;gap:7px}
+.hl-item::before{content:'✓';color:var(--gold-lt);font-weight:900;font-size:13px;flex-shrink:0}
+
+/* PARA QUIÉN */
+.quien{display:grid;grid-template-columns:1fr 1fr;background:var(--bg)}
+@media(max-width:560px){.quien{grid-template-columns:1fr}}
+.qp{padding:22px}
+.qp.br{border-right:2px solid #FFCDD2;border-top:2px solid #FFCDD2}
+.qp.bl{border-top:2px solid #FFCDD2}
+.qp-city{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:3px 12px;font-size:13px;font-weight:800;margin-bottom:8px}
+.qp.br .qp-city{background:#FFCDD2;color:var(--red-dk)}
+.qp.bl .qp-city{background:#BBDEFB;color:var(--blue-dk)}
+.qp-lbl{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.qp-check{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.qp-check li{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;color:var(--dark);font-weight:700;line-height:1.45}
+.qp-check li::before{content:'';width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.qp.br .qp-check li::before{background:var(--red)}
+.qp.bl .qp-check li::before{background:var(--blue)}
+
+/* FOOTER */
+.footer{background:var(--red-dk);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.f-logo{background:#fff;border-radius:8px;padding:5px 12px;display:flex;align-items:center}
+.f-logo span{font-family:'Baloo 2',sans-serif;font-size:15px;font-weight:900;color:var(--red-dk)}
+.f-web{font-size:13px;color:rgba(255,255,255,.75);font-weight:600}
+.f-pills{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.fpill{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:12.5px;color:#fff;font-weight:700}
+
+/* BACK NAV */
+.back-nav{padding:14px 20px;background:#FFF9F0;border-bottom:2px solid #FFCDD2;display:flex;align-items:center;gap:12px}
+.back-nav a{color:var(--red-dk);font-size:13px;font-weight:800;text-decoration:none;font-family:'Baloo 2',sans-serif}
+.back-nav a:hover{color:var(--red)}
+.back-sep{color:#aaa;font-size:12px}
+.back-nav span{font-size:12px;color:var(--muted);font-family:'Baloo 2',sans-serif;font-weight:700}
+
+/* MOBILE */
+@media(max-width:768px){
+  body{padding:0;background:#ffebee}
+  .flyer{border-radius:0;max-width:100%}
+  .top{padding:12px 16px;gap:10px}
+  .strip{padding:10px 12px}
+  .s-item{min-width:80px;padding:4px 8px}
+  .s-val{font-size:17px}
+  .s-ico{width:28px;height:28px;font-size:14px}
+  .hl-strip{padding:20px}
+  .body{grid-template-columns:1fr}
+  .panel.br{border-right:none;border-bottom:2px solid #FFCDD2}
+  .quien{grid-template-columns:1fr}
+  .qp.br{border-right:none}
+}
+</style>
+</head>
+<body>
+
+<!-- BACK NAV -->
+<nav class="back-nav">
+  <a href="../index.html">← Inicio</a>
+  <span class="back-sep">·</span>
+  <span>Roblox Studio — Ventas</span>
+</nav>
+
+<div class="flyer">
+
+<!-- TOP -->
+<div class="top">
+  <div class="logo-wrap"><span>ROBOTSchool</span></div>
+  <div class="top-div"></div>
+  <div class="top-txt">
+    <h1>Roblox Studio — Desarrollo de Videojuegos — Escuelas STEAM Colombia</h1>
+    <p>Tu hijo crea y publica su propio juego en Roblox</p>
+  </div>
+  <div class="age-pill">10 a 15 años</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="grad"></div>
+  <div class="content">
+    <div class="hero-txt">
+      <div class="hero-tag">🎮 Escuelas STEAM Colombia</div>
+      <h2 class="hero-h2">ROBLOX<br><em>STUDIO</em></h2>
+      <p class="hero-desc">Tu hijo va a <strong>diseñar, programar y publicar</strong> su propio videojuego en Roblox — con código Lua real, mecánicas, UI y un juego que sus amigos pueden jugar <strong>desde ya</strong>.</p>
+      <div class="hero-pills">
+        <div class="pill">💻 <em>Código Lua</em></div>
+        <div class="pill">🗺️ <em>Diseño 3D</em></div>
+        <div class="pill">🎮 <em>Juego propio</em></div>
+        <div class="pill">🏆 <em>Publicado en Roblox</em></div>
+      </div>
+    </div>
+    <div class="hero-builds">
+      <div class="bbox"><div class="ico">🗺️</div><span>Ciudad 3D</span></div>
+      <div class="bbox"><div class="ico">💻</div><span>Código Lua</span></div>
+      <div class="bbox"><div class="ico">🎮</div><span>UI / HUD</span></div>
+      <div class="bbox"><div class="ico">🏆</div><span>Juego publicado</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BADGES -->
+<div class="badges-strip">
+  <div class="badge-item"><div class="badge-ico">💻</div>Programación Lua real</div>
+  <div class="badge-item"><div class="badge-ico">🗺️</div>CiudadRobot — proyecto central</div>
+  <div class="badge-item"><div class="badge-ico">🌐</div>Juego publicado en Roblox.com</div>
+  <div class="badge-item"><div class="badge-ico">🏆</div>Game Developer Day final</div>
+  <div class="badge-item"><div class="badge-ico">🛡️</div>6 insignias desbloqueables</div>
+</div>
+
+<!-- STATS -->
+<div class="strip">
+  <div class="s-item"><div class="s-ico">🧩</div><div><div class="s-val">8</div><div class="s-lbl">Módulos</div></div></div>
+  <div class="s-item"><div class="s-ico">📚</div><div><div class="s-val">32</div><div class="s-lbl">Clases</div></div></div>
+  <div class="s-item"><div class="s-ico">⏱️</div><div><div class="s-val">64h</div><div class="s-lbl">Totales</div></div></div>
+  <div class="s-item"><div class="s-ico">🎮</div><div><div class="s-val">10–15</div><div class="s-lbl">Años</div></div></div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+  <div class="panel br">
+    <div class="panel-ttl">💻 Habilidades que aprenden</div>
+    <div class="skill"><div class="sk-ico">🗺️</div><div class="sk-name">Diseño 3D en Roblox Studio</div></div>
+    <div class="skill"><div class="sk-ico">💻</div><div class="sk-name">Programación en Lua (variables, condicionales, loops, funciones)</div></div>
+    <div class="skill"><div class="sk-ico">⚡</div><div class="sk-name">Eventos y scripting: click, touch, remote events</div></div>
+    <div class="skill"><div class="sk-ico">🎮</div><div class="sk-name">UI/HUD: pantallas, menús, notificaciones</div></div>
+    <div class="skill"><div class="sk-ico">📊</div><div class="sk-name">DataStore: guardar y cargar progreso</div></div>
+    <div class="skill"><div class="sk-ico">🐛</div><div class="sk-name">Debugging sistemático de código</div></div>
+    <div class="skill"><div class="sk-ico">🌐</div><div class="sk-name">Publicación real en Roblox.com</div></div>
+    <div class="skill"><div class="sk-ico">🎤</div><div class="sk-name">Presentación técnica — Game Developer Day</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-ttl">📋 Programa completo</div>
+    <div class="mod"><div class="mn">01</div><div><div class="m-name">El Mundo de Roblox Studio</div><div class="m-robots">Interfaz · Herramientas 3D · Plaza central del mapa <span class="m-badge">Diseño</span></div></div></div>
+    <div class="mod"><div class="mn">02</div><div><div class="m-name">Primeros Scripts Lua</div><div class="m-robots">Variables · Funciones · Primer script con eventos reales <span class="m-badge blu">Lua</span></div></div></div>
+    <div class="mod"><div class="mn">03</div><div><div class="m-name">Objetos Interactivos</div><div class="m-robots">Coleccionables · Puertas automáticas · Trampas <span class="m-badge blu">Scripting</span></div></div></div>
+    <div class="mod"><div class="mn">04</div><div><div class="m-name">UI y HUD del juego</div><div class="m-robots">Monedas en pantalla · Menú de inicio · Pantalla de victoria <span class="m-badge">UI</span></div></div></div>
+    <div class="mod"><div class="mn">05</div><div><div class="m-name">Sistemas de Juego</div><div class="m-robots">Puntuación · Vidas · Respawn · Leaderboard en tiempo real <span class="m-badge blu">Lógica</span></div></div></div>
+    <div class="mod"><div class="mn">06</div><div><div class="m-name">DataStore y Persistencia</div><div class="m-robots">Guardar progreso entre sesiones · Zonas desbloqueables <span class="m-badge blu">DataStore</span></div></div></div>
+    <div class="mod"><div class="mn">07</div><div><div class="m-name">Misiones y Zonas Avanzadas</div><div class="m-robots">5 misiones rastreadas · Teletransportadores · Ascensores <span class="m-badge">Avanzado</span></div></div></div>
+    <div class="mod"><div class="mn gold">08</div><div><div class="m-name">Publicación y Game Developer Day ⭐</div><div class="m-robots">Afinar el juego · Publicar en Roblox.com · Demo en vivo <span class="m-badge">Publicado</span></div></div></div>
+  </div>
+</div>
+
+<!-- HIGHLIGHT STRIP -->
+<div class="hl-strip">
+  <div class="hl-txt">
+    <h3>Un videojuego real —<br><em>CiudadRobot</em> — construido módulo a módulo</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.65;margin-top:8px">No son ejercicios sueltos. Desde M1 hasta el Game Developer Day, todo suma a <strong style="color:#FFD63A">un juego completo publicado</strong> que familia y amigos pueden jugar en Roblox.com desde el día uno.</p>
+  </div>
+  <div class="hl-list">
+    <div class="hl-item">Plaza central, calles y zonas temáticas</div>
+    <div class="hl-item">Coleccionables, trampas y teletransportadores</div>
+    <div class="hl-item">HUD con monedas, niveles y zonas actuales</div>
+    <div class="hl-item">5 misiones rastreadas con leaderboard</div>
+    <div class="hl-item">Progresión persistente con DataStore</div>
+    <div class="hl-item">Publicado en Roblox.com — jugable por todos</div>
+  </div>
+</div>
+
+<!-- PARA QUIÉN -->
+<div class="quien">
+  <div class="qp br">
+    <div class="qp-city">🎮 Los que ya juegan Roblox</div>
+    <div class="qp-lbl">Transformamos el juego que ya conocen en un taller donde ellos son los que crean — no solo consumen.</div>
+    <ul class="qp-check">
+      <li>Sin experiencia en programación — arranca desde cero</li>
+      <li>Lua como puente real hacia Python y JavaScript</li>
+      <li>Retos por niveles: Estrella · Cohete · Diamante</li>
+    </ul>
+  </div>
+  <div class="qp bl">
+    <div class="qp-city" style="background:#BBDEFB;color:#0D47A1">💡 Los que quieren crear tecnología</div>
+    <div class="qp-lbl">Para quienes quieren entender cómo funcionan los videojuegos por dentro — y tener el suyo publicado.</div>
+    <ul class="qp-check">
+      <li>Clases presenciales y virtuales disponibles</li>
+      <li>Sedes: 75, 134, Colombo, Gato con Botas, Hispanoamericano y más</li>
+      <li>Cupo limitado · seguimiento individual en clase</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="f-logo"><span>ROBOTSchool</span></div>
+  <div class="f-web">robotschool.co · info@robotschool.co · 318 654 1859</div>
+  <div class="f-pills">
+    <span class="fpill">💬 WhatsApp</span>
+    <span class="fpill">🌐 Presencial</span>
+    <span class="fpill">💻 Virtual</span>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
