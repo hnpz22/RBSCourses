@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Módulo 02 — AUTOMATIZACIÓN CON REDSTONE — Minecraft Coding Lab</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -15,265 +14,766 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Nunito',sans-serif;background:var(--night);color:var(--text);line-height:1.6;}
-
-/* MODULE COVER */
-.mod-cover{
-  padding:60px 40px 40px;
-  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
-  border-bottom:4px solid var(--accent);
-  position:relative;overflow:hidden;
-}
-.mod-cover::after{
-  content:'';position:absolute;right:-60px;top:-60px;
-  width:400px;height:400px;border-radius:50%;
-  background:radial-gradient(circle,var(--accent) 0%,transparent 70%);
-  opacity:.05;pointer-events:none;
-}
-.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
-  letter-spacing:2px;margin-bottom:16px;}
-.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;
-  color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
-.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);
-  letter-spacing:2px;margin-bottom:10px;}
-.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);
-  color:var(--accent);line-height:1.6;margin-bottom:8px;}
+.mod-cover{padding:60px 40px 40px;background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border-bottom:4px solid var(--accent);position:relative;overflow:hidden;}
+.mod-cover::after{content:'';position:absolute;right:-60px;top:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.05;pointer-events:none;}
+.mod-logo{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);letter-spacing:2px;margin-bottom:16px;}
+.mod-big-num{font-family:'Press Start 2P',monospace;font-size:72px;color:rgba(255,255,255,.04);line-height:1;display:block;margin-bottom:-16px;}
+.mod-label{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--muted);letter-spacing:2px;margin-bottom:10px;}
+.mod-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.5vw,22px);color:var(--accent);line-height:1.6;margin-bottom:8px;}
 .mod-theme{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
 .mod-tags{display:flex;gap:8px;flex-wrap:wrap;}
 .tag{font-size:10px;font-weight:800;padding:3px 10px;border:1.5px solid currentColor;letter-spacing:.5px;}
 .tag-p{color:var(--diamond);}
 .tag-o{color:var(--emerald);}
 .tag-s{color:var(--purple);}
-
-/* BODY */
+.tag-a{color:var(--gold);}
 .body{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
-
-/* META GRID */
-.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1px;background:var(--border);margin-bottom:40px;}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);margin-bottom:32px;}
 .meta-cell{background:var(--card);padding:18px 20px;}
-.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);
-  margin-bottom:8px;letter-spacing:1px;}
+.meta-cell h4{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);margin-bottom:8px;letter-spacing:1px;}
 .meta-cell p,.meta-cell ul{font-size:13px;color:var(--light);line-height:1.7;}
 .meta-cell ul{list-style:none;}
 .meta-cell ul li::before{content:"▸ ";color:var(--diamond);}
-
-/* CLASS CARD */
 .class-card{margin-bottom:24px;}
-.class-head{
-  display:flex;align-items:center;gap:14px;
-  background:var(--card2);
-  border:1px solid var(--border);border-left:5px solid var(--gold);
-  padding:14px 18px;
-}
-.class-num{font-family:'Press Start 2P',monospace;font-size:15px;
-  color:var(--gold);min-width:40px;}
+.class-head{display:flex;align-items:center;gap:14px;background:var(--card2);border:1px solid var(--border);border-left:5px solid var(--gold);padding:14px 18px;}
+.class-num{font-family:'Press Start 2P',monospace;font-size:15px;color:var(--gold);min-width:40px;}
 .class-title h3{font-size:14px;font-weight:900;margin-bottom:3px;}
 .class-title span{font-size:11px;color:var(--muted);}
 .class-body{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;}
-
-/* DETONADORA */
-.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);
-  padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);
-  font-style:italic;font-weight:700;line-height:1.6;}
-
-/* PART */
+.det{background:rgba(78,205,196,.06);border-left:3px solid var(--diamond);padding:11px 15px;margin-bottom:18px;font-size:13px;color:var(--diamond);font-style:italic;font-weight:700;line-height:1.6;}
 .part{margin-bottom:22px;}
-.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);
-  margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+.part-title{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--diamond);margin-bottom:10px;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
 .part-title.p2{color:var(--green);}
-.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;
-  background:var(--diamond);color:#000;padding:2px 6px;}
+.part-title.p3{color:var(--purple);}
+.time-tag{font-family:'Press Start 2P',monospace;font-size:6px;background:var(--diamond);color:#000;padding:2px 6px;}
 .part-title.p2 .time-tag{background:var(--green);}
+.part-title.p3 .time-tag{background:var(--purple);}
 .part-border{border-left:3px solid var(--diamond);padding-left:15px;}
 .part-border.p2{border-left-color:var(--green);}
-
-/* ITEMS */
+.part-border.p3{border-left-color:var(--purple);}
 .items{list-style:none;display:flex;flex-direction:column;gap:8px;}
-.items li{font-size:13px;color:var(--light);line-height:1.6;
-  padding-left:18px;position:relative;}
-.items li::before{content:"■";position:absolute;left:0;top:4px;
-  font-size:7px;color:var(--diamond);}
+.items li{font-size:13px;color:var(--light);line-height:1.6;padding-left:18px;position:relative;}
+.items li::before{content:"■";position:absolute;left:0;top:4px;font-size:7px;color:var(--diamond);}
 .part-border.p2 .items li::before{color:var(--green);}
+.part-border.p3 .items li::before{color:var(--purple);}
 .items li strong{color:#fff;}
-.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;
-  background:rgba(255,255,255,.05);padding:1px 5px;
-  border:1px solid var(--border);color:var(--diamond);}
-
-/* CHALLENGES */
-.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
-  padding-top:12px;border-top:1px solid var(--border);}
-.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;
-  font-family:'JetBrains Mono',monospace;}
+.items li code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.05);padding:1px 5px;border:1px solid var(--border);color:var(--diamond);}
+.steps{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.steps li{font-size:13px;color:var(--light);line-height:1.6;padding-left:30px;position:relative;counter-increment:step;}
+.steps li::before{content:counter(step);position:absolute;left:0;top:2px;font-family:'Press Start 2P',monospace;font-size:6px;background:var(--diamond);color:#000;width:20px;height:20px;line-height:20px;text-align:center;display:block;}
+.steps li strong{color:#fff;}
+.steps li code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.05);padding:1px 5px;border:1px solid var(--border);color:var(--diamond);}
+.challenges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.ch{font-size:10px;font-weight:800;padding:3px 9px;border:1.5px solid;font-family:'JetBrains Mono',monospace;}
 .ch-e{color:var(--emerald);border-color:var(--emerald);}
 .ch-m{color:var(--gold);border-color:var(--gold);}
 .ch-h{color:var(--red);border-color:var(--red);}
-
-/* PIXEL DIVIDER */
-.px-div{height:5px;background:repeating-linear-gradient(90deg,
-  var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,
-  var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,
-  var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
-
-/* FOOTER */
-footer{background:#000;padding:32px 20px;text-align:center;
-  border-top:3px solid var(--gold);}
+.px-div{height:5px;background:repeating-linear-gradient(90deg,var(--green) 0,var(--green) 8px,#8B5E3C 8px,#8B5E3C 16px,var(--gold) 16px,var(--gold) 24px,var(--diamond) 24px,var(--diamond) 32px,var(--red) 32px,var(--red) 40px,var(--purple) 40px,var(--purple) 48px);}
+footer{background:#000;padding:32px 20px;text-align:center;border-top:3px solid var(--gold);}
 footer p{font-family:'Press Start 2P',monospace;font-size:7px;color:#333;line-height:2.4;}
 footer span{color:var(--gold);}
 
-/* CONCEPT TAGS */
-.ctags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.ctag{font-family:'JetBrains Mono',monospace;font-size:10px;
-  background:rgba(58,134,255,.1);border:1px solid var(--blue);
-  color:var(--blue);padding:2px 8px;}
-</style>
+/* ── NUEVOS ELEMENTOS ── */
 
+/* Checkpoint */
+.checkpoint{display:flex;align-items:flex-start;gap:14px;background:rgba(247,183,49,.07);border-top:2px dashed rgba(247,183,49,.35);border-bottom:2px dashed rgba(247,183,49,.35);padding:12px 16px;margin:18px 0;}
+.checkpoint-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.checkpoint-text{font-family:'Press Start 2P',monospace;font-size:6.5px;color:var(--gold);line-height:2.2;}
+
+/* Regla de oro */
+.regla-oro{display:flex;align-items:flex-start;gap:14px;background:rgba(232,65,24,.07);border:1px solid rgba(232,65,24,.3);border-left:5px solid var(--red);padding:14px 16px;margin-bottom:32px;}
+.regla-oro p{font-size:13px;color:var(--light);line-height:1.7;}
+.regla-oro p strong{color:#fff;}
+
+/* Teacher guide */
+details.tip-doc{background:rgba(247,183,49,.04);border:1px solid rgba(247,183,49,.2);border-left:4px solid var(--gold);margin-bottom:20px;}
+details.tip-doc summary{font-family:'Press Start 2P',monospace;font-size:6.5px;color:var(--gold);padding:12px 16px;cursor:pointer;letter-spacing:1px;user-select:none;list-style:none;display:flex;align-items:center;gap:6px;}
+details.tip-doc summary::-webkit-details-marker{display:none;}
+details.tip-doc summary::before{content:"▶";}
+details.tip-doc[open] summary::before{content:"▼";}
+.tip-body{padding:2px 16px 16px;}
+.tip-section{margin-bottom:16px;}
+.tip-section:last-child{margin-bottom:0;}
+.tip-section h5{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;padding-bottom:4px;border-bottom:1px solid rgba(247,183,49,.18);}
+.tip-section p{font-size:12px;color:var(--light);line-height:1.7;margin-bottom:6px;}
+.tip-section ul{list-style:none;margin-top:4px;}
+.tip-section ul li{font-size:12px;color:var(--light);padding-left:16px;position:relative;margin-bottom:5px;line-height:1.6;}
+.tip-section ul li::before{content:"▸ ";position:absolute;left:0;color:var(--gold);}
+.tip-section ul li strong{color:#fff;}
+
+/* Timeline table */
+.tip-tl{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px;}
+.tip-tl th{font-family:'JetBrains Mono',monospace;font-size:9px;text-align:left;color:var(--gold);padding:6px 8px;border-bottom:1px solid rgba(247,183,49,.2);}
+.tip-tl td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--light);vertical-align:top;line-height:1.5;}
+.tip-tl td:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;white-space:nowrap;padding-right:12px;}
+
+/* Recipe */
+.recipe{background:rgba(58,134,255,.06);border:1px solid rgba(58,134,255,.25);border-left:4px solid var(--blue);padding:12px 15px;margin-bottom:14px;}
+.recipe h5{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);margin-bottom:8px;letter-spacing:1px;}
+.recipe ul{list-style:none;}
+.recipe ul li{font-size:12px;color:var(--light);padding-left:22px;position:relative;margin-bottom:5px;line-height:1.5;}
+.recipe ul li::before{content:"⬛";position:absolute;left:0;font-size:9px;top:2px;}
+.recipe ul li strong{color:#fff;}
+
+/* Verify */
+.verify{background:rgba(93,161,48,.06);border:1px solid rgba(93,161,48,.22);border-left:4px solid var(--green);padding:12px 15px;margin-top:14px;}
+.verify h5{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);margin-bottom:8px;letter-spacing:1px;}
+.verify ul{list-style:none;}
+.verify ul li{font-size:12px;color:var(--light);padding-left:22px;position:relative;margin-bottom:5px;}
+.verify ul li::before{content:"□";position:absolute;left:0;color:var(--green);font-weight:900;}
+
+/* Warn */
+.warn{background:rgba(232,65,24,.05);border:1px solid rgba(232,65,24,.18);border-left:4px solid var(--red);padding:12px 15px;margin-top:10px;}
+.warn h5{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--red);margin-bottom:8px;letter-spacing:1px;}
+.warn-row{display:grid;grid-template-columns:minmax(160px,1fr) 2fr;gap:10px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--border);font-size:12px;}
+.warn-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.w-p{color:var(--red);font-weight:800;line-height:1.5;}
+.w-s{color:var(--light);line-height:1.5;}
+
+/* Note pedagógica */
+.nota{font-size:11px;color:var(--muted);font-style:italic;margin-top:8px;padding-left:12px;border-left:2px solid var(--border);}
+</style>
 <style>:root{--accent:#E84118;}</style>
 </head>
 <body>
 
+<!-- COVER -->
 <div class="mod-cover">
   <div class="mod-logo">⬛ ROBOTSCHOOL — MINECRAFT CODING LAB</div>
   <span class="mod-big-num">02</span>
   <div class="mod-label">// MÓDULO 02 DE 8 · 4 CLASES · 8 HORAS</div>
   <h1 class="mod-title">AUTOMATIZACIÓN CON REDSTONE</h1>
-  <div class="mod-theme">Lógica Computacional Aplicada — Circuitos y Compuertas · 4 clases · 8 horas</div>
-  <div class="mod-tags"><span class="tag tag-p">Minecraft Education</span><span class="tag tag-p">Code.org</span><span class="tag tag-o">ODS 9 Industria e Innovación</span><span class="tag tag-s">Compuertas Lógicas</span><span class="tag tag-s">Automatización</span></div>
+  <div class="mod-theme">Primeros Circuitos · 4 Retos Progresivos · Minecraft Java + Education · 4 clases · 8 horas</div>
+  <div class="mod-tags">
+    <span class="tag tag-p">Minecraft Java / Education</span>
+    <span class="tag tag-p">Hour of Code Minecraft</span>
+    <span class="tag tag-o">ODS 9 Industria e Innovación</span>
+    <span class="tag tag-s">Automatización</span>
+    <span class="tag tag-a">8–10 años</span>
+  </div>
 </div>
 
 <div class="px-div"></div>
 
 <div class="body">
-  <div class="meta"><div class="meta-cell"><h4>🎯 OBJETIVO</h4><ul><li>Comprender el Redstone como simulación de circuitos eléctricos. Aplicar compuertas lógicas AND, OR, NOT para automatizar sistemas en la Ciudad Inteligente.</li></ul></div><div class="meta-cell"><h4>💡 CONCEPTOS CLAVE</h4><ul><li>Circuitos en serie y en paralelo</li><li>Compuertas AND, OR, NOT</li><li>Tablas de verdad (señal 0 y 1)</li><li>Detector de luz solar</li><li>Optimización de circuitos con Redstone</li></ul></div><div class="meta-cell"><h4>🏙️ CONSTRUYEN</h4><ul><li>Sistema de luces automáticas (detector solar)</li><li>Puertas automáticas con lógica AND</li><li>Dispensadores inteligentes activados por sensor</li><li>Sistema de defensa perimetral del sector</li></ul></div><div class="meta-cell"><h4>🏆 MISIÓN</h4><ul><li>Misión Ingeniero Eléctrico: Automatizar el sector completo. Luces, puerta y sistema de defensa deben funcionar solos, sin intervención manual.</li></ul></div></div>
-  
-        <div class="class-card">
-          <div class="class-head">
-            <div class="class-num">C1</div>
-            <div class="class-title"><h3>¿Qué es el Redstone?</h3><span>Circuitos básicos · Serie y Paralelo · Hour of Code Minecraft</span></div>
+
+  <!-- META -->
+  <div class="meta">
+    <div class="meta-cell">
+      <h4>🎯 OBJETIVO</h4>
+      <ul>
+        <li>Entender el Redstone como un cable de electricidad virtual. Construir 4 sistemas automáticos progresivos para la casa del M1: timbre, luces nocturnas, trampa y caja fuerte.</li>
+      </ul>
+    </div>
+    <div class="meta-cell">
+      <h4>💡 CONCEPTOS</h4>
+      <ul>
+        <li>Circuito: fuente → cable → receptor</li>
+        <li>Botón, palanca, placa de presión</li>
+        <li>Sensor de luz solar (modo invertido)</li>
+        <li>Dispensador activado por sensor</li>
+        <li>Puerta de hierro + Redstone</li>
+        <li>AND como concepto experiencial</li>
+      </ul>
+    </div>
+    <div class="meta-cell">
+      <h4>🏗️ CONSTRUYEN</h4>
+      <ul>
+        <li>Timbre con noteblock en la puerta</li>
+        <li>Luces que se encienden solas de noche</li>
+        <li>Trampa con dispensador en la entrada</li>
+        <li>Caja fuerte con puerta de hierro y doble cerradura</li>
+      </ul>
+    </div>
+    <div class="meta-cell">
+      <h4>🏆 MISIÓN</h4>
+      <ul>
+        <li>Misión Automatizador: Tu casa tiene que poder defenderse sola y reaccionar sin que nadie intervenga. Timbre, luces, trampa y caja fuerte deben funcionar automáticamente.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REGLA DE ORO -->
+  <div class="regla-oro">
+    <div style="font-size:22px;flex-shrink:0;">🔒</div>
+    <p><strong>Regla de oro de este módulo —</strong> Minecraft se abre 30 minutos después de empezar la clase. Primero: Code.org hasta el nivel mínimo del día (verificable en pantalla). Quien termina el reto mínimo puede pasar al difícil. Quien no termina el reto mínimo no presenta en el cierre.</p>
+  </div>
+
+  <!-- ═══════════ C1 ═══════════ -->
+  <div class="class-card">
+    <div class="class-head">
+      <div class="class-num">C1</div>
+      <div class="class-title">
+        <h3>El Timbre de la Casa</h3>
+        <span>Primer circuito · Botón → Redstone → Noteblock</span>
+      </div>
+    </div>
+    <div class="class-body">
+      <div class="det">💬 ¿Cómo sabe el timbre de tu casa que alguien llegó? ¿Qué viaja exactamente desde el botón hasta la campana?</div>
+
+      <details class="tip-doc">
+        <summary>🎓 GUÍA DOCENTE — abrir antes de la clase</summary>
+        <div class="tip-body">
+          <div class="tip-section">
+            <h5>☑ Checklist pre-clase</h5>
+            <ul>
+              <li>Servidor en <strong>modo creativo</strong> para todos los estudiantes</li>
+              <li>Zonas del M1 intactas — no tocar las construcciones anteriores</li>
+              <li>Proyector listo. Tienes en tu inventario: Stone Button, Redstone Dust ×8, Note Block</li>
+              <li>Hour of Code Minecraft abierto: <strong>hourofcode.com/mc</strong></li>
+              <li>Construyes el timbre tú en el proyector ANTES de que empiecen (2 min)</li>
+            </ul>
           </div>
-          <div class="class-body"><div class="det">💬 ¿Cómo crees que funciona el interruptor de la luz de tu cuarto? ¿Qué es lo que viaja por los cables cuando lo prendes?</div>
-            <div class="part">
-              <div class="part-title">
-                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border">
-                <ul class="items"><li><strong>¿Qué es el Redstone?</strong> Analogía con la electricidad real. Alcance máximo: 15 bloques sin repetidor. Necesita fuente de energía (palanca, botón, placa de presión, detector de luz solar).</li><li><strong>Componentes básicos:</strong> Polvo de Redstone (cable), palanca (interruptor permanente), botón (pulso momentáneo), lámpara de Redstone (receptor de carga), repetidor (amplificador de señal).</li><li><strong>Hour of Code — Minecraft Education:</strong> Abrir hourofcode.com/minecrAfttimecraft. Actividad guiada de programación por bloques dentro del entorno educativo del juego.</li><li><strong>Circuito en serie:</strong> Una fuente → cable continuo → destino. Todos los componentes en la misma línea. Si se corta en un punto, todo falla.</li><li><strong>Circuito en paralelo:</strong> Una fuente → múltiples ramales independientes. Si un ramal falla, los demás siguen funcionando.</li></ul>
-                <div class="challenges">
-                  <span class="ch ch-e">FÁCIL: Palanca que enciende una lámpara</span>
-                  <span class="ch ch-m">MEDIO: 3 lámparas en serie con un solo interruptor</span>
-                  <span class="ch ch-h">DIFÍCIL: Sistema paralelo: botón enciende unas lámparas, palanca enciende otras</span>
-                </div>
-              </div>
-            </div>
-            <div class="part">
-              <div class="part-title p2">
-                <span>▶ PARTE 2 — MINECRAFT LAB</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border p2">
-                <ul class="items"><li><strong>Automatizar luces de la casa:</strong> Instalar detector de luz solar invertido conectado a las lámparas del interior. Las luces deben encenderse solas al anochecer sin intervención del jugador.</li><li><strong>Extensión a la granja:</strong> Circuito paralelo que encienda lámparas adicionales en la zona de cultivos al anochecer para simular iluminación agrícola.</li><li><strong>Documentar el circuito:</strong> Cada estudiante dibuja en papel el esquema de su circuito con flechas indicando el flujo de señal de Redstone.</li></ul>
-                
-              </div>
-            </div></div>
-        </div>
-        <div class="class-card">
-          <div class="class-head">
-            <div class="class-num">C2</div>
-            <div class="class-title"><h3>Compuertas Lógicas</h3><span>AND · OR · NOT · Tablas de verdad construidas en Minecraft</span></div>
+          <div class="tip-section">
+            <h5>⏱ Timeline — 2 horas</h5>
+            <table class="tip-tl">
+              <tr><th>TIEMPO</th><th>BLOQUE</th><th>QUÉ HACER</th></tr>
+              <tr><td>0:00–0:10</td><td>Apertura</td><td>Detonadora. No respondas tú — espera que ellos propongan. Conecta la respuesta con el Redstone: "Eso es exactamente lo que vamos a construir hoy."</td></tr>
+              <tr><td>0:10–0:20</td><td>Concepto</td><td>¿Qué es Redstone? Demo rápida en proyector: palanca → Redstone Dust → lámpara. Máximo 10 min. No explicar más de los 3 componentes del circuito.</td></tr>
+              <tr><td>0:20–0:50</td><td>Hour of Code</td><td>hourofcode.com/mc — actividad standalone, no necesita cuenta. Todos en pantalla de Code.org. Minecraft cerrado.</td></tr>
+              <tr><td>0:50–0:55</td><td>Checkpoint 1</td><td>¿Llegaste al nivel 5? Muestra la pantalla. Sí → abres Minecraft. No → 5 min más y abres igual.</td></tr>
+              <tr><td>0:55–0:58</td><td>Demo timbre</td><td>Construyes el timbre completo en el proyector en 2 min mientras explicas cada paso en voz alta.</td></tr>
+              <tr><td>0:58–1:35</td><td>Minecraft Lab</td><td>Ellos construyen su timbre. Tú circulas. Si ves que alguien está explorando en vez de construyendo: "Muéstrame el botón puesto. ¿No está? Entonces eso es lo primero."</td></tr>
+              <tr><td>1:35–1:40</td><td>Checkpoint 2</td><td>Vas a cada PC y presionas el botón. ¿Suena? ✓ tick. ¿No suena? Ayudas en ese momento (máx 2 min por estudiante).</td></tr>
+              <tr><td>1:40–1:50</td><td>Reto difícil</td><td>Segundo noteblock en otra habitación, o buscar un Bell block.</td></tr>
+              <tr><td>1:50–2:00</td><td>Cierre</td><td>¿Qué viaja por el cable? → "Una señal de Redstone." Preview C2: "La próxima van a hacer que la casa se encienda sola de noche."</td></tr>
+            </table>
           </div>
-          <div class="class-body"><div class="det">💬 Imagina una caja fuerte que solo se abre si presionas DOS botones exactamente al mismo tiempo. ¿Qué tipo de lógica usa ese mecanismo?</div>
-            <div class="part">
-              <div class="part-title">
-                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border">
-                <ul class="items"><li><strong>¿Qué es una compuerta lógica?</strong> Es el bloque fundamental de todos los computadores del mundo. Recibe señales de entrada (0 o 1) y produce una salida única según una regla fija.</li><li><strong>Compuerta AND:</strong> Salida = 1 SOLO SI ambas entradas son 1. Tabla: 0+0=0, 0+1=0, 1+0=0, 1+1=1. Ejemplo real: sistema de seguridad con doble autenticación.</li><li><strong>Compuerta OR:</strong> Salida = 1 si AL MENOS UNA entrada es 1. Ejemplo real: alarma con múltiples sensores — si cualquiera detecta movimiento, suena.</li><li><strong>Compuerta NOT:</strong> Invierte la señal. Entrada 1 → Salida 0. Entrada 0 → Salida 1. Ejemplo real: luz que se apaga cuando detecta claridad exterior.</li><li><strong>Code.org — Voyage Aquatic:</strong> studio.code.org/s/aquatic. Refuerza la lógica condicional en formato visual interactivo.</li></ul>
-                <div class="challenges">
-                  <span class="ch ch-e">FÁCIL: Compuerta AND con 2 palancas y 1 lámpara</span>
-                  <span class="ch ch-m">MEDIO: Puerta que se abre usando lógica AND (ambos botones)</span>
-                  <span class="ch ch-h">DIFÍCIL: Caja fuerte con sistema combinado AND + NOT</span>
-                </div>
-              </div>
+          <div class="tip-section">
+            <h5>⚠ Errores frecuentes</h5>
+            <div class="warn">
+              <div class="warn-row"><span class="w-p">Cable con hueco</span><span class="w-s">El polvo de Redstone debe ser continuo. Cada bloque de dust debe tocar el siguiente. Buscar el hueco y rellenar.</span></div>
+              <div class="warn-row"><span class="w-p">Noteblock no suena</span><span class="w-s">Necesita estar sobre un bloque sólido (madera, piedra). No funciona sobre vidrio, losas ni en el aire.</span></div>
+              <div class="warn-row"><span class="w-p">Botón en el suelo</span><span class="w-s">Stone Button va en una pared vertical. En el suelo van las pressure plates. Que lo reemplacen.</span></div>
+              <div class="warn-row"><span class="w-p">Cable no entra a la casa</span><span class="w-s">El dust pasa por el suelo, entrando por debajo de la pared. Quitar un bloque del piso en la base de la pared para que el cable pase.</span></div>
             </div>
-            <div class="part">
-              <div class="part-title p2">
-                <span>▶ PARTE 2 — MINECRAFT LAB</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border p2">
-                <ul class="items"><li><strong>Construir las 3 compuertas físicas:</strong> Representar AND, OR y NOT con Redstone en el suelo del sector. Colocar letreros al lado de cada una con su tabla de verdad completa.</li><li><strong>Integrar al proyecto:</strong> Puerta principal de la casa con lógica AND (requiere 2 botones para abrirse). Granja con lógica OR (cualquier sensor de presión activa el sistema).</li></ul>
-                
-              </div>
-            </div></div>
-        </div>
-        <div class="class-card">
-          <div class="class-head">
-            <div class="class-num">C3</div>
-            <div class="class-title"><h3>Automatizando Tareas con Redstone</h3><span>Dispensadores · Pistones · Trampas · Granjas automáticas</span></div>
           </div>
-          <div class="class-body"><div class="det">💬 ¿Qué 3 tareas de tu casa podrías automatizar si tuvieras un sistema eléctrico inteligente? ¿Cuál sería la más útil para tu familia?</div>
-            <div class="part">
-              <div class="part-title">
-                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border">
-                <ul class="items"><li><strong>Aplicaciones reales de la automatización:</strong> Puertas automáticas de supermercado, semáforos inteligentes, sistemas de riego por goteo, brazos robóticos en líneas de ensamblaje.</li><li><strong>Dispensadores:</strong> Lanzan objetos, agua o proyectiles al recibir una señal de Redstone. Usos: distribución de alimentos, sistemas de trampa, riego automático de cultivos.</li><li><strong>Pistones:</strong> Normales (solo empujan) vs. pegajosos (empujan y jalan bloques). Aplicaciones: puertas secretas, puentes retráctiles, ascensores simples, trampas.</li><li><strong>Code.org — Voyage Aquatic:</strong> Niveles intermedios con foco en funciones reutilizables y patrones de repetición.</li></ul>
-                <div class="challenges">
-                  <span class="ch ch-e">FÁCIL: Dispensador que entrega ítems al presionar botón</span>
-                  <span class="ch ch-m">MEDIO: Trampa con placa de presión + dispensador de proyectiles</span>
-                  <span class="ch ch-h">DIFÍCIL: Sistema de defensa perimetral con 3 o más dispensadores</span>
-                </div>
-              </div>
+          <div class="tip-section">
+            <h5>✅ Verificación en 30 segundos por estudiante</h5>
+            <div class="verify" style="margin:0;">
+              <ul>
+                <li>Botón en la pared exterior (no en el suelo)</li>
+                <li>Cable de Redstone sin huecos desde el botón hasta el noteblock</li>
+                <li>Al presionar el botón → se escucha el sonido dentro de la casa</li>
+              </ul>
             </div>
-            <div class="part">
-              <div class="part-title p2">
-                <span>▶ PARTE 2 — MINECRAFT LAB</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border p2">
-                <ul class="items"><li><strong>Automatización completa de la casa:</strong> Luces (detector solar) + puerta (placa de presión) + dispensador de ítems de bienvenida al entrar. Los 3 sistemas deben funcionar simultáneamente.</li><li><strong>Sistema de defensa:</strong> Perímetro con dispensadores activados por placas de presión en las zonas de acceso al sector.</li><li><strong>Mini expo entre pares:</strong> 3 minutos para mostrar el sistema a un compañero y explicar cada componente: qué hace, cómo se activa, qué lógica usa.</li></ul>
-                
-              </div>
-            </div></div>
-        </div>
-        <div class="class-card">
-          <div class="class-head">
-            <div class="class-num">C4</div>
-            <div class="class-title"><h3>Optimización y Cierre del Módulo 2</h3><span>Eficiencia en circuitos · Presentación · Insignia ⚡ Automatizador</span></div>
           </div>
-          <div class="class-body"><div class="det">💬 ¿Qué significa que un sistema sea "eficiente"? ¿Es mejor hacer más con menos recursos, o hacer lo mismo más rápido?</div>
-            <div class="part">
-              <div class="part-title">
-                <span>▶ PARTE 1 — CONCEPTUALIZACIÓN</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border">
-                <ul class="items"><li><strong>Optimización en Redstone:</strong> ¿Se puede lograr lo mismo con menos bloques de cable? El docente revisa en vivo los circuitos de 3–4 estudiantes voluntarios. El grupo propone mejoras.</li><li><strong>ODS 9 — Industria, Innovación e Infraestructura:</strong> ¿Cómo la automatización industrial transforma comunidades en Colombia? Casos de estudio breves y concretos.</li><li><strong>Reflexión del grupo:</strong> ¿Qué sistemas del mundo real se podrían mejorar usando la lógica AND, OR o NOT que aprendieron?</li></ul>
-                <div class="challenges">
-                  <span class="ch ch-e">FÁCIL: Reducir un circuito existente en 2 bloques</span>
-                  <span class="ch ch-m">MEDIO: Combinar 2 sistemas independientes en uno solo</span>
-                  <span class="ch ch-h">DIFÍCIL: Sector completamente automatizado con menos de 30 bloques de Redstone total</span>
-                </div>
-              </div>
-            </div>
-            <div class="part">
-              <div class="part-title p2">
-                <span>▶ PARTE 2 — PRESENTACIÓN + CIERRE</span>
-                <span class="time-tag">60 MIN</span>
-              </div>
-              <div class="part-border p2">
-                <ul class="items"><li><strong>Ajuste final (20 min):</strong> Pulir circuitos, verificar que todos los sistemas funcionen, decorar los mecanismos visibles.</li><li><strong>CIERRE MÓDULO 2:</strong> Cada estudiante presenta su sector (3 min): qué automatizó, cómo funciona, qué lógica usó (AND / OR / NOT). El docente facilita preguntas del grupo.</li><li><strong>Insignia ⚡ Automatizador:</strong> Se otorga a quienes tengan al menos 3 sistemas automáticos funcionando y puedan explicarlos con claridad.</li></ul>
-                
-              </div>
-            </div></div>
+          <div class="tip-section">
+            <h5>⚡ Diferenciación</h5>
+            <ul>
+              <li><strong>Termina rápido:</strong> Segundo noteblock en otra habitación, o buscar Bell block para reemplazar el noteblock.</li>
+              <li><strong>Se trabó:</strong> Simplificar a palanca + Redstone Dust + Redstone Lamp. El timbre puede ser solo palanca-lámpara por hoy.</li>
+            </ul>
+          </div>
         </div>
+      </details>
+
+      <!-- Parte 1 -->
+      <div class="part">
+        <div class="part-title"><span>▶ PARTE 1 — ¿QUÉ ES REDSTONE?</span><span class="time-tag">10 MIN</span></div>
+        <div class="part-border">
+          <ul class="items">
+            <li><strong>El Redstone es un cable de electricidad virtual.</strong> Lleva una señal desde una fuente hasta un receptor. Exactamente igual que los cables eléctricos de tu casa.</li>
+            <li><strong>Todo circuito de Redstone tiene tres partes:</strong> Fuente (genera la señal: botón, palanca, placa de presión) → Cable (la transporta: polvo de Redstone) → Receptor (la usa: lámpara, puerta, dispensador). Si falta una parte, no funciona.</li>
+            <li><strong>Límite del cable:</strong> El polvo de Redstone lleva la señal máximo 15 bloques. Para distancias más largas se usa un Repetidor.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Parte 2: Code.org -->
+      <div class="part">
+        <div class="part-title p2"><span>▶ PARTE 2 — HOUR OF CODE</span><span class="time-tag">30 MIN</span></div>
+        <div class="part-border p2">
+          <ul class="items">
+            <li><strong>Actividad:</strong> Hour of Code Minecraft — <code>hourofcode.com/mc</code></li>
+            <li>No necesita cuenta ni registro. Se abre directo y funciona solo.</li>
+            <li><strong>Objetivo de hoy:</strong> Completar los niveles 1 al 8 de forma individual.</li>
+            <li><strong>Minecraft permanece cerrado</strong> hasta el checkpoint.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-icon">🔐</div>
+        <div class="checkpoint-text">
+          CHECKPOINT 1 — Antes de abrir Minecraft<br>
+          → Muestra tu pantalla de Hour of Code. ¿Llegaste al nivel 5 mínimo?<br>
+          → Sí: abre Minecraft. No: 5 minutos más y abres igual.
+        </div>
+      </div>
+
+      <!-- Parte 3: Lab -->
+      <div class="part">
+        <div class="part-title p3"><span>▶ PARTE 3 — MINECRAFT LAB: EL TIMBRE</span><span class="time-tag">40 MIN</span></div>
+        <div class="part-border p3">
+          <div class="recipe">
+            <h5>📦 Ingredientes — buscar en inventario creativo con E</h5>
+            <ul>
+              <li><strong>Stone Button</strong> ×1 — buscar "button", elegir el de piedra</li>
+              <li><strong>Redstone Dust</strong> ×8 — buscar "redstone dust"</li>
+              <li><strong>Note Block</strong> ×1 — buscar "note block"</li>
+            </ul>
+          </div>
+          <ol class="steps">
+            <li>Párate frente a la <strong>pared exterior</strong> de tu casa. Coloca el <strong>Stone Button</strong> en esa pared con clic derecho. El botón queda pegado a la pared.</li>
+            <li>Baja al suelo. Coloca <strong>Redstone Dust</strong> en el piso desde debajo del botón hacia adentro de la casa. Pon un bloque de dust en cada casilla del suelo, sin dejar huecos. Máximo 8 bloques.</li>
+            <li>Al final del cable, coloca el <strong>Note Block</strong> en el suelo. Debe estar sobre madera, piedra u otro bloque sólido (no vidrio, no en el aire).</li>
+            <li>Haz clic derecho sobre el Note Block varias veces. Cada clic cambia el instrumento — busca el sonido que más te guste.</li>
+            <li><strong>Prueba:</strong> Sal de la casa y presiona el botón. ¿Escuchas el sonido desde adentro?</li>
+          </ol>
+          <div class="challenges">
+            <span class="ch ch-e">FÁCIL: Botón → noteblock funcionando</span>
+            <span class="ch ch-m">MEDIO: Segundo noteblock en otra habitación</span>
+            <span class="ch ch-h">DIFÍCIL: Reemplazar por Bell block + conectar 3 habitaciones distintas</span>
+          </div>
+          <div class="verify">
+            <h5>✅ El reto está completo cuando...</h5>
+            <ul>
+              <li>El botón está en la pared exterior (no en el suelo)</li>
+              <li>Al presionar el botón desde afuera → se escucha el sonido adentro</li>
+              <li>El cable no tiene ningún hueco</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ C2 ═══════════ -->
+  <div class="class-card">
+    <div class="class-head">
+      <div class="class-num">C2</div>
+      <div class="class-title">
+        <h3>La Casa que se Despierta de Noche</h3>
+        <span>Sensor de luz solar invertido · Lámparas automáticas</span>
+      </div>
+    </div>
+    <div class="class-body">
+      <div class="det">💬 ¿Las luces del parqueadero o la calle de tu edificio se encienden solas? ¿Cómo saben cuándo hacerlo? ¿Qué las "avisa"?</div>
+
+      <details class="tip-doc">
+        <summary>🎓 GUÍA DOCENTE — abrir antes de la clase</summary>
+        <div class="tip-body">
+          <div class="tip-section">
+            <h5>☑ Checklist pre-clase</h5>
+            <ul>
+              <li><strong>Comandos de hora</strong> para el servidor: <code>/time set night</code> y <code>/time set day</code>. Practica escribirlos antes de la clase.</li>
+              <li>En tu inventario: Daylight Detector ×1, Redstone Dust ×8, Redstone Lamp ×3</li>
+              <li>Imagen opcional de un sensor de alumbrado público o fotocélula (buscar en Google: "fotocélula alumbrado público")</li>
+              <li><strong>El paso más importante que debes dominar:</strong> clic derecho sobre el Daylight Detector después de colocarlo → lo pone en modo nocturno (cara ligeramente más oscura). Sin este clic, todo sale al revés.</li>
+            </ul>
+          </div>
+          <div class="tip-section">
+            <h5>⏱ Timeline — 2 horas</h5>
+            <table class="tip-tl">
+              <tr><th>TIEMPO</th><th>BLOQUE</th><th>QUÉ HACER</th></tr>
+              <tr><td>0:00–0:10</td><td>Apertura</td><td>Detonadora. Muestra imagen de sensor en alumbrado público si la tienes. ¿Cómo creen que funciona?</td></tr>
+              <tr><td>0:10–0:20</td><td>Concepto</td><td>Los sensores en la vida real (luz, movimiento, temperatura). El Daylight Detector = fotocélula. Demo en proyector del detector + el clic derecho de inversión.</td></tr>
+              <tr><td>0:20–0:50</td><td>Hour of Code</td><td>hourofcode.com/mc — continuar desde donde quedaron. Niveles 9 al 15. Minecraft cerrado.</td></tr>
+              <tr><td>0:50–0:55</td><td>Checkpoint 1</td><td>¿Llegaste al nivel 12? Muestra pantalla. Sí → abre Minecraft.</td></tr>
+              <tr><td>0:55–0:58</td><td>Demo</td><td>Construyes el sistema de luces en el proyector. Muestra el clic derecho de inversión. Escribe /time set night para mostrarlo funcionando.</td></tr>
+              <tr><td>0:58–1:35</td><td>Minecraft Lab</td><td>Ellos construyen. Circula. Cuando la mayoría tenga el detector puesto: escribe /time set night en el chat del servidor para que vean las lámparas encenderse solas.</td></tr>
+              <tr><td>1:35–1:40</td><td>Checkpoint 2</td><td>Tapas el detector de cada estudiante con un bloque → ¿se encienden las lámparas? ✓</td></tr>
+              <tr><td>1:40–1:50</td><td>Reto difícil</td><td>Extender lámparas a la granja del M1.</td></tr>
+              <tr><td>1:50–2:00</td><td>Cierre</td><td>Escribe /time set day. Ver las lámparas apagarse solas. "¿Qué pasaría si el sensor se rompiera?" Preview C3: "La próxima clase van a construir una trampa."</td></tr>
+            </table>
+          </div>
+          <div class="tip-section">
+            <h5>🔑 El paso que no puede fallar</h5>
+            <p>El Daylight Detector tiene <strong>dos modos</strong>. Modo normal: emite señal de día (inútil para luces nocturnas). Para invertirlo: <strong>clic derecho después de colocarlo</strong>. La cara del bloque se oscurece levemente. Sin este paso las lámparas se encienden de día y se apagan de noche — exactamente al revés de lo que queremos. Muéstralo en el proyector antes de que empiecen.</p>
+          </div>
+          <div class="tip-section">
+            <h5>⚠ Errores frecuentes</h5>
+            <div class="warn">
+              <div class="warn-row"><span class="w-p">Lámparas de día</span><span class="w-s">No invirtieron el detector. Hacer clic derecho sobre él hasta que la cara se oscurezca.</span></div>
+              <div class="warn-row"><span class="w-p">Detector no emite señal</span><span class="w-s">¿Tiene algo encima? Necesita ver el cielo directamente, sin ningún bloque arriba.</span></div>
+              <div class="warn-row"><span class="w-p">Cable no baja del techo</span><span class="w-s">El Redstone Dust no puede bajar por una pared plana. Construir escalones de bloques en la pared exterior y poner dust en cada escalón.</span></div>
+              <div class="warn-row"><span class="w-p">Lámparas no se encienden con cable puesto</span><span class="w-s">El polvo de Redstone debe tocar directamente alguna cara de la lámpara. Verificar que no hay hueco entre el cable y la lámpara.</span></div>
+            </div>
+          </div>
+          <div class="tip-section">
+            <h5>✅ Verificación en 30 segundos</h5>
+            <div class="verify" style="margin:0;">
+              <ul>
+                <li>Detector en el techo, sin bloques encima, cara oscura (modo nocturno)</li>
+                <li>Al tapar el detector con un bloque → lámparas se encienden</li>
+                <li>Al quitar el bloque → lámparas se apagan</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tip-section">
+            <h5>⚡ Diferenciación</h5>
+            <ul>
+              <li><strong>Termina rápido:</strong> Extender el sistema a la granja del M1 — "iluminación agrícola nocturna" para que los cultivos tengan luz de noche.</li>
+              <li><strong>Se trabó:</strong> Una sola lámpara encendida es suficiente para que el concepto funcione. No necesita cubrir toda la casa.</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <div class="part">
+        <div class="part-title"><span>▶ PARTE 1 — SENSORES EN LA VIDA REAL</span><span class="time-tag">10 MIN</span></div>
+        <div class="part-border">
+          <ul class="items">
+            <li><strong>Los sensores miden el mundo sin que nosotros hagamos nada.</strong> El alumbrado público tiene una fotocélula que mide la luz del cielo: cuando baja de cierto nivel → enciende. Cuando sube → apaga. Sin que nadie toque un interruptor.</li>
+            <li><strong>El Daylight Detector de Minecraft es exactamente eso:</strong> mide si hay luz solar y envía una señal de Redstone según el resultado.</li>
+            <li><strong>El truco del modo invertido:</strong> Por defecto emite señal cuando hay sol (inútil). Con un clic derecho lo invertimos: ahora emite señal cuando está oscuro. Igual que una fotocélula real.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p2"><span>▶ PARTE 2 — HOUR OF CODE</span><span class="time-tag">30 MIN</span></div>
+        <div class="part-border p2">
+          <ul class="items">
+            <li><strong>Actividad:</strong> Hour of Code Minecraft — <code>hourofcode.com/mc</code></li>
+            <li><strong>Objetivo de hoy:</strong> Continuar desde donde quedaron. Meta: llegar al nivel 12.</li>
+            <li><strong>Minecraft cerrado</strong> durante este bloque.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-icon">🔐</div>
+        <div class="checkpoint-text">
+          CHECKPOINT 1 — Antes de abrir Minecraft<br>
+          → ¿Llegaste al nivel 12? Muestra tu pantalla.<br>
+          → Docente: después del checkpoint escribe /time set night para el demo.
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p3"><span>▶ PARTE 3 — MINECRAFT LAB: LUCES NOCTURNAS</span><span class="time-tag">45 MIN</span></div>
+        <div class="part-border p3">
+          <div class="recipe">
+            <h5>📦 Ingredientes</h5>
+            <ul>
+              <li><strong>Daylight Detector</strong> ×1 — buscar "daylight"</li>
+              <li><strong>Redstone Dust</strong> ×8 — buscar "redstone dust"</li>
+              <li><strong>Redstone Lamp</strong> ×3 — buscar "redstone lamp"</li>
+            </ul>
+          </div>
+          <ol class="steps">
+            <li>Sube al <strong>techo</strong> de tu casa. El detector necesita ver el cielo directamente: ningún bloque encima.</li>
+            <li>Coloca el <strong>Daylight Detector</strong> en el techo.</li>
+            <li><strong>Clic derecho</strong> sobre el detector → la cara se oscurece levemente = modo nocturno activado. <em>Este es el paso más importante.</em></li>
+            <li>Baja el cable: construye escalones de piedra en la pared exterior y coloca <strong>Redstone Dust</strong> en cada escalón hasta llegar al suelo.</li>
+            <li>Entra a la casa. Coloca las <strong>Redstone Lamps</strong> y conecta el cable hasta ellas. El dust debe tocar alguna cara de cada lámpara.</li>
+            <li><strong>Prueba sin esperar la noche:</strong> pon un bloque sólido encima del detector → ¿se encienden las lámparas? Quita el bloque → ¿se apagan?</li>
+          </ol>
+          <div class="challenges">
+            <span class="ch ch-e">FÁCIL: Al menos 1 lámpara encendida de noche</span>
+            <span class="ch ch-m">MEDIO: 3 lámparas en habitaciones distintas</span>
+            <span class="ch ch-h">DIFÍCIL: Extender las lámparas a la granja del M1 (iluminación agrícola nocturna)</span>
+          </div>
+          <div class="verify">
+            <h5>✅ El reto está completo cuando...</h5>
+            <ul>
+              <li>Detector en el techo, cara oscura (modo nocturno)</li>
+              <li>Al tapar el detector → lámparas se encienden</li>
+              <li>Al destapar → lámparas se apagan</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ C3 ═══════════ -->
+  <div class="class-card">
+    <div class="class-head">
+      <div class="class-num">C3</div>
+      <div class="class-title">
+        <h3>La Trampa</h3>
+        <span>Placa de presión · Dispensador con flechas · Camuflaje</span>
+      </div>
+    </div>
+    <div class="class-body">
+      <div class="det">💬 Si fueras el guardia de tu casa y alguien intentara entrar mientras no estás, ¿qué trampa construirías para sorprenderlos?</div>
+
+      <details class="tip-doc">
+        <summary>🎓 GUÍA DOCENTE — abrir antes de la clase</summary>
+        <div class="tip-body">
+          <div class="tip-section">
+            <h5>☑ Checklist pre-clase</h5>
+            <ul>
+              <li>En tu inventario: Stone Pressure Plate, Dispenser, Arrows ×16, Redstone Dust ×6</li>
+              <li><strong>Regla de aula — decirla en voz alta antes de abrir Minecraft:</strong> "La trampa solo se prueba en tu propia casa. Ir a la casa de alguien más sin permiso = Minecraft cerrado por el resto de la clase."</li>
+              <li>Versión fallback lista (ver abajo) para grupos que van lento</li>
+            </ul>
+          </div>
+          <div class="tip-section">
+            <h5>⏱ Timeline — 2 horas</h5>
+            <table class="tip-tl">
+              <tr><th>TIEMPO</th><th>BLOQUE</th><th>QUÉ HACER</th></tr>
+              <tr><td>0:00–0:10</td><td>Apertura</td><td>Detonadora. Preguntar qué trampas conocen en videojuegos. ¿Cómo funciona una trampa en la vida real?</td></tr>
+              <tr><td>0:10–0:20</td><td>Concepto</td><td>Placa de presión = sensor de peso. Dispensador = actuador. Mismo esquema de siempre: fuente → cable → receptor. Mostrar el dispenser vacío en el proyector.</td></tr>
+              <tr><td>0:20–0:50</td><td>Hour of Code</td><td>hourofcode.com/mc — continuar. Meta: llegar al nivel 16. Minecraft cerrado.</td></tr>
+              <tr><td>0:50–0:55</td><td>Checkpoint 1</td><td>¿Nivel 16? + Repetir la regla de la trampa ANTES de abrir Minecraft.</td></tr>
+              <tr><td>0:55–0:58</td><td>Demo</td><td>Demo en proyector de la trampa completa. Incluir el paso de poner flechas adentro del dispensador.</td></tr>
+              <tr><td>0:58–1:35</td><td>Minecraft Lab</td><td>Construyen. Esta clase genera más ruido — es normal. Circula con frecuencia.</td></tr>
+              <tr><td>1:35–1:40</td><td>Checkpoint 2</td><td>Pisas la placa de cada estudiante tú mismo. ¿Sale la flecha? ✓</td></tr>
+              <tr><td>1:40–1:50</td><td>Reto difícil</td><td>Camuflar el dispensador con una Painting.</td></tr>
+              <tr><td>1:50–2:00</td><td>Cierre</td><td>Cada uno muestra su trampa. Preview C4: "La próxima hacemos la caja fuerte — el sistema más difícil del módulo."</td></tr>
+            </table>
+          </div>
+          <div class="tip-section">
+            <h5>🔧 Versión fallback sin Redstone (si el grupo va lento)</h5>
+            <p>Trampa de hoyo: excavar 2 bloques de profundidad en la entrada → cubrir con Stone Pressure Plate encima → quien pisa cae adentro. No requiere Redstone ni cable. Útil si C1 o C2 tuvieron muchos problemas técnicos.</p>
+          </div>
+          <div class="tip-section">
+            <h5>⚠ Errores frecuentes</h5>
+            <div class="warn">
+              <div class="warn-row"><span class="w-p">Dispenser apunta mal</span><span class="w-s">Se orienta hacia donde miras al colocarlo. Romperlo con un pico y reponerlo mirando en la dirección correcta.</span></div>
+              <div class="warn-row"><span class="w-p">No salen flechas</span><span class="w-s">Verificar que hay flechas adentro: clic derecho en el dispenser y revisar el inventario interno. Sin flechas adentro no dispara nada.</span></div>
+              <div class="warn-row"><span class="w-p">Placa no activa el dispenser</span><span class="w-s">Revisar el cable de Redstone: debe conectar placa y dispenser sin huecos.</span></div>
+              <div class="warn-row"><span class="w-p">Placa se activa con objetos en el suelo</span><span class="w-s">La Stone Pressure Plate se activa por mobs y jugadores, no por items tirados en el suelo. Es la correcta para esta trampa.</span></div>
+            </div>
+          </div>
+          <div class="tip-section">
+            <h5>✅ Verificación en 30 segundos</h5>
+            <div class="verify" style="margin:0;">
+              <ul>
+                <li>Placa de presión en el piso de la entrada</li>
+                <li>Dispenser apuntando hacia el área de la entrada</li>
+                <li>Al pisar la placa (pisas tú) → sale una flecha</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div class="part">
+        <div class="part-title"><span>▶ PARTE 1 — LA PLACA DE PRESIÓN</span><span class="time-tag">10 MIN</span></div>
+        <div class="part-border">
+          <ul class="items">
+            <li><strong>La placa de presión es un sensor de peso.</strong> Cuando alguien la pisa, envía una señal de Redstone. Cuando levanta el pie, la señal se detiene. Igual que la alfombrilla del supermercado que activa la puerta automática.</li>
+            <li><strong>El dispensador es un actuador.</strong> Cuando recibe la señal → lanza lo que tiene adentro: flechas, agua, comida, cualquier objeto.</li>
+            <li><strong>El esquema es el mismo de siempre:</strong> Placa de presión (fuente) → Redstone Dust (cable) → Dispensador (receptor). Si entendieron el timbre, la trampa funciona igual.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p2"><span>▶ PARTE 2 — HOUR OF CODE</span><span class="time-tag">30 MIN</span></div>
+        <div class="part-border p2">
+          <ul class="items">
+            <li><strong>Actividad:</strong> Hour of Code Minecraft — <code>hourofcode.com/mc</code></li>
+            <li><strong>Objetivo de hoy:</strong> Continuar desde donde quedaron. Meta: llegar al nivel 16.</li>
+            <li><strong>Minecraft cerrado</strong> hasta el checkpoint. La trampa se construye después.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-icon">🔐</div>
+        <div class="checkpoint-text">
+          CHECKPOINT 1 — Antes de abrir Minecraft<br>
+          → ¿Llegaste al nivel 16? Muestra tu pantalla.<br>
+          → REGLA antes de abrir: la trampa solo se prueba en tu propia casa. Ni una vez en la de otro.
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p3"><span>▶ PARTE 3 — MINECRAFT LAB: LA TRAMPA</span><span class="time-tag">45 MIN</span></div>
+        <div class="part-border p3">
+          <div class="recipe">
+            <h5>📦 Ingredientes</h5>
+            <ul>
+              <li><strong>Stone Pressure Plate</strong> ×1 — buscar "stone pressure plate"</li>
+              <li><strong>Dispenser</strong> ×1 — buscar "dispenser"</li>
+              <li><strong>Arrow</strong> ×16 — buscar "arrow" (van dentro del dispenser)</li>
+              <li><strong>Redstone Dust</strong> ×6 — para conectar placa y dispenser</li>
+            </ul>
+          </div>
+          <ol class="steps">
+            <li>Elige la <strong>entrada principal</strong> de tu casa. Quita 1 bloque de la pared al lado de la puerta para hacer un hueco.</li>
+            <li><strong>Mira hacia la entrada</strong> y coloca el <strong>Dispenser</strong> en ese hueco. El dispenser apunta hacia donde mirabas al colocarlo — asegúrate de que el agujero apunte hacia adentro de la entrada.</li>
+            <li>Haz clic derecho sobre el Dispenser → pon las <strong>16 arrows</strong> en los casilleros del inventario → cierra con E.</li>
+            <li>Coloca la <strong>Stone Pressure Plate</strong> en el piso frente a la puerta, donde un intruso pondría el pie.</li>
+            <li>Conecta con <strong>Redstone Dust</strong>: desde la placa hasta el dispenser (4–6 bloques de cable directo).</li>
+            <li><strong>Prueba:</strong> Pisa la placa. ¿Sale la flecha? Ahora camufla el dispenser para que no se vea.</li>
+          </ol>
+          <div class="challenges">
+            <span class="ch ch-e">FÁCIL: Trampa funcionando (placa → flecha)</span>
+            <span class="ch ch-m">MEDIO: Cubrir el dispenser con una Painting para ocultarlo</span>
+            <span class="ch ch-h">DIFÍCIL: Segunda trampa en la ventana trasera de la casa</span>
+          </div>
+          <div class="verify">
+            <h5>✅ El reto está completo cuando...</h5>
+            <ul>
+              <li>La placa está en el piso de la entrada</li>
+              <li>El dispenser apunta hacia el área de la entrada</li>
+              <li>Al pisar la placa → sale una flecha</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ C4 ═══════════ -->
+  <div class="class-card">
+    <div class="class-head">
+      <div class="class-num">C4</div>
+      <div class="class-title">
+        <h3>La Caja Fuerte + Cierre del Módulo</h3>
+        <span>Puerta de hierro · Doble cerradura · Concepto AND · Insignia ⚡</span>
+      </div>
+    </div>
+    <div class="class-body">
+      <div class="det">💬 En algunas bóvedas de banco necesitan DOS personas con DOS llaves distintas para abrirla al mismo tiempo. ¿Por qué no confían en una sola persona con una sola llave?</div>
+
+      <details class="tip-doc">
+        <summary>🎓 GUÍA DOCENTE — abrir antes de la clase</summary>
+        <div class="tip-body">
+          <div class="tip-section">
+            <h5>☑ Checklist pre-clase</h5>
+            <ul>
+              <li>En tu inventario: Iron Door ×1, Lever ×2, Redstone Dust ×12, bloques de construcción ×20</li>
+              <li><strong>Diferencia crítica:</strong> puertas de <em>madera</em> se abren con clic. Puertas de <em>hierro</em> (Iron Door) SOLO se abren con señal de Redstone. Si alguien pone madera, no aprende el concepto.</li>
+              <li>Tener lista la lista de criterios de la insignia para la presentación final</li>
+            </ul>
+          </div>
+          <div class="tip-section">
+            <h5>⏱ Timeline — 2 horas</h5>
+            <table class="tip-tl">
+              <tr><th>TIEMPO</th><th>BLOQUE</th><th>QUÉ HACER</th></tr>
+              <tr><td>0:00–0:10</td><td>Apertura</td><td>Detonadora. Ejemplos de AND en la vida real: encender un carro (llave EN posición Y pie en el freno). Conectar con Redstone.</td></tr>
+              <tr><td>0:10–0:20</td><td>Concepto AND</td><td>AND = dos condiciones deben ser verdad al mismo tiempo para que algo funcione. Mostrar la Iron Door en el proyector: sin Redstone, no se abre con clic.</td></tr>
+              <tr><td>0:20–0:50</td><td>Hour of Code</td><td>hourofcode.com/mc — terminar todo lo que puedan. Minecraft cerrado.</td></tr>
+              <tr><td>0:50–0:55</td><td>Checkpoint 1</td><td>¿Cuántos niveles completaron en total en el módulo? Anotarlo — eso es parte del cierre.</td></tr>
+              <tr><td>0:55–0:58</td><td>Demo caja fuerte</td><td>Construyes la caja fuerte en proyector mientras explicas cada paso.</td></tr>
+              <tr><td>0:58–1:25</td><td>Minecraft Lab</td><td>Construyen. Verificar que usan Iron Door, no madera.</td></tr>
+              <tr><td>1:25–1:30</td><td>Checkpoint 2</td><td>Verificar los 4 sistemas de cada estudiante antes de la presentación.</td></tr>
+              <tr><td>1:30–1:55</td><td>Presentaciones</td><td>Tour: cada uno muestra timbre + luces + trampa + bóveda. 3 min por estudiante. Tú activas cada sistema.</td></tr>
+              <tr><td>1:55–2:00</td><td>Insignia</td><td>Entregar insignia ⚡ Automatizador a quienes cumplan los 4 criterios.</td></tr>
+            </table>
+          </div>
+          <div class="tip-section">
+            <h5>🔧 Cómo construir la caja fuerte</h5>
+            <p>Cuarto de 4×3 base, 3 bloques de alto. Iron Door en la entrada. Cofre con objetos valiosos adentro. Palanca 1 en la pared exterior conectada con Redstone a la puerta. Palanca 2 en la pared interior conectada al otro lado.</p>
+            <p class="nota">Nota técnica: este circuito es OR (cualquier palanca abre la puerta). El AND real en Redstone requiere antorchas inversoras — es nivel intermedio. Para 9 años, el concepto experiencial importa más que el circuito exacto. Si alguien quiere el AND real, es el reto difícil.</p>
+          </div>
+          <div class="tip-section">
+            <h5>⚠ Errores frecuentes</h5>
+            <div class="warn">
+              <div class="warn-row"><span class="w-p">Pone puerta de madera</span><span class="w-s">La puerta de madera se abre con clic sin Redstone. Buscar "iron door" en el inventario y reemplazar.</span></div>
+              <div class="warn-row"><span class="w-p">Palanca no abre la puerta</span><span class="w-s">El cable debe llegar al bloque del suelo donde está parada la puerta, no a la puerta directamente. La Iron Door recibe señal desde el bloque base.</span></div>
+            </div>
+          </div>
+          <div class="tip-section">
+            <h5>🏆 Criterios de la Insignia ⚡ Automatizador</h5>
+            <div class="verify" style="margin:0;">
+              <ul>
+                <li>Timbre: botón en pared exterior → sonido adentro</li>
+                <li>Luces nocturnas: detector invertido → lámparas encendidas al tapar</li>
+                <li>Trampa: placa de presión → flecha sale</li>
+                <li>Caja fuerte: Iron Door + al menos 1 palanca funcional</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div class="part">
+        <div class="part-title"><span>▶ PARTE 1 — AND: DOS CONDICIONES AL MISMO TIEMPO</span><span class="time-tag">10 MIN</span></div>
+        <div class="part-border">
+          <ul class="items">
+            <li><strong>AND significa que dos cosas deben ser verdad al mismo tiempo para que algo funcione.</strong> Para encender un carro: llave en posición Y pie en el freno. Solo una → no arranca. Para desbloquear un iPhone: tu cara Y que estés mirando la pantalla. Las dos juntas.</li>
+            <li><strong>En una bóveda de banco:</strong> la llave del director AND la llave del guardia al mismo tiempo. Ninguno puede solo. La lógica AND protege contra errores de una sola persona.</li>
+            <li><strong>En Minecraft:</strong> la puerta de hierro no se abre con clic — solo con una señal de Redstone. Hoy van a construir una bóveda con dos cerraduras y una regla: siempre se activan las dos juntas.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p2"><span>▶ PARTE 2 — HOUR OF CODE</span><span class="time-tag">30 MIN</span></div>
+        <div class="part-border p2">
+          <ul class="items">
+            <li><strong>Actividad:</strong> Hour of Code Minecraft — <code>hourofcode.com/mc</code></li>
+            <li><strong>Objetivo de hoy:</strong> Terminar todos los niveles posibles. ¿Cuántos completaron en total durante el módulo?</li>
+            <li><strong>Minecraft cerrado</strong> durante este bloque.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-icon">🔐</div>
+        <div class="checkpoint-text">
+          CHECKPOINT 1 — Antes de abrir Minecraft<br>
+          → ¿Cuántos niveles completaron en total en este módulo? Anótalo.<br>
+          → Docente: verificar que los 3 sistemas anteriores siguen funcionando antes de empezar la caja fuerte.
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-title p3"><span>▶ PARTE 3 — MINECRAFT LAB: LA CAJA FUERTE</span><span class="time-tag">30 MIN</span></div>
+        <div class="part-border p3">
+          <div class="recipe">
+            <h5>📦 Ingredientes</h5>
+            <ul>
+              <li><strong>Iron Door</strong> ×1 — buscar "iron door" (NO la puerta de madera)</li>
+              <li><strong>Lever</strong> ×2 — buscar "lever"</li>
+              <li><strong>Redstone Dust</strong> ×12 — para conectar las palancas a la puerta</li>
+              <li><strong>Bloques de construcción</strong> ×20+ — piedra o madera para las paredes</li>
+            </ul>
+          </div>
+          <ol class="steps">
+            <li>Construye un <strong>cuarto pequeño</strong> cerca de tu casa (base 4×3, altura 3 bloques) con piedra o madera.</li>
+            <li>En la entrada del cuarto coloca una <strong>Iron Door</strong>. Intenta abrirla con clic derecho → no se abre. Solo funciona con Redstone.</li>
+            <li>Pon un cofre adentro con objetos valiosos (diamantes, esmeraldas). Eso es lo que la bóveda protege.</li>
+            <li>Coloca la <strong>Palanca 1</strong> en la pared exterior de la bóveda. Conecta con Redstone Dust hasta el bloque del suelo donde está parada la puerta.</li>
+            <li>Coloca la <strong>Palanca 2</strong> en la pared interior. Conecta al otro lado de la puerta.</li>
+            <li><strong>Prueba:</strong> Activa la Palanca 1 → ¿se abre la Iron Door? La regla de la caja fuerte: siempre activas las dos palancas juntas.</li>
+          </ol>
+          <div class="challenges">
+            <span class="ch ch-e">FÁCIL: Caja fuerte con Iron Door y 1 palanca</span>
+            <span class="ch ch-m">MEDIO: 2 palancas: una afuera, una adentro</span>
+            <span class="ch ch-h">DIFÍCIL: AND real — la puerta solo se abre si AMBAS palancas están activas (pide ayuda al docente para el circuito con antorchas)</span>
+          </div>
+          <div class="verify">
+            <h5>✅ El reto está completo cuando...</h5>
+            <ul>
+              <li>Existe un cuarto con cofre adentro</li>
+              <li>La entrada tiene Iron Door (no madera)</li>
+              <li>Al activar la palanca → la Iron Door se abre</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CIERRE -->
+      <div class="part">
+        <div class="part-title p2"><span>▶ CIERRE — PRESENTACIONES + INSIGNIA ⚡</span><span class="time-tag">25 MIN</span></div>
+        <div class="part-border p2">
+          <ul class="items">
+            <li><strong>Tour del sector (3 min por estudiante):</strong> Cada uno muestra los 4 sistemas en orden — timbre, luces, trampa, caja fuerte. El docente activa cada sistema en vivo frente al grupo.</li>
+            <li><strong>Reflexión grupal (2 preguntas, no más):</strong> ¿Cuál de los 4 fue el más difícil? ¿Cuál usarían en una casa real?</li>
+            <li><strong>Conexión ODS 9 (30 segundos):</strong> "Lo que construyeron funciona igual que los sistemas industriales reales: un sensor detecta algo → envía señal → un actuador reacciona. Desde el brazo robótico de una fábrica hasta el sensor de movimiento de una alarma."</li>
+            <li><strong>Preview M3:</strong> "En el próximo módulo construyen edificios públicos — restaurantes, escuelas, casas del árbol — y conectan todo en una ciudad."</li>
+          </ul>
+          <div class="verify" style="margin-top:16px;">
+            <h5>🏆 Insignia ⚡ AUTOMATIZADOR — criterios</h5>
+            <ul>
+              <li>Timbre: botón en pared exterior → sonido adentro</li>
+              <li>Luces nocturnas: detector invertido → lámparas se encienden al tapar</li>
+              <li>Trampa: placa de presión → flecha sale</li>
+              <li>Caja fuerte: Iron Door + palanca funcional conectada con Redstone</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
-<div style="display:flex;justify-content:space-between;align-items:center;
-          padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);
-          max-width:960px;margin:0 auto;"><a href="modulo_01.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M1: Intro</a><a href="modulo_03.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M3: Intención →</a></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;background:var(--card2);border-top:1px solid var(--border);max-width:960px;margin:0 auto;">
+  <a href="modulo_01.html" style="color:var(--muted);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">← M1: Intro</a>
+  <a href="modulo_03.html" style="color:var(--gold);font-family:'Press Start 2P',monospace;font-size:8px;text-decoration:none;">M3: Intención →</a>
+</div>
 
 <footer>
   <p><span>MÓDULO 02</span> · MINECRAFT CODING LAB · ROBOTSCHOOL</p>
